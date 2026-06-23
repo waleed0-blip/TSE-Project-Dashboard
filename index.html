@@ -62,7 +62,17 @@
         .kpi-card.interactive-metric { cursor: pointer; border-left: 4px solid var(--primary-color); }
         .kpi-card.interactive-metric:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); background-color: #fffdfb; }
 
-        /* GOOGLE COLAB-STYLE GEMINI WORKSPACE SIDEBAR */
+        /* FLOATING GLOBAL GEMINI BUTTON */
+        .global-gemini-fab {
+            position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, var(--gemini-blue), var(--gemini-purple));
+            color: white; border: none; border-radius: 50%; width: 65px; height: 65px; font-size: 2rem;
+            cursor: pointer; box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4); z-index: 999990;
+            transition: transform 0.2s, box-shadow 0.2s; display: none; /* hidden until logged in */
+            justify-content: center; align-items: center;
+        }
+        .global-gemini-fab:hover { transform: scale(1.08); box-shadow: 0 8px 25px rgba(66, 133, 244, 0.6); }
+
+        /* INTERACTIVE GEMINI WORKSPACE SIDEBAR */
         #geminiWorkspaceSidebar {
             position: fixed; top: 0; right: -460px; width: 420px; height: 100vh;
             background-color: #fff; border-left: 4px solid var(--gemini-blue);
@@ -77,25 +87,31 @@
             color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;
         }
         .gemini-logo-sparkle { font-size: 1.4rem; font-weight: bold; display: flex; align-items: center; gap: 8px; }
-        .gemini-content-stream { flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #f8f9fa; display: flex; flex-direction: column; gap: 15px; }
         
-        .chat-bubble { padding: 12px 16px; border-radius: 14px; font-size: 0.9rem; max-width: 85%; }
-        .chat-bubble.user { background-color: var(--accent-color); color: #111; align-self: flex-end; }
-        .chat-bubble.ai { background-color: #fff; border: 1px solid var(--border-color); color: #222; align-self: flex-start; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .gemini-content-stream { flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #f8f9fa; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
+        .chat-bubble { padding: 12px 16px; border-radius: 14px; font-size: 0.95rem; max-width: 85%; line-height: 1.4; word-wrap: break-word; }
+        .chat-bubble.user { background-color: #e0f2fe; color: #111; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-bubble.ai { background-color: #fff; border: 1px solid var(--border-color); color: #222; align-self: flex-start; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border-bottom-left-radius: 2px; }
         
         .gemini-code-block {
             background-color: var(--gemini-dark); color: #f8f8f2; padding: 14px; border-radius: 8px;
-            font-family: 'Courier New', Courier, monospace; font-size: 0.82rem; overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; overflow-x: auto;
             position: relative; margin-top: 8px; border-left: 3px solid #50fa7b;
         }
-        .copy-code-badge { position: absolute; right: 10px; top: 10px; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; color: #fff; }
-
-        .gemini-trigger-btn {
-            background: linear-gradient(135deg, #e0ebff, #f3e8ff); border: 1px solid #cadaff;
-            border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: inline-flex;
-            justify-content: center; align-items: center; font-size: 1.1rem; transition: all 0.2s; text-decoration: none;
+        
+        .gemini-input-area {
+            display: flex; padding: 15px; background: #fff; border-top: 1px solid var(--border-color); gap: 10px;
         }
-        .gemini-trigger-btn:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(66, 133, 244, 0.4); background: #d2e3fc; }
+        .gemini-input-area input {
+            flex-grow: 1; padding: 12px 20px; border: 1px solid var(--border-color); border-radius: 25px;
+            outline: none; font-size: 0.95rem; font-family: inherit;
+        }
+        .gemini-input-area input:focus { border-color: var(--gemini-blue); }
+        .gemini-input-area button {
+            background-color: var(--gemini-blue); color: white; border: none; border-radius: 50%;
+            width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.2s;
+        }
+        .gemini-input-area button:hover { transform: scale(1.05); background-color: #3367d6; }
 
         .analytics-modal-shield { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999998; justify-content: center; align-items: center; }
         .modal-content-box { background-color: white; border-radius: 14px; max-width: 950px; width: 95%; max-height: 80vh; overflow-y: auto; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
@@ -186,14 +202,23 @@
     </div>
 </div>
 
-<!-- GEMINI INTEGRATED AUTO BUG-FIX WORKSPACE PANEL -->
+<!-- FLOATING GLOBAL GEMINI ACTION BUTTON -->
+<button class="global-gemini-fab" id="geminiGlobalFab" onclick="toggleGeminiWorkspace()" title="Open Gemini AI Assistant">✨</button>
+
+<!-- REAL INTERACTIVE GEMINI WORKSPACE SIDEBAR -->
 <div id="geminiWorkspaceSidebar">
     <div class="gemini-header-panel">
         <div class="gemini-logo-sparkle">✨ Gemini AI Assistant</div>
-        <span style="cursor:pointer; font-weight:bold; font-size:1.2rem;" onclick="closeGeminiWorkspace()">✕</span>
+        <span style="cursor:pointer; font-weight:bold; font-size:1.2rem;" onclick="toggleGeminiWorkspace()">✕</span>
     </div>
     <div class="gemini-content-stream" id="geminiStreamBox">
-        <!-- AI chat stream output drops here -->
+        <div class="chat-bubble ai">
+            <strong>Hi!</strong> I'm ready to help you troubleshoot, write Python analysis scripts, or format operational emails. What's on your mind?
+        </div>
+    </div>
+    <div class="gemini-input-area">
+        <input type="text" id="geminiChatInput" placeholder="Ask Gemini..." onkeydown="if(event.key === 'Enter') sendGeminiMessage()">
+        <button onclick="sendGeminiMessage()">➤</button>
     </div>
 </div>
 
@@ -266,7 +291,6 @@
                     <th>Date Logged</th>
                     <th>Ticket / Reference</th>
                     <th>HQ Developer Feedback & Actions</th>
-                    <th style="text-align:center;">AI Patch</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -449,24 +473,23 @@
         { model: "GT Runner 2", issue: "XDR positional pathing algorithms require validation mapping logs under complex structural environments", date: "2026-04", ref: "TM202604100158", action: "Verified active; algorithmic tracking guarantees trace continuity even across dense environmental noise loops", status: "SOLVED" }
     ];
 
-    let activeStateDataset = DEFAULT_CHECKLIST_DATA;
-    let incidentLogDataset = DEFAULT_INCIDENTS_DATA;
+    let activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+    let incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
 
     function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
         if (inputVal === SITE_ENTRY_PASSWORD) {
             document.getElementById('masterAuthShield').style.display = 'none';
             document.getElementById('captureArea').style.display = 'block'; 
+            document.getElementById('geminiGlobalFab').style.display = 'flex'; // Reveals floating button
             
-            // Safety Data Recovery Fallback (Prevents empty layouts)
-            if(Object.keys(activeStateDataset).length === 0) activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
-            if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
-
+            // RENDERS INSTANTLY
             applyHeadlineStateToDOM();
             rebuildSummaryTableMarkupStructures();
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
 
+            // Background Async Syncing
             fetchCloudState().then(() => {
                 applyHeadlineStateToDOM();
                 rebuildSummaryTableMarkupStructures();
@@ -478,6 +501,51 @@
             document.getElementById('masterGateKeyInput').value = '';
         }
     }
+
+    // --- GEMINI INTERACTIVE CHAT ENGINE ---
+    function toggleGeminiWorkspace() {
+        const sidebar = document.getElementById('geminiWorkspaceSidebar');
+        sidebar.classList.toggle('open');
+    }
+
+    function sendGeminiMessage() {
+        const inputField = document.getElementById('geminiChatInput');
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        const streamBox = document.getElementById('geminiStreamBox');
+        
+        // Append user bubble
+        const userBubble = document.createElement('div');
+        userBubble.className = 'chat-bubble user';
+        userBubble.innerText = text;
+        streamBox.appendChild(userBubble);
+        
+        inputField.value = '';
+        streamBox.scrollTop = streamBox.scrollHeight;
+
+        // Simulated intelligent AI response tailored to Huawei / Data Analysis
+        setTimeout(() => {
+            const aiBubble = document.createElement('div');
+            aiBubble.className = 'chat-bubble ai';
+            
+            const lowerText = text.toLowerCase();
+            if(lowerText.includes("python") || lowerText.includes("pandas") || lowerText.includes("code") || lowerText.includes("script")) {
+                aiBubble.innerHTML = `Here is a custom Python/Pandas snippet you can use in your Google Colab notebook to analyze the latest FCR and NSS technical incident logs:<br><br>
+                <div class="gemini-code-block">
+                    <span class="copy-code-badge" onclick="navigator.clipboard.writeText(this.nextSibling.textContent.trim()); alert('Code snippet copied!');">Copy Code</span><pre style="margin:0;">import pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load specific field issues\ndf = pd.read_csv('Project_Analytics_Log.csv')\n\n# Group unresolved cases\npending_cases = df[df['Status'] == 'PENDING']\nprint(f"Total action items: {len(pending_cases)}")</pre>
+                </div>`;
+            } else if (lowerText.includes("nova") || lowerText.includes("mate") || lowerText.includes("watch") || lowerText.includes("freebuds")) {
+                 aiBubble.innerHTML = `I can help you build an automated diagnostic layout or format a professional email escalation for that specific Huawei device. Do you want me to draft the email to the Quality team for this issue?`;
+            } else {
+                aiBubble.innerHTML = `I received your query. Because this dashboard is running strictly on local execution without an active backend API token, I am operating in offline-simulation mode. To process live external data, connect me to your Google Apps Script pipeline!`;
+            }
+            
+            streamBox.appendChild(aiBubble);
+            streamBox.scrollTop = streamBox.scrollHeight;
+        }, 800);
+    }
+    // ----------------------------------------
 
     function applyHeadlineStateToDOM() {
         const mainInput = document.getElementById('globalMainHeadlineText');
@@ -516,44 +584,6 @@
             syncCloudChannel("incidents", incidentLogDataset);
         }
     }
-
-    function consultGeminiAIHelper(globalIdx) {
-        const item = incidentLogDataset[globalIdx];
-        const streamBox = document.getElementById('geminiStreamBox');
-        streamBox.innerHTML = ''; 
-
-        document.getElementById('geminiWorkspaceSidebar').classList.add('open');
-
-        const userBubble = document.createElement('div');
-        userBubble.className = 'chat-bubble user';
-        userBubble.innerText = `Gemini, analyze this captured technical bug on ${item.model}: "${item.issue}". Produce an automated script/workaround logic to resolve it.`;
-        streamBox.appendChild(userBubble);
-
-        setTimeout(() => {
-            const aiBubble = document.createElement('div');
-            aiBubble.className = 'chat-bubble ai';
-            aiBubble.innerHTML = `<strong>Gemini Engine Diagnostics:</strong> Found trace parameter alignment for ${item.model}. Based on WeCare database matching protocols, here is an automated fix patch layout script for testing verification:`;
-            
-            let codeBlockString = `// Automated Bug Mitigation Patch for ${item.model}\n`;
-            if (item.issue.includes("Gallery") || item.issue.includes("AI Remove")) {
-                codeBlockString += `function deployGalleryAIFeaturePatch() {\n  const framework = HuaweiGallery.getFrameworkCore();\n  if (!framework.hasModule("AIRemove")) {\n    framework.injectModuleExtension("en-us16099942", "AIRemove_v15_Commercial");\n    console.log("AI Remove feature trace successfully forced via package redirect.");\n  }\n}`;
-            } else if (item.issue.includes("4K") || item.issue.includes("video")) {
-                codeBlockString += `function forceVideoCodecDecoderFallback() {\n  const player = nativeHuaweiVideoPlayer.getInstance();\n  if (player.getCodecProfile() === "VP9") {\n    player.setDecodingEngineMode("SOFTWARE_FALLBACK_JUNE_2026");\n    player.clearStutterBuffers();\n  }\n}`;
-            } else {
-                codeBlockString += `function verifyCarrierVoWiFiPacketTrace() {\n  const networkHub = HuaweiNetwork_Egypt.getVodafoneConfig();\n  networkHub.setStabilityThreshold(0.95);\n  networkHub.flushRoutingTablesCache();\n  console.log("VoWiFi latency drop package tracing metrics activated.");\n}`;
-            }
-
-            const codeContainer = document.createElement('div');
-            codeContainer.className = 'gemini-code-block';
-            codeContainer.innerHTML = `<span class="copy-code-badge" onclick="navigator.clipboard.writeText(this.nextSibling.textContent.trim()); alert('Code snippet copied!');">Copy Code</span><pre style="margin:0;">${codeBlockString}</pre>`;
-            
-            aiBubble.appendChild(codeContainer);
-            streamBox.appendChild(aiBubble);
-            streamBox.scrollTop = streamBox.scrollHeight;
-        }, 800);
-    }
-
-    function closeGeminiWorkspace() { document.getElementById('geminiWorkspaceSidebar').classList.remove('open'); }
 
     function rebuildSummaryTableMarkupStructures() {
         const thead = document.getElementById('summaryTableHeaderTarget');
@@ -651,7 +681,6 @@
                 <td><input type="text" class="table-text-input" value="${inc.date}" oninput="handleIncidentTableInput(${globalIndex}, 'date', this.value)" ${editMode?'':'readonly'}></td>
                 <td><input type="text" class="table-text-input" value="${inc.ref}" oninput="handleIncidentTableInput(${globalIndex}, 'ref', this.value)" ${editMode?'':'readonly'}></td>
                 <td><input type="text" class="table-text-input" value="${inc.action}" oninput="handleIncidentTableInput(${globalIndex}, 'action', this.value)" ${editMode?'':'readonly'}></td>
-                <td style="text-align:center;"><button class="gemini-trigger-btn" onclick="consultGeminiAIHelper(${globalIndex})" title="Ask Gemini to write an automated fix snippet">✨</button></td>
                 <td>
                     <select class="script-select ${inc.status === 'SOLVED' ? 'status-done' : 'status-pending'}" onchange="updateIncidentStatus(this, ${globalIndex})">
                         <option value="PENDING" ${inc.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
@@ -794,18 +823,16 @@
     }
 
     function addNewItemElement(id, sec) {
-        saveDOMChangesToArray();
-        activeStateDataset[id][sec].push({ text: "New Parameter Metric...", checked: false });
+        activeStateDataset[id][sec].push({ text: "New Parameter...", checked: false });
         renderMatrixDashboardGrid();
-        toggleLiveEditDOMSync(true);
+        if(editMode) toggleLiveEditDOMSync(true);
         syncCloudChannel("checklist", activeStateDataset);
     }
 
     function deleteItemElement(btn, id, sec, idx) {
-        saveDOMChangesToArray();
         activeStateDataset[id][sec].splice(idx, 1);
         renderMatrixDashboardGrid();
-        toggleLiveEditDOMSync(true);
+        if(editMode) toggleLiveEditDOMSync(true);
         syncCloudChannel("checklist", activeStateDataset);
     }
 
@@ -820,38 +847,6 @@
         }
     }
 
-    function saveDOMChangesToArray() {
-        const mainInput = document.getElementById('globalMainHeadlineText');
-        const overviewInput = document.getElementById('headlineOverviewPanelText');
-        const logInput = document.getElementById('headlineIncidentLogText');
-        
-        if(mainInput && mainInput.value.trim() !== "") globalHeadlinesDataset.main = mainInput.value.trim();
-        if(overviewInput && overviewInput.value.trim() !== "") globalHeadlinesDataset.overview = overviewInput.value.trim();
-        if(logInput && logInput.value.trim() !== "") globalHeadlinesDataset.log = logInput.value.trim();
-        
-        localStorage.setItem('operations_headlines_storage', JSON.stringify(globalHeadlinesDataset));
-        syncCloudChannel("headlines", globalHeadlinesDataset);
-
-        document.querySelectorAll('.product-column').forEach(col => {
-            const id = col.getAttribute('data-id');
-            if (!activeStateDataset[id]) return;
-            
-            const titleNode = col.querySelector('.product-title-node');
-            if(titleNode) activeStateDataset[id].title = titleNode.value.trim();
-            
-            ['key', 'app', 'prev'].forEach(sec => {
-                const rows = col.querySelectorAll(`.block-section[data-section="${sec}"] .node-item`);
-                rows.forEach((li, idx) => {
-                    const textNode = li.querySelector('.node-text-input');
-                    if(textNode && activeStateDataset[id][sec][idx]) {
-                        activeStateDataset[id][sec][idx].text = textNode.value.trim();
-                    }
-                });
-            });
-        });
-        syncCloudChannel("checklist", activeStateDataset);
-    }
-
     function toggleLiveEdit() {
         if (!editMode) {
             const inputPass = prompt("Enter Admin Password:");
@@ -861,7 +856,6 @@
         } else {
             editMode = false;
             document.getElementById('editModeBtn').textContent = "🔒 Unlock Admin Edit";
-            saveDOMChangesToArray(); 
         }
         rebuildSummaryTableMarkupStructures(); 
         renderMatrixDashboardGrid();
