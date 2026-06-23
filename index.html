@@ -52,7 +52,7 @@
         .container { max-width: 1400px; margin: 0 auto; display: none; }
         header { text-align: center; border-bottom: 5px solid var(--primary-color); padding-bottom: 15px; margin-bottom: 35px; }
         
-        .headline-input-element { display: block; border: 1px dashed transparent; background: transparent; font-size: 2.4rem; text-transform: uppercase; margin: 0; font-weight: 800; text-align: center; color: var(--primary-color); width: 100%; outline: none; transition: all 0.2s; }
+        .headline-input-element { display: block; border: 1px dashed transparent; background: transparent; font-size: 2.4rem; text-transform: uppercase; margin: 0; font-weight: 800; text-align: center; color: var(--primary-color); width: 100%; outline: none; transition: all 0.2s; font-family: inherit; }
         .admin-unlocked .headline-input-element { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; }
 
         .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
@@ -93,7 +93,7 @@
         .gemini-trigger-btn {
             background: linear-gradient(135deg, #e0ebff, #f3e8ff); border: 1px solid #cadaff;
             border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: inline-flex;
-            justify-content: center; align-items: center; font-size: 1.1rem; transition: all 0.2s;
+            justify-content: center; align-items: center; font-size: 1.1rem; transition: all 0.2s; text-decoration: none;
         }
         .gemini-trigger-btn:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(66, 133, 244, 0.4); background: #d2e3fc; }
 
@@ -103,7 +103,7 @@
 
         .overall-view-panel, .analytics-section { background: #fff; border: 2px solid var(--primary-color); border-radius: 12px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow-x: auto; }
         
-        .panel-heading-input { border: 1px dashed transparent; background: transparent; font-size: 1.2rem; font-weight: bold; color: var(--primary-color); text-transform: uppercase; width: 60%; outline: none; transition: all 0.2s; }
+        .panel-heading-input { border: 1px dashed transparent; background: transparent; font-size: 1.2rem; font-weight: bold; color: var(--primary-color); text-transform: uppercase; width: 60%; outline: none; transition: all 0.2s; font-family: inherit; }
         .admin-unlocked .panel-heading-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 6px; }
 
         .matrix-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; margin-top: 10px; }
@@ -144,7 +144,7 @@
         .product-content { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
         .block-section { display: flex; flex-direction: column; padding: 5px; border-radius: 6px; transition: background-color 0.4s; }
         .block-header { font-size: 0.95rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-
+        
         .script-select { font-size: 0.8rem; font-weight: bold; padding: 3px 8px; border-radius: 12px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f5f5f5; }
         .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; }
 
@@ -186,6 +186,7 @@
     </div>
 </div>
 
+<!-- GEMINI INTEGRATED AUTO BUG-FIX WORKSPACE PANEL -->
 <div id="geminiWorkspaceSidebar">
     <div class="gemini-header-panel">
         <div class="gemini-logo-sparkle">✨ Gemini AI Assistant</div>
@@ -448,19 +449,24 @@
         { model: "GT Runner 2", issue: "XDR positional pathing algorithms require validation mapping logs under complex structural environments", date: "2026-04", ref: "TM202604100158", action: "Verified active; algorithmic tracking guarantees trace continuity even across dense environmental noise loops", status: "SOLVED" }
     ];
 
+    let activeStateDataset = DEFAULT_CHECKLIST_DATA;
+    let incidentLogDataset = DEFAULT_INCIDENTS_DATA;
+
     function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
         if (inputVal === SITE_ENTRY_PASSWORD) {
             document.getElementById('masterAuthShield').style.display = 'none';
             document.getElementById('captureArea').style.display = 'block'; 
             
-            // RENDERS INSTANTLY: Bypass potential network hangs
+            // Safety Data Recovery Fallback (Prevents empty layouts)
+            if(Object.keys(activeStateDataset).length === 0) activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+            if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
+
             applyHeadlineStateToDOM();
             rebuildSummaryTableMarkupStructures();
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
 
-            // Background Async Syncing
             fetchCloudState().then(() => {
                 applyHeadlineStateToDOM();
                 rebuildSummaryTableMarkupStructures();
@@ -471,6 +477,16 @@
             document.getElementById('authErrorNode').style.display = 'block';
             document.getElementById('masterGateKeyInput').value = '';
         }
+    }
+
+    function applyHeadlineStateToDOM() {
+        const mainInput = document.getElementById('globalMainHeadlineText');
+        const overviewInput = document.getElementById('headlineOverviewPanelText');
+        const logInput = document.getElementById('headlineIncidentLogText');
+        
+        if(mainInput) mainInput.value = globalHeadlinesDataset.main || "New Products Checklist & Analytics";
+        if(overviewInput) overviewInput.value = globalHeadlinesDataset.overview || "📊 Overall Matrix Summary View";
+        if(logInput) logInput.value = globalHeadlinesDataset.log || "🚨 Technical Incident Capture Log";
     }
 
     function handleHeadlineInput(fieldKey, valueString) {
@@ -778,16 +794,18 @@
     }
 
     function addNewItemElement(id, sec) {
+        saveDOMChangesToArray();
         activeStateDataset[id][sec].push({ text: "New Parameter Metric...", checked: false });
         renderMatrixDashboardGrid();
-        if(editMode) toggleLiveEditDOMSync(true);
+        toggleLiveEditDOMSync(true);
         syncCloudChannel("checklist", activeStateDataset);
     }
 
     function deleteItemElement(btn, id, sec, idx) {
+        saveDOMChangesToArray();
         activeStateDataset[id][sec].splice(idx, 1);
         renderMatrixDashboardGrid();
-        if(editMode) toggleLiveEditDOMSync(true);
+        toggleLiveEditDOMSync(true);
         syncCloudChannel("checklist", activeStateDataset);
     }
 
@@ -802,6 +820,38 @@
         }
     }
 
+    function saveDOMChangesToArray() {
+        const mainInput = document.getElementById('globalMainHeadlineText');
+        const overviewInput = document.getElementById('headlineOverviewPanelText');
+        const logInput = document.getElementById('headlineIncidentLogText');
+        
+        if(mainInput && mainInput.value.trim() !== "") globalHeadlinesDataset.main = mainInput.value.trim();
+        if(overviewInput && overviewInput.value.trim() !== "") globalHeadlinesDataset.overview = overviewInput.value.trim();
+        if(logInput && logInput.value.trim() !== "") globalHeadlinesDataset.log = logInput.value.trim();
+        
+        localStorage.setItem('operations_headlines_storage', JSON.stringify(globalHeadlinesDataset));
+        syncCloudChannel("headlines", globalHeadlinesDataset);
+
+        document.querySelectorAll('.product-column').forEach(col => {
+            const id = col.getAttribute('data-id');
+            if (!activeStateDataset[id]) return;
+            
+            const titleNode = col.querySelector('.product-title-node');
+            if(titleNode) activeStateDataset[id].title = titleNode.value.trim();
+            
+            ['key', 'app', 'prev'].forEach(sec => {
+                const rows = col.querySelectorAll(`.block-section[data-section="${sec}"] .node-item`);
+                rows.forEach((li, idx) => {
+                    const textNode = li.querySelector('.node-text-input');
+                    if(textNode && activeStateDataset[id][sec][idx]) {
+                        activeStateDataset[id][sec][idx].text = textNode.value.trim();
+                    }
+                });
+            });
+        });
+        syncCloudChannel("checklist", activeStateDataset);
+    }
+
     function toggleLiveEdit() {
         if (!editMode) {
             const inputPass = prompt("Enter Admin Password:");
@@ -811,6 +861,7 @@
         } else {
             editMode = false;
             document.getElementById('editModeBtn').textContent = "🔒 Unlock Admin Edit";
+            saveDOMChangesToArray(); 
         }
         rebuildSummaryTableMarkupStructures(); 
         renderMatrixDashboardGrid();
@@ -872,16 +923,19 @@
 
     async function fetchCloudState() {
         let cachedHeadlines = localStorage.getItem('operations_headlines_storage');
-        if(cachedHeadlines) globalHeadlinesDataset = JSON.parse(cachedHeadlines);
+        if(cachedHeadlines) {
+            let parsed = JSON.parse(cachedHeadlines);
+            if(parsed && parsed.main) globalHeadlinesDataset = parsed;
+        }
 
         if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
         try {
             let res = await fetch(CLOUD_DATABASE_URL);
             let json = await res.json();
             if(json.status === "success" && json.data) {
-                if(json.data.checklist) activeStateDataset = json.data.checklist;
+                if(json.data.checklist && Object.keys(json.data.checklist).length > 0) activeStateDataset = json.data.checklist;
                 if(json.data.incidents && json.data.incidents.length > 0) incidentLogDataset = json.data.incidents;
-                if(json.data.headlines) globalHeadlinesDataset = json.data.headlines;
+                if(json.data.headlines && json.data.headlines.main) globalHeadlinesDataset = json.data.headlines;
             }
         } catch(e) { console.log("Cloud Read Error:", e); }
     }
