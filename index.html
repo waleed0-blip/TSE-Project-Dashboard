@@ -9,15 +9,17 @@
     
     <style>
         :root {
-            --primary-color: #5c3e35;
-            --accent-color: #d2eaf7;
-            --bg-color: #fcfbfa;
+            --primary-color: #4a332a;
+            --accent-color: #eaf4fc;
+            --bg-color: #f4f7f6;
             --card-bg: #ffffff;
             --text-color: #2b2b2b;
-            --border-color: #d9d9d9;
-            --success-color: #388e3c;
-            --warning-color: #f57c00;
-            --danger-color: #d32f2f;
+            --border-color: #e0e0e0;
+            --success-color: #2e7d32;
+            --warning-color: #ef6c00;
+            --danger-color: #c62828;
+            --shadow-light: 0 8px 24px rgba(0,0,0,0.04);
+            --shadow-hover: 0 12px 32px rgba(0,0,0,0.08);
         }
 
         body {
@@ -25,118 +27,134 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0; padding: 30px 20px;
-            line-height: 1.5;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* PERFECT FLEXBOX DEAD-CENTER PORTAL GATE */
         #masterAuthShield {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: var(--primary-color); display: flex; justify-content: center; align-items: center; z-index: 999999;
         }
         .auth-card {
-            background-color: white; color: var(--text-color); padding: 40px; border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 90%; margin: auto;
+            background-color: white; color: var(--text-color); padding: 40px; border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); text-align: center; max-width: 420px; width: 90%; margin: auto;
         }
-        .auth-card h2 { margin-top: 0; color: var(--primary-color); font-size: 1.6rem; text-transform: uppercase; }
-        .auth-input { width: 100%; padding: 12px 20px; margin-bottom: 15px; border: 2px solid var(--border-color); border-radius: 25px; font-size: 1rem; text-align: center; outline: none; box-sizing: border-box; }
+        .auth-card h2 { margin-top: 0; color: var(--primary-color); font-size: 1.6rem; text-transform: uppercase; letter-spacing: 1px; }
+        .auth-input { width: 100%; padding: 14px 20px; margin-bottom: 15px; border: 2px solid var(--border-color); border-radius: 25px; font-size: 1.05rem; text-align: center; outline: none; box-sizing: border-box; transition: border-color 0.2s; }
         .auth-input:focus { border-color: var(--primary-color); }
-        .auth-submit-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; width: 100%; cursor: pointer; transition: background 0.2s; }
-        .auth-submit-btn:hover { background-color: #422c26; }
-        .error-message { color: #d32f2f; font-size: 0.85rem; font-weight: bold; margin-top: 10px; display: none; }
+        .auth-submit-btn { background-color: var(--primary-color); color: white; border: none; padding: 14px 30px; border-radius: 25px; font-weight: bold; font-size: 1.05rem; width: 100%; cursor: pointer; transition: background 0.2s; }
+        .auth-submit-btn:hover { background-color: #31211b; }
+        .error-message { color: var(--danger-color); font-size: 0.85rem; font-weight: bold; margin-top: 10px; display: none; }
 
-        .container { max-width: 1400px; margin: 0 auto; display: none; }
-        header { text-align: center; border-bottom: 5px solid var(--primary-color); padding-bottom: 15px; margin-bottom: 35px; }
+        .container { max-width: 1450px; margin: 0 auto; display: none; }
+        header { text-align: center; padding-bottom: 20px; margin-bottom: 30px; border-bottom: 4px solid var(--primary-color); }
         
-        .headline-input-element { display: block; border: 1px dashed transparent; background: transparent; font-size: 2.4rem; text-transform: uppercase; margin: 0; font-weight: 800; text-align: center; color: var(--primary-color); width: 100%; outline: none; transition: all 0.2s; font-family: inherit; }
-        .admin-unlocked .headline-input-element { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; }
+        .headline-input-element { display: block; border: 1px dashed transparent; background: transparent; font-size: 2.6rem; text-transform: uppercase; margin: 0; font-weight: 800; text-align: center; color: var(--primary-color); width: 100%; outline: none; transition: all 0.2s; font-family: inherit; letter-spacing: -0.5px; }
+        .admin-unlocked .headline-input-element { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 10px; }
 
-        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .kpi-card { background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: transform 0.2s; }
-        .kpi-card h3 { margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; color: #666; }
-        .kpi-card .num { font-size: 2.2rem; font-weight: 800; color: var(--primary-color); }
-        .kpi-card.interactive-metric { cursor: pointer; border-left: 4px solid var(--primary-color); }
-        .kpi-card.interactive-metric:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); background-color: #fffdfb; }
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 35px; }
+        .kpi-card { background: var(--card-bg); border-radius: 16px; padding: 25px 20px; text-align: center; box-shadow: var(--shadow-light); transition: transform 0.2s, box-shadow 0.2s; border: 1px solid rgba(0,0,0,0.03); }
+        .kpi-card h3 { margin: 0 0 12px 0; font-size: 0.95rem; text-transform: uppercase; color: #777; letter-spacing: 0.5px; }
+        .kpi-card .num { font-size: 2.6rem; font-weight: 800; color: var(--primary-color); line-height: 1; }
+        .kpi-card.interactive-metric { cursor: pointer; border-bottom: 4px solid transparent; }
+        .kpi-card.interactive-metric:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-bottom: 4px solid var(--primary-color); }
 
-        .analytics-modal-shield { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999998; justify-content: center; align-items: center; }
-        .modal-content-box { background-color: white; border-radius: 14px; max-width: 950px; width: 95%; max-height: 80vh; overflow-y: auto; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
-        .close-modal-x { position: absolute; right: 20px; top: 20px; font-size: 1.5rem; font-weight: bold; color: #666; cursor: pointer; }
+        .analytics-modal-shield { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 999998; justify-content: center; align-items: center; }
+        .modal-content-box { background-color: white; border-radius: 20px; max-width: 900px; width: 95%; max-height: 85vh; overflow-y: auto; padding: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; }
+        .close-modal-x { position: absolute; right: 25px; top: 25px; font-size: 1.5rem; font-weight: bold; color: #999; cursor: pointer; transition: color 0.2s; }
+        .close-modal-x:hover { color: #333; }
 
-        .overall-view-panel, .analytics-section { background: #fff; border: 2px solid var(--primary-color); border-radius: 12px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow-x: auto; }
+        .overall-view-panel, .analytics-section { background: var(--card-bg); border-radius: 16px; padding: 25px; margin-bottom: 35px; box-shadow: var(--shadow-light); overflow-x: auto; border: 1px solid rgba(0,0,0,0.03); }
         
-        .panel-heading-input { border: 1px dashed transparent; background: transparent; font-size: 1.2rem; font-weight: bold; color: var(--primary-color); text-transform: uppercase; width: 60%; outline: none; transition: all 0.2s; font-family: inherit; }
-        .admin-unlocked .panel-heading-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 6px; }
+        .panel-heading-input { border: 1px dashed transparent; background: transparent; font-size: 1.25rem; font-weight: 800; color: var(--primary-color); text-transform: uppercase; width: 60%; outline: none; transition: all 0.2s; font-family: inherit; }
+        .admin-unlocked .panel-heading-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; }
 
-        .matrix-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; margin-top: 10px; }
-        .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 10px 12px; vertical-align: middle; }
-        .matrix-table th { background-color: #f5f5f5; font-weight: bold; position: relative; }
+        .matrix-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 0.95rem; margin-top: 15px; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+        .matrix-table th, .matrix-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); }
+        .matrix-table th:last-child, .matrix-table td:last-child { border-right: none; }
+        .matrix-table tr:last-child td { border-bottom: none; }
+        .matrix-table th { background-color: #f8f9fa; font-weight: 700; color: #444; }
         .matrix-header-container { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 
-        .matrix-del-col-btn { display: none; background: var(--danger-color); color: white; border: none; border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
+        .matrix-del-col-btn { display: none; background: var(--danger-color); color: white; border: none; border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
         .admin-unlocked .matrix-del-col-btn { display: inline-block; }
-        .clickable-cell-trigger { cursor: pointer; text-decoration: underline; color: var(--primary-color); font-weight: bold; }
+        .matrix-del-col-btn:hover { opacity: 0.8; }
+        .clickable-cell-trigger { cursor: pointer; font-weight: 600; color: var(--primary-color); transition: color 0.2s; }
+        .clickable-cell-trigger:hover { color: var(--warning-color); }
 
-        /* Incident Delete Button */
-        .incident-del-btn { display: none; background: var(--danger-color); color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 0.8rem; cursor: pointer; font-weight: bold; }
+        .incident-del-btn { display: none; background: #ffebee; color: var(--danger-color); border: 1px solid #ffcdd2; border-radius: 6px; padding: 4px 10px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
         .admin-unlocked .incident-del-btn { display: inline-block; }
+        .incident-del-btn:hover { background: var(--danger-color); color: white; }
 
-        .log-btn, .admin-control-btn { background-color: var(--warning-color); color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; cursor: pointer; display: none; }
+        .log-btn, .admin-control-btn { background-color: var(--warning-color); color: white; border: none; padding: 8px 18px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; cursor: pointer; display: none; box-shadow: 0 4px 10px rgba(239, 108, 0, 0.2); }
         .admin-unlocked .log-btn, .admin-unlocked .admin-control-btn { display: inline-block; }
-        .admin-control-btn { background-color: #333; margin-left: 8px; }
+        .admin-control-btn { background-color: #333; margin-left: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 20px; flex-wrap: wrap; }
-        .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
-        .tab-btn { background-color: #eaeaea; border: none; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-        .tab-btn.active, .tab-btn:hover { background-color: var(--accent-color); color: #111; }
+        .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; }
+        .tabs { display: flex; gap: 10px; flex-wrap: wrap; }
+        .tab-btn { background-color: #fff; border: 1px solid var(--border-color); padding: 10px 22px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.95rem; box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: all 0.2s; color: #555; }
+        .tab-btn.active, .tab-btn:hover { background-color: var(--primary-color); color: #fff; border-color: var(--primary-color); }
 
-        .right-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .edit-toggle-btn { background-color: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+        .right-controls { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .edit-toggle-btn { background-color: #2c3e50; color: #fff; border: none; padding: 12px 24px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: background 0.2s; }
         .edit-toggle-btn.editing-active { background-color: var(--warning-color); }
         
-        .export-box { display: flex; align-items: center; gap: 6px; background-color: #fff; border: 2px solid var(--primary-color); border-radius: 25px; padding: 3px 5px 3px 15px; }
-        .export-select { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); font-weight: bold; font-size: 0.85rem; outline: none; cursor: pointer; }
-        .export-btn { background-color: var(--primary-color); color: white; border: none; padding: 6px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+        .export-box { display: flex; align-items: center; gap: 8px; background-color: #fff; border: 2px solid var(--primary-color); border-radius: 30px; padding: 4px 6px 4px 18px; }
+        .export-select { padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border-color); font-weight: 600; font-size: 0.9rem; outline: none; cursor: pointer; background: #fafafa; }
+        .export-btn { background-color: var(--primary-color); color: white; border: none; padding: 8px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: opacity 0.2s; }
+        .export-btn:hover { opacity: 0.9; }
 
-        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 25px; margin-top: 25px; }
-        .product-column { background: var(--card-bg); border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; }
-        .product-column-header-wrap { position: relative; }
-        .product-title-input { border: 1px dashed transparent; background: transparent; padding: 18px; font-size: 1.3rem; font-weight: 700; text-align: center; border-bottom: 1px solid var(--border-color); outline: none; width: 100%; box-sizing: border-box; font-family: inherit; color: inherit; }
+        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 30px; margin-top: 30px; }
+        .product-column { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow-light); border: 1px solid rgba(0,0,0,0.04); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .product-column:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+        .product-column-header-wrap { position: relative; background: #fafafa; border-bottom: 1px solid var(--border-color); }
+        .product-title-input { border: 1px dashed transparent; background: transparent; padding: 22px; font-size: 1.4rem; font-weight: 800; text-align: center; outline: none; width: 100%; box-sizing: border-box; font-family: inherit; color: var(--primary-color); }
         .admin-unlocked .product-title-input { border: 1px dashed var(--warning-color); background-color: #fffde7; }
         
-        .remove-column-btn { display: none; position: absolute; top: 18px; right: 15px; background: var(--danger-color); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-weight: bold; cursor: pointer; z-index: 10; }
+        .remove-column-btn { display: none; position: absolute; top: 22px; right: 20px; background: var(--danger-color); color: white; border: none; border-radius: 50%; width: 26px; height: 26px; font-weight: bold; cursor: pointer; z-index: 10; }
         .admin-unlocked .remove-column-btn { display: flex; justify-content: center; align-items: center; }
 
-        .product-content { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-        .block-section { display: flex; flex-direction: column; padding: 5px; border-radius: 6px; transition: background-color 0.4s; }
-        .block-header { font-size: 0.95rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .product-content { padding: 25px; display: flex; flex-direction: column; gap: 25px; }
+        .block-section { display: flex; flex-direction: column; }
+        .block-header { font-size: 0.95rem; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
         
-        .script-select { font-size: 0.8rem; font-weight: bold; padding: 3px 8px; border-radius: 12px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f5f5f5; }
-        .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; }
+        .script-select { font-size: 0.85rem; font-weight: bold; padding: 4px 10px; border-radius: 14px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f5f5f5; }
+        .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; cursor: pointer; }
 
         .status-done { background-color: #e8f5e9; color: var(--success-color); border: 1px solid #c8e6c9; }
         .status-progress { background-color: #fff3e0; color: var(--warning-color); border: 1px solid #ffe0b2; }
         .status-pending { background-color: #ffebee; color: var(--danger-color); border: 1px solid #ffcdd2; }
-        .status-badge-inline { display: inline-block; font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 10px; }
+        .status-badge-inline { display: inline-block; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; }
 
-        .node-list { list-style: none; padding: 0; margin: 0; min-height: 5px; }
-        .node-item { padding: 8px 6px; display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; position: relative; }
-        .node-item input[type="checkbox"] { margin-top: 4px; width: 15px; height: 15px; accent-color: var(--success-color); }
+        .node-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+        .node-item { padding: 10px; display: flex; align-items: flex-start; gap: 14px; font-size: 0.95rem; position: relative; background: #fafbfc; border-radius: 10px; border: 1px solid transparent; transition: background 0.2s; }
+        .node-item:hover { background: #f0f4f8; }
+        .node-item input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--success-color); cursor: pointer; }
         
-        .node-text-input { flex-grow: 1; border: 1px dashed transparent; background: transparent; font-size: 0.9rem; color: var(--text-color); outline: none; width: 100%; padding-right: 25px; box-sizing: border-box; font-family: inherit; }
-        .admin-unlocked .node-text-input { border: 1px dashed var(--warning-color); background-color: #fffde7; }
+        .node-text-input { flex-grow: 1; border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: #333; outline: none; width: 100%; padding-right: 25px; box-sizing: border-box; font-family: inherit; line-height: 1.4; }
+        .admin-unlocked .node-text-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 6px; padding: 4px; }
 
-        .delete-node-btn { display: none; background: none; border: none; color: var(--danger-color); cursor: pointer; position: absolute; right: 4px; font-weight: bold; }
+        .delete-node-btn { display: none; background: none; border: none; color: #ccc; cursor: pointer; position: absolute; right: 10px; top: 10px; font-weight: bold; font-size: 1rem; transition: color 0.2s; }
+        .delete-node-btn:hover { color: var(--danger-color); }
         .admin-unlocked .delete-node-btn { display: block; }
-        .add-node-btn { display: none; background: none; border: 1px dashed var(--warning-color); color: var(--warning-color); padding: 5px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; margin-top: 6px; text-align: center; font-weight: bold; }
+        .add-node-btn { display: none; background: #fff8e1; border: 1px dashed var(--warning-color); color: var(--warning-color); padding: 8px; border-radius: 10px; font-size: 0.85rem; cursor: pointer; margin-top: 10px; text-align: center; font-weight: bold; transition: background 0.2s; }
+        .add-node-btn:hover { background: #ffecb3; }
         .admin-unlocked .add-node-btn { display: block; }
 
-        .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.9rem; color: var(--text-color); outline: none; width: 100%; font-family: inherit; }
-        .admin-unlocked .table-text-input { background-color: #fffde7; border: 1px dashed var(--warning-color); border-radius: 4px; }
+        .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: #333; outline: none; width: 100%; font-family: inherit; padding: 4px; }
+        .admin-unlocked .table-text-input { background-color: #fffde7; border: 1px dashed var(--warning-color); border-radius: 6px; }
 
-        .progress-container, .summary-progress-bg { background: #e0e0e0; border-radius: 10px; height: 10px; overflow: hidden; }
-        .summary-progress-bg { height: 6px; margin-top: 4px; }
-        .progress-bar { background: var(--success-color); height: 100%; width: 0%; transition: width 0.4s; }
-        .search-bar { padding: 10px 20px; width: 150px; border: 2px solid var(--border-color); border-radius: 25px; outline: none; }
+        .progress-container, .summary-progress-bg { background: #eaedf0; border-radius: 10px; height: 12px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
+        .summary-progress-bg { height: 8px; margin-top: 6px; }
+        .progress-bar { background: linear-gradient(90deg, #4caf50, #81c784); height: 100%; width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .search-bar { padding: 12px 22px; width: 180px; border: 1px solid var(--border-color); border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        
+        /* UNHIDE BUTTON STYLE */
+        .unhide-block { padding: 20px; text-align: center; background: #f9f9f9; border-radius: 12px; border: 1px dashed #ccc; margin-top: 15px; }
+        .btn-unhide { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        /* MODAL CATEGORY STYLES */
+        .cat-header { background: #f0f4f8; font-weight: 800; color: var(--primary-color); text-transform: uppercase; letter-spacing: 1px; font-size: 1rem; }
+        .cat-item { padding-left: 30px !important; color: #444; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -154,10 +172,10 @@
 <div id="analyticsKpiModal" class="analytics-modal-shield" onclick="closeKpiDetailsModal()">
     <div class="modal-content-box" onclick="event.stopPropagation()">
         <span class="close-modal-x" onclick="closeKpiDetailsModal()">✕</span>
-        <h2 id="modalTargetTitle" style="color:var(--primary-color); margin-top:0; border-bottom:2px solid #eee; padding-bottom:8px;">Bugs Log Summary View</h2>
+        <h2 id="modalTargetTitle" style="color:var(--primary-color); margin-top:0; border-bottom:3px solid #f0f0f0; padding-bottom:12px;">Data Breakdown View</h2>
         <div style="overflow-x:auto;">
             <table class="matrix-table">
-                <thead>
+                <thead id="modalTableHeader">
                     <tr>
                         <th>Product Model</th>
                         <th>Captured Technical Issue</th>
@@ -190,9 +208,9 @@
             <h3>Resolved Cases</h3>
             <div class="num" id="kpiSolved" style="color:var(--success-color)">0</div>
         </div>
-        <div class="kpi-card">
-            <h3>Project Footprint Hotspot</h3>
-            <div class="num" id="kpiHotspot" style="font-size:1rem; padding-top:15px; font-weight:700;">None</div>
+        <div class="kpi-card interactive-metric" onclick="showTestedProductsModal()">
+            <h3>Total Products Tested</h3>
+            <div class="num" id="kpiTested">0</div>
         </div>
     </div>
 
@@ -245,8 +263,10 @@
         </div>
     </div>
 
-    <div class="tracker-card">
-        <div class="tracker-meta"><span>Total Checklist Execution Progress</span><span id="trackerText">0% Completed</span></div>
+    <div class="tracker-card" style="background:#fff; padding:25px; border-radius:16px; box-shadow:var(--shadow-light); border:1px solid rgba(0,0,0,0.03);">
+        <div style="display:flex; justify-content:space-between; font-weight:800; color:#555; margin-bottom:10px; text-transform:uppercase; font-size:0.95rem;">
+            <span>Total Checklist Execution Progress</span><span id="trackerText" style="color:var(--primary-color);">0% Completed</span>
+        </div>
         <div class="progress-container"><div class="progress-bar" id="trackerVisual"></div></div>
     </div>
 
@@ -258,7 +278,7 @@
     const ADMIN_EDIT_PASSWORD = "1234";       
     
     // Paste your Google Web App Script URL here:
-    const CLOUD_DATABASE_URL = "https://script.google.com/macros/s/AKfycbyzuQxBW3kW9nOhI5Kb6kG9Hjgua-OFPdhuq2DfmySC3AsKk-qXQNPcYFnTlzoeyA-1ZQ/exec"; 
+    const CLOUD_DATABASE_URL = "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE"; 
 
     let editMode = false;
     let currentActiveFilterId = "";
@@ -271,7 +291,7 @@
 
     const DEFAULT_CHECKLIST_DATA = {
         mate80: {
-            title: "Mate 80 Pro", script: "done",
+            title: "Mate 80 Pro", script: "done", category: "Smartphones", isArchived: false,
             key: [
                 { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
                 { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
@@ -297,7 +317,7 @@
             ]
         },
         matepad: {
-            title: "Matepad Pro Max", script: "done",
+            title: "Matepad Pro Max", script: "done", category: "Tablets", isArchived: false,
             key: [
                 { text: "Inaccurate GPS/Location on Huawei Tablets. (en-us16078162)", checked: false },
                 { text: "Overheating during heavy Usage (For 1 Hours using go paint and Huawei notes).", checked: false },
@@ -316,7 +336,7 @@
             prev: []
         },
         watchx1: {
-            title: "Watch Kids X1 Pro", script: "done",
+            title: "Watch Kids X1 Pro", script: "done", category: "Wearables", isArchived: false,
             key: [
                 { text: "My HUAWEI Mate X7 series phone cannot wirelessly reverse charge HUAWEI FreeBuds Pro 5", checked: false },
                 { text: "delay when make calls, watch videos, or play games", checked: false },
@@ -330,7 +350,7 @@
             ]
         },
         watchfit5: {
-            title: "Watch Fit 5 Series", script: "done",
+            title: "Watch Fit 5 Series", script: "done", category: "Wearables", isArchived: false,
             key: [
                 { text: "Issues of launching the voice assistant on my watch (en-us15818740)", checked: false },
                 { text: "Mute incoming call using the watch", checked: false },
@@ -343,14 +363,14 @@
                 { text: "Petal Maps", checked: false },
                 { text: "YouTube (High resolution Videos)", checked: false },
                 { text: "Facebook", checked: false },
-                { text: "WPS PC (Arabic and English)", checked: false },
+                { text: "WPS Office PC Level Framework", checked: false },
                 { text: "Netflix", checked: false },
                 { text: "Amazon Prime", checked: false }
             ],
             prev: []
         },
         nova15: {
-            title: "Nova 15 Max", script: "done",
+            title: "Nova 15 Max", script: "done", category: "Smartphones", isArchived: false,
             key: [
                 { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
                 { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
@@ -376,7 +396,6 @@
         }
     };
 
-    // 100% COMPLETE INJECTED AUDIT FROM LOG CIRCLES INSIDE REPORTS 1, 2, AND 3
     const DEFAULT_INCIDENTS_DATA = [
         { model: "Nova 15 Max", issue: "AI Remove option is not found in Gallery application framework", date: "2026-06", ref: "TM6202606150161", action: "HQ Still Analyzing the captured software package behavior parameters", status: "PENDING" },
         { model: "Nova 15 Max", issue: "Camera screen layout flashes aggressively during photo snapshot capture execution", date: "2026-05", ref: "TM202605150178", action: "HQ Analyzed and released technical support knowledge brief FAQ en-us16099942", status: "SOLVED" },
@@ -405,6 +424,7 @@
 
     let activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
     let incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
+    let completedProductsData = {}; // Stores categorized tested products
 
     function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
@@ -412,17 +432,14 @@
             document.getElementById('masterAuthShield').style.display = 'none';
             document.getElementById('captureArea').style.display = 'block'; 
             
-            // Safety Data Recovery Fallback (Prevents empty layouts)
             if(Object.keys(activeStateDataset).length === 0) activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
             if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
 
-            // RENDERS INSTANTLY: Bypass potential network hangs
             applyHeadlineStateToDOM();
             rebuildSummaryTableMarkupStructures();
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
 
-            // Background Async Syncing
             fetchCloudState().then(() => {
                 applyHeadlineStateToDOM();
                 rebuildSummaryTableMarkupStructures();
@@ -528,30 +545,11 @@
             if(inc.status === "PENDING") pendingCount++; else solvedCount++;
         });
 
-        let productMetrics = {};
-        incidentLogDataset.forEach(inc => {
-            if (!productMetrics[inc.model]) productMetrics[inc.model] = { total: 0, pending: 0 };
-            productMetrics[inc.model].total++;
-            if (inc.status === "PENDING") productMetrics[inc.model].pending++;
-        });
-
-        let hotProduct = "None"; let maxPending = -1; let maxTotal = 0;
-        Object.keys(productMetrics).forEach(p => {
-            let pData = productMetrics[p];
-            if (pData.pending > maxPending || (pData.pending === maxPending && pData.total > maxTotal)) {
-                maxPending = pData.pending;
-                maxTotal = pData.total;
-                hotProduct = p;
-            }
-        });
-
         document.getElementById('kpiScopeLabel').innerText = targetLabel;
         document.getElementById('kpiTotal').innerText = filteredIncidents.length;
         document.getElementById('kpiPending').innerText = pendingCount;
         document.getElementById('kpiSolved').innerText = solvedCount;
         
-        document.getElementById('kpiHotspot').innerText = hotProduct !== "None" ? `${hotProduct} (${maxPending} Open / ${maxTotal} Total)` : "None";
-
         renderIncidentLogTable(filteredIncidents);
     }
 
@@ -597,6 +595,9 @@
         else if (scopeFilterMode === "SOLVED") { targetedArray = targetedArray.filter(i => i.status === "SOLVED"); titleLabel += " - Resolved Track Logs"; }
 
         document.getElementById('modalTargetTitle').innerText = titleLabel;
+        const thead = document.getElementById('modalTableHeader');
+        thead.innerHTML = `<tr><th>Product Model</th><th>Captured Technical Issue</th><th>Date Logged</th><th>Reference Code</th><th>Status</th></tr>`;
+
         const modalBody = document.getElementById('modalTableBodyTarget');
         modalBody.innerHTML = '';
 
@@ -618,14 +619,38 @@
         document.getElementById('analyticsKpiModal').style.display = 'flex';
     }
 
+    function showTestedProductsModal() {
+        document.getElementById('modalTargetTitle').innerText = "Products Fully Tested (100% Checklist Completion)";
+        const thead = document.getElementById('modalTableHeader');
+        thead.innerHTML = `<tr><th>Category & Validated Products</th></tr>`;
+
+        const modalBody = document.getElementById('modalTableBodyTarget');
+        modalBody.innerHTML = '';
+
+        if(Object.keys(completedProductsData).length === 0) {
+            modalBody.innerHTML = `<tr><td style="text-align:center; color:#888; padding:20px;">No products have reached 100% completion testing yet.</td></tr>`;
+        } else {
+            let html = "";
+            Object.keys(completedProductsData).forEach(cat => {
+                html += `<tr><td class="cat-header">${cat}</td></tr>`;
+                completedProductsData[cat].forEach(prodName => {
+                    html += `<tr><td class="cat-item">✔️ ${prodName}</td></tr>`;
+                });
+            });
+            modalBody.innerHTML = html;
+        }
+        document.getElementById('analyticsKpiModal').style.display = 'flex';
+    }
+
     function closeKpiDetailsModal() { document.getElementById('analyticsKpiModal').style.display = 'none'; }
 
     function addNewProductColumnChannel() {
         const rawName = prompt("Enter the name of the new Product Model:");
         if(!rawName) return;
+        const catName = prompt("Enter category (e.g. Smartphones, Tablets, Wearables):", "Other Devices") || "Other Devices";
 
         const cleanKey = "prod_" + Date.now();
-        activeStateDataset[cleanKey] = { title: rawName, script: "pending", key: [], app: [], prev: [] };
+        activeStateDataset[cleanKey] = { title: rawName, script: "pending", category: catName, isArchived: false, key: [], app: [], prev: [] };
         
         rebuildSummaryTableMarkupStructures();
         renderMatrixDashboardGrid();
@@ -651,12 +676,22 @@
         });
     }
 
+    function unhideProductColumn(id) {
+        activeStateDataset[id].isArchived = false;
+        syncCloudChannel("checklist", activeStateDataset);
+        switchProductFilter(''); // Send back to main view
+    }
+
     function renderMatrixDashboardGrid() {
         const grid = document.getElementById('matrixGrid');
         if (!grid) return; grid.innerHTML = '';
 
         Object.keys(activeStateDataset).forEach(id => {
             const prod = activeStateDataset[id];
+            
+            // Smart Auto-Hide Logic: Skip rendering on main dashboard if archived
+            if (currentActiveFilterId === "" && prod.isArchived) return;
+
             const col = document.createElement('div');
             col.className = 'product-column'; col.setAttribute('data-id', id);
 
@@ -665,6 +700,14 @@
                     <button class="remove-column-btn" onclick="removeProductColumnChannel('${id}')">✕</button>
                     <input type="text" class="product-title-node product-title-input" value="${prod.title}" oninput="handleProductTitleInput('${id}', this.value)" ${editMode?'':'readonly'}>
                 </div>
+            `;
+
+            // Add unhide button if viewing an archived tab specifically
+            if (prod.isArchived && currentActiveFilterId === id) {
+                contentHTML += `<div class="unhide-block"><button class="btn-unhide" onclick="unhideProductColumn('${id}')">👁️ Unhide to Main Dashboard</button></div>`;
+            }
+
+            contentHTML += `
                 <div class="product-content">
                     <div class="block-section" data-section="script">
                         <div class="block-header">
@@ -707,15 +750,36 @@
         refreshMetrics();
     }
 
+    function checkProductAutoCompletion(prodId) {
+        let pTotal = 0; let pChecked = 0;
+        ['key', 'app', 'prev'].forEach(sec => {
+            if(activeStateDataset[prodId][sec]) {
+                pTotal += activeStateDataset[prodId][sec].length;
+                pChecked += activeStateDataset[prodId][sec].filter(i => i.checked).length;
+            }
+        });
+        
+        if (pTotal > 0 && pTotal === pChecked && !activeStateDataset[prodId].isArchived) {
+            setTimeout(() => {
+                if(confirm(`Great job! All checks for ${activeStateDataset[prodId].title} are fully complete.\n\nDo you want to auto-hide this product from the main dashboard to save space? (You can still access it anytime via its tab).`)) {
+                    activeStateDataset[prodId].isArchived = true;
+                    syncCloudChannel("checklist", activeStateDataset);
+                    if(currentActiveFilterId === "") renderMatrixDashboardGrid(); // re-render to hide
+                }
+            }, 300); // slight delay to show the checkmark first
+        }
+    }
+
     function handleCheckboxStateToggle(chk, id, sec, idx) {
         activeStateDataset[id][sec][idx].checked = chk.checked;
         refreshMetrics();
         syncCloudChannel("checklist", activeStateDataset);
+        if(chk.checked) checkProductAutoCompletion(id);
     }
 
     function addNewItemElement(id, sec) {
         if(editMode) saveDOMChangesToArray();
-        activeStateDataset[id][sec].push({ text: "New Parameter...", checked: false });
+        activeStateDataset[id][sec].push({ text: "New Parameter Metric...", checked: false });
         renderMatrixDashboardGrid();
         if(editMode) toggleLiveEditDOMSync(true);
         syncCloudChannel("checklist", activeStateDataset);
@@ -799,20 +863,39 @@
 
     function refreshMetrics() {
         let totalMaster = 0; let checkedMaster = 0;
-        const sections = ['key', 'app', 'prev'];
+        let completedProductsCount = 0;
+        completedProductsData = {}; // reset categorization map
+
         Object.keys(activeStateDataset).forEach(prodId => {
-            sections.forEach(sec => {
+            let pTotal = 0; let pChecked = 0;
+            
+            ['key', 'app', 'prev'].forEach(sec => {
                 if (activeStateDataset[prodId] && activeStateDataset[prodId][sec]) {
                     const total = activeStateDataset[prodId][sec].length;
                     const checked = activeStateDataset[prodId][sec].filter(i => i.checked).length;
+                    pTotal += total; pChecked += checked;
                     totalMaster += total; checkedMaster += checked;
+                    
                     if(document.getElementById(`m-${sec}-${prodId}`)) document.getElementById(`m-${sec}-${prodId}`).style.width = (total > 0 ? (checked / total) * 100 : 0) + '%';
                     if(document.getElementById(`txt-${sec}-${prodId}`)) document.getElementById(`txt-${sec}-${prodId}`).innerText = `${checked}/${total}`;
                 }
             });
+
+            // If product is 100% complete, map it for the new KPI
+            if (pTotal > 0 && pTotal === pChecked) {
+                completedProductsCount++;
+                let cat = activeStateDataset[prodId].category || "Other Devices";
+                if(!completedProductsData[cat]) completedProductsData[cat] = [];
+                completedProductsData[cat].push(activeStateDataset[prodId].title);
+            }
         });
+
+        // Update Tracker Progress Bar
         if(document.getElementById('trackerVisual')) document.getElementById('trackerVisual').style.width = (totalMaster > 0 ? (checkedMaster / totalMaster) * 100 : 0) + '%';
         if(document.getElementById('trackerText')) document.getElementById('trackerText').innerText = `${totalMaster > 0 ? Math.round((checkedMaster / totalMaster) * 100) : 0}% Completed`;
+
+        // Update KPI Box #4
+        document.getElementById('kpiTested').innerText = completedProductsCount;
     }
 
     function switchProductFilter(id) {
@@ -820,8 +903,8 @@
         document.querySelectorAll('#filterTabGroup .tab-btn').forEach(btn => btn.classList.remove('active'));
         if(event && event.target) event.target.classList.add('active');
 
-        const columns = document.querySelectorAll('.product-column');
-        columns.forEach(col => { if(col.getAttribute('data-id') === id || !id) col.classList.remove('hidden-node'); else col.classList.add('hidden-node'); });
+        // We use full render so unhide buttons display properly
+        renderMatrixDashboardGrid(); 
         calculateDynamicKPIs();
     }
 
@@ -897,10 +980,10 @@
 
     function generateComprehensivePresentationDeck() {
         let pptx = new PptxGenJS(); pptx.layout = 'LAYOUT_16x9';
-        let slide1 = pptx.addSlide(); slide1.addShape(pptx.ShapeType.rect, { fill: '5c3e35', x: 0, y: 0, w: '100%', h: '100%' });
+        let slide1 = pptx.addSlide(); slide1.addShape(pptx.ShapeType.rect, { fill: '4a332a', x: 0, y: 0, w: '100%', h: '100%' });
         slide1.addText(`${globalHeadlinesDataset.main.toUpperCase()}`, { x: 0.6, y: 2.2, w: 11, h: 2, fontSize: 26, bold: true, color: 'ffffff' });
         
-        let slide2 = pptx.addSlide(); slide2.addText("ANALYTICS PERFORMANCE SUMMARY TIMELINE", { x: 0.5, y: 0.4, w: 10, h: 0.5, fontSize: 18, bold: true, color: '5c3e35' });
+        let slide2 = pptx.addSlide(); slide2.addText("ANALYTICS PERFORMANCE SUMMARY TIMELINE", { x: 0.5, y: 0.4, w: 10, h: 0.5, fontSize: 18, bold: true, color: '4a332a' });
         let pptTableRows = [["Product Model", "Captured Technical Quality Issue Description", "Logged", "Reference Ticket", "Resolution Status"]];
         incidentLogDataset.forEach(inc => { pptTableRows.push([inc.model, inc.issue, inc.date, inc.ref, inc.status]); });
         slide2.addTable(pptTableRows, { x: 0.5, y: 1.5, w: 12.3, colW: [1.8, 5.3, 1.0, 2.5, 1.7], border: { pt: '1', color: 'e2e2e2' }, fill: 'ffffff', fontSize: 9, autoPage: true });
@@ -908,12 +991,12 @@
         Object.keys(activeStateDataset).forEach(id => {
             const p = activeStateDataset[id];
             let slide = pptx.addSlide();
-            slide.addText(`${p.title.toUpperCase()} FUNCTIONAL CHECKLIST STATUS`, { x: 0.5, y: 0.4, w: 11, h: 0.5, fontSize: 18, bold: true, color: '5c3e35' });
-            slide.addText("Egypt Proactive Quality Evaluation Framework", { x: 0.5, y: 0.9, w: 8, h: 0.3, fontSize: 11, bold: true, color: 'f57c00' });
+            slide.addText(`${p.title.toUpperCase()} FUNCTIONAL CHECKLIST STATUS`, { x: 0.5, y: 0.4, w: 11, h: 0.5, fontSize: 18, bold: true, color: '4a332a' });
+            slide.addText("Egypt Proactive Quality Evaluation Framework", { x: 0.5, y: 0.9, w: 8, h: 0.3, fontSize: 11, bold: true, color: 'ef6c00' });
 
             let currentY = 1.4;
             ['key', 'app', 'prev'].forEach(sec => {
-                let titleLabel = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Bugs Trace";
+                let titleLabel = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Issues Bugs Trace";
                 let itemsList = [];
                 if (p[sec]) p[sec].forEach(item => { itemsList.push((item.checked ? "[✓] " : "[ ] ") + item.text); });
 
