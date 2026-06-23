@@ -149,7 +149,8 @@
         .search-bar { padding: 12px 22px; width: 180px; border: 1px solid var(--border-color); border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         
         .unhide-block { padding: 20px; text-align: center; background: #f9f9f9; border-radius: 12px; border: 1px dashed #ccc; margin-top: 15px; }
-        .btn-unhide { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-unhide { background: var(--warning-color); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 10px rgba(239, 108, 0, 0.2); transition: transform 0.2s; }
+        .btn-unhide:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(239, 108, 0, 0.4); }
         
         .cat-header { background: #f0f4f8; font-weight: 800; color: var(--primary-color); text-transform: uppercase; letter-spacing: 1px; font-size: 1rem; }
         .cat-item { padding-left: 30px !important; color: #444; font-weight: 500; }
@@ -261,13 +262,6 @@
         </div>
     </div>
 
-    <div class="tracker-card" style="background:#fff; padding:25px; border-radius:16px; box-shadow:var(--shadow-light); border:1px solid rgba(0,0,0,0.03);">
-        <div style="display:flex; justify-content:space-between; font-weight:800; color:#555; margin-bottom:10px; text-transform:uppercase; font-size:0.95rem;">
-            <span>Total Checklist Execution Progress</span><span id="trackerText" style="color:var(--primary-color);">0% Completed</span>
-        </div>
-        <div class="progress-container"><div class="progress-bar" id="trackerVisual"></div></div>
-    </div>
-
     <div class="matrix-grid" id="matrixGrid"></div>
 </div>
 
@@ -287,7 +281,6 @@
         log: "🚨 Technical Incident Capture Log"
     };
 
-    // ALIGNED PERFECTLY WITH THE 5 INCIDENT LOG DEVICES
     const DEFAULT_CHECKLIST_DATA = {
         nova15max: {
             title: "Nova 15 Max", script: "done", category: "Smartphones", isArchived: false,
@@ -504,7 +497,6 @@
         headerHTML += `</tr>`;
         thead.innerHTML = headerHTML;
 
-        // FIXED LOGIC: Replace partial progress counts with Done/Pending Badges
         let bodyHTML = `
             <tr>
                 <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('script')">Sales Product Scripts 🔍</td>
@@ -647,11 +639,22 @@
 
     function closeKpiDetailsModal() { document.getElementById('analyticsKpiModal').style.display = 'none'; }
 
+    // SMART RETEST LOGIC ADDED HERE
     function addNewProductColumnChannel() {
         const rawName = prompt("Enter the name of the new Product Model:");
         if(!rawName) return;
-        const catName = prompt("Enter category (e.g. Smartphones, Tablets, Wearables, Audio):", "Other Devices") || "Other Devices";
 
+        // Check if product already exists to enable smart retesting
+        const existingId = Object.keys(activeStateDataset).find(id => activeStateDataset[id].title.toLowerCase() === rawName.toLowerCase());
+        
+        if (existingId) {
+            if(confirm(`"${activeStateDataset[existingId].title}" is already in your database. Do you want to bring it back to the dashboard for retesting?`)) {
+                retestProduct(existingId);
+            }
+            return;
+        }
+
+        const catName = prompt("Enter category (e.g. Smartphones, Tablets, Wearables, Audio):", "Other Devices") || "Other Devices";
         const cleanKey = "prod_" + Date.now();
         activeStateDataset[cleanKey] = { title: rawName, script: "pending", category: catName, isArchived: false, key: [], app: [], prev: [] };
         
@@ -679,7 +682,16 @@
         });
     }
 
-    function unhideProductColumn(id) {
+    // SMART RETEST UNHIDE FUNCTION
+    function retestProduct(id) {
+        if(confirm(`Do you want to wipe all previous checkmarks clean for a fresh test?\n\nClick "OK" to reset checks.\nClick "Cancel" to just unhide it with its old checks intact.`)) {
+            ['key', 'app', 'prev'].forEach(sec => {
+                if(activeStateDataset[id][sec]) {
+                    activeStateDataset[id][sec].forEach(item => item.checked = false);
+                }
+            });
+            activeStateDataset[id].script = "pending";
+        }
         activeStateDataset[id].isArchived = false;
         syncCloudChannel("checklist", activeStateDataset);
         switchProductFilter(''); 
@@ -705,7 +717,7 @@
             `;
 
             if (prod.isArchived && currentActiveFilterId === id) {
-                contentHTML += `<div class="unhide-block"><button class="btn-unhide" onclick="unhideProductColumn('${id}')">👁️ Unhide to Main Dashboard</button></div>`;
+                contentHTML += `<div class="unhide-block"><button class="btn-unhide" onclick="retestProduct('${id}')">🔄 Retest Product (Restore to Dashboard)</button></div>`;
             }
 
             contentHTML += `
@@ -762,7 +774,7 @@
         
         if (pTotal > 0 && pTotal === pChecked && !activeStateDataset[prodId].isArchived) {
             setTimeout(() => {
-                if(confirm(`Great job! All checks for ${activeStateDataset[prodId].title} are fully complete.\n\nDo you want to auto-hide this product from the main dashboard to save space? (You can still access it anytime via its tab).`)) {
+                if(confirm(`Great job! All checks for ${activeStateDataset[prodId].title} are fully complete.\n\nDo you want to auto-hide this product from the main dashboard to save space? (You can retest it anytime via its tab or the Add button).`)) {
                     activeStateDataset[prodId].isArchived = true;
                     syncCloudChannel("checklist", activeStateDataset);
                     if(currentActiveFilterId === "") renderMatrixDashboardGrid(); 
@@ -863,7 +875,6 @@
     }
 
     function refreshMetrics() {
-        let totalMaster = 0; let checkedMaster = 0;
         let completedProductsCount = 0;
         completedProductsData = {}; 
 
@@ -875,7 +886,6 @@
                     const total = activeStateDataset[prodId][sec].length;
                     const checked = activeStateDataset[prodId][sec].filter(i => i.checked).length;
                     pTotal += total; pChecked += checked;
-                    totalMaster += total; checkedMaster += checked;
                     
                     let badge = document.getElementById(`badge-${sec}-${prodId}`);
                     if (badge) {
@@ -897,9 +907,6 @@
                 completedProductsData[cat].push(activeStateDataset[prodId].title);
             }
         });
-
-        if(document.getElementById('trackerVisual')) document.getElementById('trackerVisual').style.width = (totalMaster > 0 ? (checkedMaster / totalMaster) * 100 : 0) + '%';
-        if(document.getElementById('trackerText')) document.getElementById('trackerText').innerText = `${totalMaster > 0 ? Math.round((checkedMaster / totalMaster) * 100) : 0}% Completed`;
 
         document.getElementById('kpiTested').innerText = completedProductsCount;
     }
