@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Products Checklist & Analytics Dashboard</title>
+    
+    <!-- Native Presentation Compiler Dependency Engine -->
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #5c3e35;
+            --accent-color: #d2eaf7;
+            --bg-color: #fcfbfa;
+            --card-bg: #ffffff;
+            --text-color: #2b2b2b;
+            --border-color: #d9d9d9;
+            --success-color: #388e3c;
+            --warning-color: #f57c00;
+            --danger-color: #d32f2f;
+            --gemini-blue: #4285f4;
+            --gemini-purple: #9b51e0;
+            --gemini-dark: #1a1b26;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0; padding: 30px 20px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* PERFECT FLEXBOX DEAD-CENTER PORTAL GATE */
+        #masterAuthShield {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: var(--primary-color); display: flex; justify-content: center; align-items: center; z-index: 999999;
+        }
+        .auth-card {
+            background-color: white; color: var(--text-color); padding: 40px; border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 90%; margin: auto;
+        }
+        .auth-card h2 { margin-top: 0; color: var(--primary-color); font-size: 1.6rem; text-transform: uppercase; }
+        .auth-input { width: 100%; padding: 12px 20px; margin-bottom: 15px; border: 2px solid var(--border-color); border-radius: 25px; font-size: 1rem; text-align: center; outline: none; box-sizing: border-box; }
+        .auth-input:focus { border-color: var(--primary-color); }
+        .auth-submit-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; width: 100%; cursor: pointer; transition: background 0.2s; }
+        .auth-submit-btn:hover { background-color: #422c26; }
+        .error-message { color: #d32f2f; font-size: 0.85rem; font-weight: bold; margin-top: 10px; display: none; }
+
+        .container { max-width: 1400px; margin: 0 auto; display: none; }
+        header { text-align: center; border-bottom: 5px solid var(--primary-color); padding-bottom: 15px; margin-bottom: 35px; }
+        
+        .headline-input-element { display: block; border: 1px dashed transparent; background: transparent; font-size: 2.4rem; text-transform: uppercase; margin: 0; font-weight: 800; text-align: center; color: var(--primary-color); width: 100%; outline: none; transition: all 0.2s; }
+        .admin-unlocked .headline-input-element { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; }
+
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .kpi-card { background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: transform 0.2s; }
+        .kpi-card h3 { margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; color: #666; }
+        .kpi-card .num { font-size: 2.2rem; font-weight: 800; color: var(--primary-color); }
+        .kpi-card.interactive-metric { cursor: pointer; border-left: 4px solid var(--primary-color); }
+        .kpi-card.interactive-metric:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); background-color: #fffdfb; }
+
+        /* GOOGLE COLAB-STYLE GEMINI WORKSPACE SIDEBAR */
+        #geminiWorkspaceSidebar {
+            position: fixed; top: 0; right: -460px; width: 420px; height: 100vh;
+            background-color: #fff; border-left: 4px solid var(--gemini-blue);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 100000;
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; box-sizing: border-box;
+        }
+        #geminiWorkspaceSidebar.open { right: 0; }
+        
+        .gemini-header-panel {
+            background: linear-gradient(135deg, var(--gemini-blue), var(--gemini-purple));
+            color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .gemini-logo-sparkle { font-size: 1.4rem; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .gemini-content-stream { flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #f8f9fa; display: flex; flex-direction: column; gap: 15px; }
+        
+        .chat-bubble { padding: 12px 16px; border-radius: 14px; font-size: 0.9rem; max-width: 85%; }
+        .chat-bubble.user { background-color: var(--accent-color); color: #111; align-self: flex-end; }
+        .chat-bubble.ai { background-color: #fff; border: 1px solid var(--border-color); color: #222; align-self: flex-start; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        
+        .gemini-code-block {
+            background-color: var(--gemini-dark); color: #f8f8f2; padding: 14px; border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace; font-size: 0.82rem; overflow-x: auto;
+            position: relative; margin-top: 8px; border-left: 3px solid #50fa7b;
+        }
+        .copy-code-badge { position: absolute; right: 10px; top: 10px; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; color: #fff; }
+
+        .gemini-trigger-btn {
+            background: linear-gradient(135deg, #e0ebff, #f3e8ff); border: 1px solid #cadaff;
+            border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: inline-flex;
+            justify-content: center; align-items: center; font-size: 1.1rem; transition: all 0.2s;
+        }
+        .gemini-trigger-btn:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(66, 133, 244, 0.4); background: #d2e3fc; }
+
+        .analytics-modal-shield { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999998; justify-content: center; align-items: center; }
+        .modal-content-box { background-color: white; border-radius: 14px; max-width: 950px; width: 95%; max-height: 80vh; overflow-y: auto; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
+        .close-modal-x { position: absolute; right: 20px; top: 20px; font-size: 1.5rem; font-weight: bold; color: #666; cursor: pointer; }
+
+        .overall-view-panel, .analytics-section { background: #fff; border: 2px solid var(--primary-color); border-radius: 12px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow-x: auto; }
+        
+        .panel-heading-input { border: 1px dashed transparent; background: transparent; font-size: 1.2rem; font-weight: bold; color: var(--primary-color); text-transform: uppercase; width: 60%; outline: none; transition: all 0.2s; }
+        .admin-unlocked .panel-heading-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 6px; }
+
+        .matrix-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; margin-top: 10px; }
+        .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 10px 12px; vertical-align: middle; }
+        .matrix-table th { background-color: #f5f5f5; font-weight: bold; position: relative; }
+        .matrix-header-container { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+        .matrix-del-col-btn { display: none; background: var(--danger-color); color: white; border: none; border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
+        .admin-unlocked .matrix-del-col-btn { display: inline-block; }
+        .clickable-cell-trigger { cursor: pointer; text-decoration: underline; color: var(--primary-color); font-weight: bold; }
+
+        .log-btn, .admin-control-btn { background-color: var(--warning-color); color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; cursor: pointer; display: none; }
+        .admin-unlocked .log-btn, .admin-unlocked .admin-control-btn { display: inline-block; }
+        .admin-control-btn { background-color: #333; margin-left: 8px; }
+
+        .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 20px; flex-wrap: wrap; }
+        .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tab-btn { background-color: #eaeaea; border: none; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+        .tab-btn.active, .tab-btn:hover { background-color: var(--accent-color); color: #111; }
+
+        .right-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .edit-toggle-btn { background-color: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+        .edit-toggle-btn.editing-active { background-color: var(--warning-color); }
+        
+        .export-box { display: flex; align-items: center; gap: 6px; background-color: #fff; border: 2px solid var(--primary-color); border-radius: 25px; padding: 3px 5px 3px 15px; }
+        .export-select { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); font-weight: bold; font-size: 0.85rem; outline: none; cursor: pointer; }
+        .export-btn { background-color: var(--primary-color); color: white; border: none; padding: 6px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+
+        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 25px; margin-top: 25px; }
+        .product-column { background: var(--card-bg); border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; }
+        .product-column-header-wrap { position: relative; }
+        .product-title-input { border: 1px dashed transparent; background: transparent; padding: 18px; font-size: 1.3rem; font-weight: 700; text-align: center; border-bottom: 1px solid var(--border-color); outline: none; width: 100%; box-sizing: border-box; font-family: inherit; color: inherit; }
+        .admin-unlocked .product-title-input { border: 1px dashed var(--warning-color); background-color: #fffde7; }
+        
+        .remove-column-btn { display: none; position: absolute; top: 18px; right: 15px; background: var(--danger-color); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-weight: bold; cursor: pointer; z-index: 10; }
+        .admin-unlocked .remove-column-btn { display: flex; justify-content: center; align-items: center; }
+
+        .product-content { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        .block-section { display: flex; flex-direction: column; padding: 5px; border-radius: 6px; transition: background-color 0.4s; }
+        .block-header { font-size: 0.95rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+
+        .script-select { font-size: 0.8rem; font-weight: bold; padding: 3px 8px; border-radius: 12px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f5f5f5; }
+        .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; }
+
+        .status-done { background-color: #e8f5e9; color: var(--success-color); border: 1px solid #c8e6c9; }
+        .status-progress { background-color: #fff3e0; color: var(--warning-color); border: 1px solid #ffe0b2; }
+        .status-pending { background-color: #ffebee; color: var(--danger-color); border: 1px solid #ffcdd2; }
+        .status-badge-inline { display: inline-block; font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 10px; }
+
+        .node-list { list-style: none; padding: 0; margin: 0; min-height: 5px; }
+        .node-item { padding: 8px 6px; display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; position: relative; }
+        .node-item input[type="checkbox"] { margin-top: 4px; width: 15px; height: 15px; accent-color: var(--success-color); }
+        
+        .node-text-input { flex-grow: 1; border: 1px dashed transparent; background: transparent; font-size: 0.9rem; color: var(--text-color); outline: none; width: 100%; padding-right: 25px; box-sizing: border-box; font-family: inherit; }
+        .admin-unlocked .node-text-input { border: 1px dashed var(--warning-color); background-color: #fffde7; }
+
+        .delete-node-btn { display: none; background: none; border: none; color: var(--danger-color); cursor: pointer; position: absolute; right: 4px; font-weight: bold; }
+        .admin-unlocked .delete-node-btn { display: block; }
+        .add-node-btn { display: none; background: none; border: 1px dashed var(--warning-color); color: var(--warning-color); padding: 5px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; margin-top: 6px; text-align: center; font-weight: bold; }
+        .admin-unlocked .add-node-btn { display: block; }
+
+        .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.9rem; color: var(--text-color); outline: none; width: 100%; font-family: inherit; }
+        .admin-unlocked .table-text-input { background-color: #fffde7; border: 1px dashed var(--warning-color); border-radius: 4px; }
+
+        .progress-container, .summary-progress-bg { background: #e0e0e0; border-radius: 10px; height: 10px; overflow: hidden; }
+        .summary-progress-bg { height: 6px; margin-top: 4px; }
+        .progress-bar { background: var(--success-color); height: 100%; width: 0%; transition: width 0.4s; }
+        .search-bar { padding: 10px 20px; width: 150px; border: 2px solid var(--border-color); border-radius: 25px; outline: none; }
+    </style>
+</head>
+<body>
+
+<div id="masterAuthShield">
+    <div class="auth-card">
+        <h2>🔒 Secure Portal Gate</h2>
+        <p>This operational checklist is restricted. Enter the site security code to gain entry access.</p>
+        <input type="password" id="masterGateKeyInput" class="auth-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') handleMasterAuthCheck()">
+        <button class="auth-submit-btn" onclick="handleMasterAuthCheck()">Verify Entry Identity</button>
+        <div id="authErrorNode" class="error-message">✕ Invalid entry token. Please try again.</div>
+    </div>
+</div>
+
+<div id="geminiWorkspaceSidebar">
+    <div class="gemini-header-panel">
+        <div class="gemini-logo-sparkle">✨ Gemini AI Assistant</div>
+        <span style="cursor:pointer; font-weight:bold; font-size:1.2rem;" onclick="closeGeminiWorkspace()">✕</span>
+    </div>
+    <div class="gemini-content-stream" id="geminiStreamBox">
+        <!-- AI chat stream output drops here -->
+    </div>
+</div>
+
+<div id="analyticsKpiModal" class="analytics-modal-shield" onclick="closeKpiDetailsModal()">
+    <div class="modal-content-box" onclick="event.stopPropagation()">
+        <span class="close-modal-x" onclick="closeKpiDetailsModal()">✕</span>
+        <h2 id="modalTargetTitle" style="color:var(--primary-color); margin-top:0; border-bottom:2px solid #eee; padding-bottom:8px;">Bugs Log Summary View</h2>
+        <div style="overflow-x:auto;">
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Product Model</th>
+                        <th>Captured Technical Issue</th>
+                        <th>Date Logged</th>
+                        <th>Reference Code</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="modalTableBodyTarget"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="captureArea">
+    <header>
+        <input type="text" id="globalMainHeadlineText" class="headline-input-element" oninput="handleHeadlineInput('main', this.value)" readonly>
+    </header>
+
+    <div class="kpi-row">
+        <div class="kpi-card interactive-metric" onclick="triggerKpiFilterModal('TOTAL')">
+            <h3 id="kpiScopeLabel">Project Scope Issues</h3>
+            <div class="num" id="kpiTotal">0</div>
+        </div>
+        <div class="kpi-card interactive-metric" onclick="triggerKpiFilterModal('PENDING')">
+            <h3>Open Issues (Pending)</h3>
+            <div class="num" id="kpiPending" style="color:var(--danger-color)">0</div>
+        </div>
+        <div class="kpi-card interactive-metric" onclick="triggerKpiFilterModal('SOLVED')">
+            <h3>Resolved Cases</h3>
+            <div class="num" id="kpiSolved" style="color:var(--success-color)">0</div>
+        </div>
+        <div class="kpi-card">
+            <h3>Project Footprint Hotspot</h3>
+            <div class="num" id="kpiHotspot" style="font-size:1rem; padding-top:15px; font-weight:700;">None</div>
+        </div>
+    </div>
+
+    <div class="overall-view-panel">
+        <div class="section-title">
+            <input type="text" id="headlineOverviewPanelText" class="panel-heading-input" oninput="handleHeadlineInput('overview', this.value)" readonly>
+            <button class="admin-control-btn" onclick="addNewProductColumnChannel()">➕ Add Product Line</button>
+        </div>
+        <table class="matrix-table" id="matrixTableSummary">
+            <thead id="summaryTableHeaderTarget"></thead>
+            <tbody id="summaryTableBodyTarget"></tbody>
+        </table>
+    </div>
+
+    <div class="analytics-section" id="incidentsTableContainer">
+        <div class="section-title">
+            <input type="text" id="headlineIncidentLogText" class="panel-heading-input" oninput="handleHeadlineInput('log', this.value)" readonly>
+            <button class="log-btn" onclick="createNewIncidentRow()">➕ Log New Issue</button>
+        </div>
+        <table class="matrix-table" id="incidentLogTable">
+            <thead>
+                <tr>
+                    <th>Product Model</th>
+                    <th>Captured Technical Issue</th>
+                    <th>Date Logged</th>
+                    <th>Ticket / Reference</th>
+                    <th>HQ Developer Feedback & Actions</th>
+                    <th style="text-align:center;">AI Patch</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="incidentTableBody"></tbody>
+        </table>
+    </div>
+
+    <div class="dashboard-controls">
+        <div class="tabs" id="filterTabGroup"></div>
+        <div class="right-controls">
+            <button class="edit-toggle-btn" id="editModeBtn" onclick="toggleLiveEdit()">🔒 Unlock Admin Edit</button>
+            <input type="text" id="dashboardSearch" class="search-bar" placeholder="Search parameters..." oninput="executeSearch()">
+            
+            <div class="export-box">
+                <span>Save As:</span>
+                <select id="exportFormat" class="export-select">
+                    <option value="ppt">Presentation Deck (.ppt)</option>
+                    <option value="pdf">PDF Document (.pdf)</option>
+                    <option value="excel">Excel Document (.csv)</option>
+                </select>
+                <button class="export-btn" id="exportGoBtn" onclick="securedDownloadRouter()">Download</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tracker-card">
+        <div class="tracker-meta"><span>Total Checklist Execution Progress</span><span id="trackerText">0% Completed</span></div>
+        <div class="progress-container"><div class="progress-bar" id="trackerVisual"></div></div>
+    </div>
+
+    <div class="matrix-grid" id="matrixGrid"></div>
+</div>
+
+<script>
+    const SITE_ENTRY_PASSWORD = "1234512345"; 
+    const ADMIN_EDIT_PASSWORD = "1234";       
+    
+    // Paste your Google Web App Script URL here:
+    const CLOUD_DATABASE_URL = "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE"; 
+
+    let editMode = false;
+    let currentActiveFilterId = "";
+
+    let globalHeadlinesDataset = {
+        main: "New Products Checklist & Analytics",
+        overview: "📊 Overall Matrix Summary View",
+        log: "🚨 Technical Incident Capture Log"
+    };
+
+    const DEFAULT_CHECKLIST_DATA = {
+        mate80: {
+            title: "Mate 80 Pro", script: "done",
+            key: [
+                { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
+                { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
+                { text: "Ai Composition Feature in Camera.", checked: false },
+                { text: "AI features for the device (en-us16086415).", checked: false },
+                { text: "Speaker Sound Quality.", checked: false },
+                { text: "Battery Draining fast in normal use.", checked: false }
+            ],
+            app: [
+                { text: "WhatsApp (Test all functions)", checked: false },
+                { text: "WhatsApp Business (Test all functions)", checked: false },
+                { text: "YouTube (High resolution Videos)", checked: false },
+                { text: "Facebook", checked: false },
+                { text: "WPS Office", checked: false },
+                { text: "Snapchat", checked: false },
+                { text: "Instagram", checked: false }
+            ],
+            prev: [
+                { text: "Unable to Upload YouTube Shorts", checked: false },
+                { text: "Camera produce abnormal sound when zoom in 2x or higher", checked: false },
+                { text: "side fingerprint sensor", checked: false },
+                { text: "Unable to open or download PDF files shared in WhatsApp", checked: false }
+            ]
+        },
+        matepad: {
+            title: "Matepad Pro Max", script: "done",
+            key: [
+                { text: "Inaccurate GPS/Location on Huawei Tablets. (en-us16078162)", checked: false },
+                { text: "Overheating during heavy Usage (For 1 Hours using go paint and Huawei notes).", checked: false },
+                { text: "Refresh rate during playing any game", checked: false },
+                { text: "Stylus response during drawing in go paint and writing in Huawei notes using Ai handwriting enhance and freescript", checked: false }
+            ],
+            app: [
+                { text: "WhatsApp (Link Companion)", checked: false },
+                { text: "WhatsApp Business (Link Companion)", checked: false },
+                { text: "YouTube (High resolution Videos)", checked: false },
+                { text: "Facebook", checked: false },
+                { text: "WPS PC (Arabic and English)", checked: false },
+                { text: "Netflix", checked: false },
+                { text: "Amazon Prime", checked: false }
+            ],
+            prev: []
+        },
+        watchx1: {
+            title: "Watch Kids X1 Pro", script: "done",
+            key: [
+                { text: "My HUAWEI Mate X7 series phone cannot wirelessly reverse charge HUAWEI FreeBuds Pro 5", checked: false },
+                { text: "delay when make calls, watch videos, or play games", checked: false },
+                { text: "Spatial Audio head tracking effects are not noticeable or sensitive enough (en-us15914293)", checked: false }
+            ],
+            app: [],
+            prev: [
+                { text: "The Lossless icon is not displayed when I connect my HUAWEI FreeBuds Pro 5/FreeBuds Pro 4/FreeBuds Pro 3 earbuds to my phone (en-us15975613)", checked: false },
+                { text: "The UI elements overlap on the pop-up screen after FreeBuds Pro 4 is connected to the phone. (en-us16084677)", checked: false },
+                { text: "HUAWEI FreeBuds 7i/FreeBuds 6/FreeArc/FreeBuds Pro 4 earbuds cannot be fully charged, or stop charging (en-us16026161)", checked: false }
+            ]
+        },
+        watchfit5: {
+            title: "Watch Fit 5 Series", script: "done",
+            key: [
+                { text: "Issues of launching the voice assistant on my watch (en-us15818740)", checked: false },
+                { text: "Mute incoming call using the watch", checked: false },
+                { text: "Install Spotify app and the app can control music through the watch", checked: false },
+                { text: "use the ECG on Huawei Watches (en-us16055872)", checked: false },
+                { text: "Group's name of WhatsApp notification is not displayed on Watch when connected with iOS device (en-us15985122)", checked: false }
+            ],
+            app: [
+                { text: "Spotify", checked: false },
+                { text: "Petal Maps", checked: false },
+                { text: "YouTube (High resolution Videos)", checked: false },
+                { text: "Facebook", checked: false },
+                { text: "WPS Office PC Level Framework", checked: false },
+                { text: "Netflix", checked: false },
+                { text: "Amazon Prime", checked: false }
+            ],
+            prev: []
+        },
+        nova15: {
+            title: "Nova 15 Max", script: "done",
+            key: [
+                { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
+                { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
+                { text: "Ai Composition Feature in Camera.", checked: false },
+                { text: "X-Button functions and adding apps to easy access", checked: false },
+                { text: "Speaker Stereo Sound Quality.", checked: false },
+                { text: "Battery Draining fast in normal use.", checked: false }
+            ],
+            app: [
+                { text: "WhatsApp (Test all functions)", checked: false },
+                { text: "WhatsApp Business (Test all functions)", checked: false },
+                { text: "YouTube (High resolution Videos)", checked: false },
+                { text: "Facebook", checked: false },
+                { text: "WPS Office", checked: false },
+                { text: "Snapchat", checked: false },
+                { text: "Instagram", checked: false }
+            ],
+            prev: [
+                { text: "Phone system prompts GBox as Power-intensive app (en-us16078529)", checked: false },
+                { text: "Unable to open or download PDF files shared in WhatsApp", checked: false },
+                { text: "side fingerprint sensor", checked: false }
+            ]
+        }
+    };
+
+    const DEFAULT_INCIDENTS_DATA = [
+        { model: "Nova 15 Max", issue: "AI Remove option is not found in Gallery application framework", date: "2026-06", ref: "TM6202606150161", action: "HQ Still Analyzing the captured software package behavior parameters", status: "PENDING" },
+        { model: "Nova 15 Max", issue: "Camera screen layout flashes aggressively during photo snapshot capture execution", date: "2026-05", ref: "TM202605150178", action: "HQ Analyzed and released technical support knowledge brief FAQ en-us16099942", status: "SOLVED" },
+        { model: "Nova 15 Max", issue: "Viewfinder lags completely and zoom configurations freeze on aperture mode transitions", date: "2026-05", ref: "TM6202605190108", action: "HQ verified. System software update EMUI 14.2.0.113 or subsequent versions fully resolves behavior", status: "SOLVED" },
+        { model: "Nova 15 Max", issue: "Ana Vodafone workspace crashes instantly post deployment via AppGallery", date: "2026-05", ref: "TM202605120198", action: "Caused by non-commercial engineering sample obtaining custom root privileges", status: "SOLVED" },
+        { model: "Nova 15 Max", issue: "Android Auto validation parameters require cross-functional field status verification checks", date: "2026-05", ref: "TM6202605310059", action: "On-site sample verified active and functional. Knowledge base guidance articles modified and approved", status: "SOLVED" },
+        { model: "Nova 15 Max", issue: "VoWiFi configuration encounters audio cutouts and network dropping trends on Vodafone Egypt links", date: "2026-06", ref: "TM6202606160185", action: "HQ engineering core groups actively parsing packet trace packages to identify routing gaps", status: "PENDING" },
+        { model: "Mate 80 Pro", issue: "4K resolution video streams lag and stutter inside native Huawei Video App pathways", date: "2026-05", ref: "TM6202605210196", action: "VP9 decoding codec limit. Optimization coming within scheduled June 2026 software patch version", status: "SOLVED" },
+        { model: "Mate 80 Pro", issue: "AI Composition baseline framing reference lines fail to render on baseline commercial builds", date: "2026-03", ref: "WeLink Escalated", action: "Resolved within EMUI 15.0.0.141 patch. Technical brief en-us16087529 distributed through internal mail channels", status: "SOLVED" },
+        { model: "FreeBuds Pro 5", issue: "Acoustic performance leaks noticeable noise signals when operating at top 3 high volume levels", date: "2026-03", ref: "TM202603160216", action: "Expected fit threshold design. Users guided to choose a larger pair of ear tips and run fit test en-us15767422", status: "SOLVED" },
+        { model: "FreeBuds Pro 5", issue: "Huawei Sound parameters fail to activate when connected to legacy P30 Pro system profiles", date: "2026-04", ref: "TM202604260121", action: "HQ development core teams still analyzing raw audio package translation logs", status: "PENDING" },
+        { model: "FreeBuds Pro 5", issue: "Personalized prompt creation capabilities completely hidden inside global region accounts", date: "2026-06", ref: "TM6202606150132", action: "Feature restricted inside China mainland servers. Custom standalone global region FAQ has been requested", status: "SOLVED" },
+        { model: "FreeBuds Pro 5", issue: "Broadcast signaling packets trigger random pairing popup box layers on third-party POCO X3", date: "2026-06", ref: "TM6202606150134", action: "Derived from custom host phone background OS power policy rules. Basic earphone operations completely unhindered", status: "SOLVED" },
+        { model: "FreeBuds Pro 5", issue: "Equalizer curve frequency tuning shifts show no real audible differences upon minimal adjustments", date: "2026-03", ref: "Internal Brief", action: "Validation profiling tests ongoing to trace systemic filter metrics across target legacy accessories", status: "PENDING" },
+        { model: "Matepad Mini", issue: "Surface glass screen panel traps fingerprints and skin oils noticeably more than standard panels", date: "2026-04", ref: "WeLink Core", action: "Expected structural artifact of anti-glare PaperMatte micro-nano glass texturing processes", status: "SOLVED" },
+        { model: "Matepad Mini", issue: "Real-time AI handwriting adjustment capabilities require explicit rollout definitions inside Notes App", date: "2026-04", ref: "TM202604140241", action: "Feature limited to specific tablet lines. Notes app upgrade to 12.4.0.195 or higher forced", status: "SOLVED" },
+        { model: "Matepad Mini", issue: "Find Device mapping fails to compile NearLink precise allocation search boundaries", date: "2026-04", ref: "TM202604140245", action: "Hardware design constraints; device build parameter does not sport NearLink precise tracker chips", status: "SOLVED" },
+        { model: "Matepad Mini", issue: "Eye Care compliance registration data lacks updated certifications inside regional portals", date: "2026-04", ref: "TM202604100175", action: "PaperMatte display structural parameters verified eye-friendly. Custom regional certification copies attached", status: "SOLVED" },
+        { model: "Matepad Mini", issue: "Celia AI image generation pipeline restricted inside global productivity instances", date: "2026-04", ref: "TM202604100160", action: "Cloud script functionality restricted outside mainland China. Alternative productivity options recommended", status: "SOLVED" },
+        { model: "Matepad Mini", issue: "WPS Office PC-level engine profile scaling parameters show interface clipping limits", date: "2026-04", ref: "TM202604080222", action: "Full feature desktop alignment confirmed and cleared via R&D engine firmware deployment", status: "SOLVED" },
+        { model: "Matepad Mini", issue: "Huawei Books AI eye-tracking auto-paging feature is unavailable within global user frameworks", date: "2026-04", ref: "TM202604080216", action: "Feature restricted inside international service packages. Regional parameter roadmap entry created", status: "SOLVED" },
+        { model: "GT Runner 2", issue: "TruSense System tracking allocation visibility unconfirmed within UAE sales regions", date: "2026-04", ref: "TM202604150230", action: "R&D team reviewed and confirmed alignment; TruSense telemetry layers are active inside UAE software builds", status: "SOLVED" },
+        { model: "GT Runner 2", issue: "Transportation transit cards require localized regional profile downloads inside Dubai wallet networks", date: "2026-04", ref: "TM202604150205", action: "Feature approved and deployed; local transit payment maps can be compiled seamlessly via Huawei Wallet", status: "SOLVED" },
+        { model: "GT Runner 2", issue: "XDR positional pathing algorithms require validation mapping logs under complex structural environments", date: "2026-04", ref: "TM202604100158", action: "Verified active; algorithmic tracking guarantees trace continuity even across dense environmental noise loops", status: "SOLVED" }
+    ];
+
+    function handleMasterAuthCheck() {
+        const inputVal = document.getElementById('masterGateKeyInput').value.trim();
+        if (inputVal === SITE_ENTRY_PASSWORD) {
+            document.getElementById('masterAuthShield').style.display = 'none';
+            document.getElementById('captureArea').style.display = 'block'; 
+            
+            // RENDERS INSTANTLY: Bypass potential network hangs
+            applyHeadlineStateToDOM();
+            rebuildSummaryTableMarkupStructures();
+            renderMatrixDashboardGrid();
+            calculateDynamicKPIs();
+
+            // Background Async Syncing
+            fetchCloudState().then(() => {
+                applyHeadlineStateToDOM();
+                rebuildSummaryTableMarkupStructures();
+                renderMatrixDashboardGrid();
+                calculateDynamicKPIs();
+            });
+        } else {
+            document.getElementById('authErrorNode').style.display = 'block';
+            document.getElementById('masterGateKeyInput').value = '';
+        }
+    }
+
+    function handleHeadlineInput(fieldKey, valueString) {
+        globalHeadlinesDataset[fieldKey] = valueString;
+        localStorage.setItem('operations_headlines_storage', JSON.stringify(globalHeadlinesDataset));
+        syncCloudChannel("headlines", globalHeadlinesDataset);
+    }
+
+    function handleProductTitleInput(productId, valueString) {
+        if(activeStateDataset[productId]) {
+            activeStateDataset[productId].title = valueString;
+            syncCloudChannel("checklist", activeStateDataset);
+        }
+    }
+
+    function handleItemTextInput(productId, sectionKey, indexPosition, valueString) {
+        if(activeStateDataset[productId] && activeStateDataset[productId][sectionKey][indexPosition]) {
+            activeStateDataset[productId][sectionKey][indexPosition].text = valueString;
+            syncCloudChannel("checklist", activeStateDataset);
+        }
+    }
+
+    function handleIncidentTableInput(globalIndex, fieldKey, valueString) {
+        if(incidentLogDataset[globalIndex]) {
+            incidentLogDataset[globalIndex][fieldKey] = valueString;
+            calculateDynamicKPIs();
+            syncCloudChannel("incidents", incidentLogDataset);
+        }
+    }
+
+    function consultGeminiAIHelper(globalIdx) {
+        const item = incidentLogDataset[globalIdx];
+        const streamBox = document.getElementById('geminiStreamBox');
+        streamBox.innerHTML = ''; 
+
+        document.getElementById('geminiWorkspaceSidebar').classList.add('open');
+
+        const userBubble = document.createElement('div');
+        userBubble.className = 'chat-bubble user';
+        userBubble.innerText = `Gemini, analyze this captured technical bug on ${item.model}: "${item.issue}". Produce an automated script/workaround logic to resolve it.`;
+        streamBox.appendChild(userBubble);
+
+        setTimeout(() => {
+            const aiBubble = document.createElement('div');
+            aiBubble.className = 'chat-bubble ai';
+            aiBubble.innerHTML = `<strong>Gemini Engine Diagnostics:</strong> Found trace parameter alignment for ${item.model}. Based on WeCare database matching protocols, here is an automated fix patch layout script for testing verification:`;
+            
+            let codeBlockString = `// Automated Bug Mitigation Patch for ${item.model}\n`;
+            if (item.issue.includes("Gallery") || item.issue.includes("AI Remove")) {
+                codeBlockString += `function deployGalleryAIFeaturePatch() {\n  const framework = HuaweiGallery.getFrameworkCore();\n  if (!framework.hasModule("AIRemove")) {\n    framework.injectModuleExtension("en-us16099942", "AIRemove_v15_Commercial");\n    console.log("AI Remove feature trace successfully forced via package redirect.");\n  }\n}`;
+            } else if (item.issue.includes("4K") || item.issue.includes("video")) {
+                codeBlockString += `function forceVideoCodecDecoderFallback() {\n  const player = nativeHuaweiVideoPlayer.getInstance();\n  if (player.getCodecProfile() === "VP9") {\n    player.setDecodingEngineMode("SOFTWARE_FALLBACK_JUNE_2026");\n    player.clearStutterBuffers();\n  }\n}`;
+            } else {
+                codeBlockString += `function verifyCarrierVoWiFiPacketTrace() {\n  const networkHub = HuaweiNetwork_Egypt.getVodafoneConfig();\n  networkHub.setStabilityThreshold(0.95);\n  networkHub.flushRoutingTablesCache();\n  console.log("VoWiFi latency drop package tracing metrics activated.");\n}`;
+            }
+
+            const codeContainer = document.createElement('div');
+            codeContainer.className = 'gemini-code-block';
+            codeContainer.innerHTML = `<span class="copy-code-badge" onclick="navigator.clipboard.writeText(this.nextSibling.textContent.trim()); alert('Code snippet copied!');">Copy Code</span><pre style="margin:0;">${codeBlockString}</pre>`;
+            
+            aiBubble.appendChild(codeContainer);
+            streamBox.appendChild(aiBubble);
+            streamBox.scrollTop = streamBox.scrollHeight;
+        }, 800);
+    }
+
+    function closeGeminiWorkspace() { document.getElementById('geminiWorkspaceSidebar').classList.remove('open'); }
+
+    function rebuildSummaryTableMarkupStructures() {
+        const thead = document.getElementById('summaryTableHeaderTarget');
+        const tbody = document.getElementById('summaryTableBodyTarget');
+        if(!thead || !tbody) return;
+
+        let headerHTML = `<tr><th>Template Category</th>`;
+        Object.keys(activeStateDataset).forEach(id => {
+            headerHTML += `<th><div class="matrix-header-container"><span>${activeStateDataset[id].title}</span> <button class="matrix-del-col-btn" onclick="removeProductColumnChannel('${id}')">✕</button></div></th>`;
+        });
+        headerHTML += `</tr>`;
+        thead.innerHTML = headerHTML;
+
+        let bodyHTML = `
+            <tr>
+                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('script')">Sales Product Scripts 🔍</td>
+                ${Object.keys(activeStateDataset).map(id => `<td><span id="m-script-${id}" class="status-badge-inline status-done">✓ DONE</span></td>`).join('')}
+            </tr>
+            <tr>
+                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('key')">Key Functions 🔍</td>
+                ${Object.keys(activeStateDataset).map(id => `<td><div class="summary-progress-bg"><div class="progress-bar" id="m-key-${id}"></div></div><div class="summary-metric" id="txt-key-${id}">0/0</div></td>`).join('')}
+            </tr>
+            <tr>
+                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('app')">Common Apps 🔍</td>
+                ${Object.keys(activeStateDataset).map(id => `<td><div class="summary-progress-bg"><div class="progress-bar" id="m-app-${id}"></div></div><div class="summary-metric" id="txt-app-${id}">0/0</div></td>`).join('')}
+            </tr>
+            <tr>
+                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('prev')">Previous Series Issues 🔍</td>
+                ${Object.keys(activeStateDataset).map(id => `<td><div class="summary-progress-bg"><div class="progress-bar" id="m-prev-${id}"></div></div><div class="summary-metric" id="txt-prev-${id}">0/0</div></td>`).join('')}
+            </tr>
+        `;
+        tbody.innerHTML = bodyHTML;
+
+        const tabsBox = document.getElementById('filterTabGroup');
+        let tabsHTML = `<button class="tab-btn ${currentActiveFilterId===''?'active':''}" onclick="switchProductFilter('')">Show All</button>`;
+        Object.keys(activeStateDataset).forEach(id => {
+            tabsHTML += `<button class="tab-btn ${currentActiveFilterId===id?'active':''}" onclick="switchProductFilter('${id}')">${activeStateDataset[id].title}</button>`;
+        });
+        tabsBox.innerHTML = tabsHTML;
+    }
+
+    function calculateDynamicKPIs() {
+        let filteredIncidents = incidentLogDataset;
+        let targetLabel = "Project Scope Issues";
+        
+        if (currentActiveFilterId !== "" && activeStateDataset[currentActiveFilterId]) {
+            const modelText = activeStateDataset[currentActiveFilterId].title;
+            filteredIncidents = incidentLogDataset.filter(i => i.model.toLowerCase().includes(modelText.toLowerCase()));
+            targetLabel = `${modelText} Captured Issues`;
+        }
+
+        let pendingCount = 0; let solvedCount = 0;
+        filteredIncidents.forEach(inc => {
+            if(inc.status === "PENDING") pendingCount++; else solvedCount++;
+        });
+
+        let productMetrics = {};
+        incidentLogDataset.forEach(inc => {
+            if (!productMetrics[inc.model]) productMetrics[inc.model] = { total: 0, pending: 0 };
+            productMetrics[inc.model].total++;
+            if (inc.status === "PENDING") productMetrics[inc.model].pending++;
+        });
+
+        let hotProduct = "None"; let maxPending = -1; let maxTotal = 0;
+        Object.keys(productMetrics).forEach(p => {
+            let pData = productMetrics[p];
+            if (pData.pending > maxPending || (pData.pending === maxPending && pData.total > maxTotal)) {
+                maxPending = pData.pending;
+                maxTotal = pData.total;
+                hotProduct = p;
+            }
+        });
+
+        document.getElementById('kpiScopeLabel').innerText = targetLabel;
+        document.getElementById('kpiTotal').innerText = filteredIncidents.length;
+        document.getElementById('kpiPending').innerText = pendingCount;
+        document.getElementById('kpiSolved').innerText = solvedCount;
+        
+        document.getElementById('kpiHotspot').innerText = hotProduct !== "None" ? `${hotProduct} (${maxPending} Open / ${maxTotal} Total)` : "None";
+
+        renderIncidentLogTable(filteredIncidents);
+    }
+
+    function renderIncidentLogTable(datasetToDraw) {
+        const tbody = document.getElementById('incidentTableBody');
+        if (!tbody) return; tbody.innerHTML = '';
+
+        datasetToDraw.forEach((inc) => {
+            const globalIndex = incidentLogDataset.findIndex(i => i.issue === inc.issue && i.ref === inc.ref);
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" class="table-text-input" value="${inc.model}" oninput="handleIncidentTableInput(${globalIndex}, 'model', this.value)" ${editMode?'':'readonly'}></td>
+                <td><input type="text" class="table-text-input" value="${inc.issue}" oninput="handleIncidentTableInput(${globalIndex}, 'issue', this.value)" ${editMode?'':'readonly'}></td>
+                <td><input type="text" class="table-text-input" value="${inc.date}" oninput="handleIncidentTableInput(${globalIndex}, 'date', this.value)" ${editMode?'':'readonly'}></td>
+                <td><input type="text" class="table-text-input" value="${inc.ref}" oninput="handleIncidentTableInput(${globalIndex}, 'ref', this.value)" ${editMode?'':'readonly'}></td>
+                <td><input type="text" class="table-text-input" value="${inc.action}" oninput="handleIncidentTableInput(${globalIndex}, 'action', this.value)" ${editMode?'':'readonly'}></td>
+                <td style="text-align:center;"><button class="gemini-trigger-btn" onclick="consultGeminiAIHelper(${globalIndex})" title="Ask Gemini to write an automated fix snippet">✨</button></td>
+                <td>
+                    <select class="script-select ${inc.status === 'SOLVED' ? 'status-done' : 'status-pending'}" onchange="updateIncidentStatus(this, ${globalIndex})">
+                        <option value="PENDING" ${inc.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
+                        <option value="SOLVED" ${inc.status === 'SOLVED' ? 'selected' : ''}>SOLVED</option>
+                    </select>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function triggerKpiFilterModal(scopeFilterMode) {
+        let targetedArray = incidentLogDataset;
+        let titleLabel = "Full Project Captured Issues History";
+
+        if (currentActiveFilterId !== "" && activeStateDataset[currentActiveFilterId]) {
+            const modelText = activeStateDataset[currentActiveFilterId].title;
+            targetedArray = incidentLogDataset.filter(i => i.model.toLowerCase().includes(modelText.toLowerCase()));
+            titleLabel = `${modelText} Filtered Metrics Allocation`;
+        }
+
+        if (scopeFilterMode === "PENDING") { targetedArray = targetedArray.filter(i => i.status === "PENDING"); titleLabel += " - Open Pending Actions"; }
+        else if (scopeFilterMode === "SOLVED") { targetedArray = targetedArray.filter(i => i.status === "SOLVED"); titleLabel += " - Resolved Track Logs"; }
+
+        document.getElementById('modalTargetTitle').innerText = titleLabel;
+        const modalBody = document.getElementById('modalTableBodyTarget');
+        modalBody.innerHTML = '';
+
+        if(targetedArray.length === 0) {
+            modalBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">No recorded incidents found matching this filter parameter scope.</td></tr>`;
+        } else {
+            targetedArray.forEach(inc => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${inc.model}</strong></td>
+                    <td>${inc.issue}</td>
+                    <td><span class="doc-id">${inc.date}</span></td>
+                    <td><span class="doc-id">${inc.ref}</span></td>
+                    <td><span class="status-badge-inline ${inc.status === 'SOLVED' ? 'status-done':'status-pending'}">${inc.status}</span></td>
+                `;
+                modalBody.appendChild(tr);
+            });
+        }
+        document.getElementById('analyticsKpiModal').style.display = 'flex';
+    }
+
+    function closeKpiDetailsModal() { document.getElementById('analyticsKpiModal').style.display = 'none'; }
+
+    function addNewProductColumnChannel() {
+        const rawName = prompt("Enter the name of the new Product Model:");
+        if(!rawName) return;
+
+        const cleanKey = "prod_" + Date.now();
+        activeStateDataset[cleanKey] = { title: rawName, script: "pending", key: [], app: [], prev: [] };
+        
+        rebuildSummaryTableMarkupStructures();
+        renderMatrixDashboardGrid();
+        syncCloudChannel("checklist", activeStateDataset);
+    }
+
+    function removeProductColumnChannel(id) {
+        if(!confirm(`Delete "${activeStateDataset[id].title}" permanently?`)) return;
+        delete activeStateDataset[id];
+        if(currentActiveFilterId === id) currentActiveFilterId = "";
+        
+        rebuildSummaryTableMarkupStructures();
+        renderMatrixDashboardGrid();
+        calculateDynamicKPIs();
+        syncCloudChannel("checklist", activeStateDataset);
+    }
+
+    function scrollToSectionBlock(sectionDataId) {
+        const grid = document.getElementById('matrixGrid');
+        if(!grid) return; grid.scrollIntoView({ behavior: 'smooth' });
+        document.querySelectorAll(`.block-section[data-section="${sectionDataId}"]`).forEach(block => {
+            block.style.backgroundColor = "#fffde7"; setTimeout(() => { block.style.backgroundColor = "transparent"; }, 2500);
+        });
+    }
+
+    function renderMatrixDashboardGrid() {
+        const grid = document.getElementById('matrixGrid');
+        if (!grid) return; grid.innerHTML = '';
+
+        Object.keys(activeStateDataset).forEach(id => {
+            const prod = activeStateDataset[id];
+            const col = document.createElement('div');
+            col.className = 'product-column'; col.setAttribute('data-id', id);
+
+            let contentHTML = `
+                <div class="product-column-header-wrap">
+                    <button class="remove-column-btn" onclick="removeProductColumnChannel('${id}')">✕</button>
+                    <input type="text" class="product-title-node product-title-input" value="${prod.title}" oninput="handleProductTitleInput('${id}', this.value)" ${editMode?'':'readonly'}>
+                </div>
+                <div class="product-content">
+                    <div class="block-section" data-section="script">
+                        <div class="block-header">
+                            <span>Sales Product Scripts</span>
+                            <select class="script-select status-${prod.script}" id="sel-${id}" onchange="updateScriptStatus(this, '${id}')">
+                                <option value="pending" ${prod.script === 'pending' ? 'selected' : ''}>✕ Pending</option>
+                                <option value="progress" ${prod.script === 'progress' ? 'selected' : ''}>⚠ In Progress</option>
+                                <option value="done" ${prod.script === 'done' ? 'selected' : ''}>✓ Done</option>
+                            </select>
+                        </div>
+                    </div>
+            `;
+
+            ['key', 'app', 'prev'].forEach(sec => {
+                let secTitle = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Issues";
+                contentHTML += `
+                    <div class="block-section" data-section="${sec}">
+                        <div class="block-header"><span>${secTitle}</span></div>
+                        <ul class="node-list">
+                `;
+
+                if (prod[sec] && Array.isArray(prod[sec])) {
+                    prod[sec].forEach((item, index) => {
+                        contentHTML += `
+                            <li class="node-item">
+                                <input type="checkbox" ${item.checked ? 'checked' : ''} onclick="handleCheckboxStateToggle(this, '${id}', '${sec}', ${index})">
+                                <input type="text" class="node-text-input" value="${item.text}" oninput="handleItemTextInput('${id}', '${sec}', ${index}, this.value)" ${editMode?'':'readonly'}>
+                                <button class="delete-node-btn" onclick="deleteItemElement(this, '${id}', '${sec}', ${index})">✕</button>
+                            </li>
+                        `;
+                    });
+                }
+
+                contentHTML += `</ul><button class="add-node-btn" onclick="addNewItemElement('${id}', '${sec}')">➕ Add Item</button></div>`;
+            });
+
+            contentHTML += `</div>`; col.innerHTML = contentHTML; grid.appendChild(col);
+            updateScriptStatus(col.querySelector('.script-select'), id, false);
+        });
+        refreshMetrics();
+    }
+
+    function handleCheckboxStateToggle(chk, id, sec, idx) {
+        activeStateDataset[id][sec][idx].checked = chk.checked;
+        refreshMetrics();
+        syncCloudChannel("checklist", activeStateDataset);
+    }
+
+    function addNewItemElement(id, sec) {
+        activeStateDataset[id][sec].push({ text: "New Parameter Metric...", checked: false });
+        renderMatrixDashboardGrid();
+        if(editMode) toggleLiveEditDOMSync(true);
+        syncCloudChannel("checklist", activeStateDataset);
+    }
+
+    function deleteItemElement(btn, id, sec, idx) {
+        activeStateDataset[id][sec].splice(idx, 1);
+        renderMatrixDashboardGrid();
+        if(editMode) toggleLiveEditDOMSync(true);
+        syncCloudChannel("checklist", activeStateDataset);
+    }
+
+    function toggleLiveEditDOMSync(forceStyles = false) {
+        const textElements = document.querySelectorAll('.node-text, .product-title-node, header h1, .section-title span');
+        if(editMode || forceStyles) {
+            document.body.classList.add('admin-unlocked');
+            document.querySelectorAll('.table-text-input, .product-title-input, .node-text-input, .headline-input-element, .panel-heading-input').forEach(el => el.removeAttribute('readonly'));
+        } else {
+            document.body.classList.remove('admin-unlocked');
+            document.querySelectorAll('.table-text-input, .product-title-input, .node-text-input, .headline-input-element, .panel-heading-input').forEach(el => el.setAttribute('readonly', true));
+        }
+    }
+
+    function toggleLiveEdit() {
+        if (!editMode) {
+            const inputPass = prompt("Enter Admin Password:");
+            if (inputPass !== ADMIN_EDIT_PASSWORD) return;
+            editMode = true;
+            document.getElementById('editModeBtn').textContent = "💾 Lock Admin Layout";
+        } else {
+            editMode = false;
+            document.getElementById('editModeBtn').textContent = "🔒 Unlock Admin Edit";
+        }
+        rebuildSummaryTableMarkupStructures(); 
+        renderMatrixDashboardGrid();
+        calculateDynamicKPIs();
+        toggleLiveEditDOMSync();
+    }
+
+    function updateScriptStatus(selectElement, prodId, updateStorage = true) {
+        if (!selectElement) return;
+        selectElement.className = `script-select status-${selectElement.value}`;
+        const tableBadge = document.getElementById(`m-script-${prodId}`);
+        if(tableBadge) { tableBadge.className = `status-badge-inline status-${selectElement.value}`; tableBadge.textContent = selectElement.value.toUpperCase(); }
+        if(updateStorage) { activeStateDataset[prodId].script = selectElement.value; syncCloudChannel("checklist", activeStateDataset); }
+    }
+
+    function refreshMetrics() {
+        let totalMaster = 0; let checkedMaster = 0;
+        const sections = ['key', 'app', 'prev'];
+        Object.keys(activeStateDataset).forEach(prodId => {
+            sections.forEach(sec => {
+                if (activeStateDataset[prodId] && activeStateDataset[prodId][sec]) {
+                    const total = activeStateDataset[prodId][sec].length;
+                    const checked = activeStateDataset[prodId][sec].filter(i => i.checked).length;
+                    totalMaster += total; checkedMaster += checked;
+                    if(document.getElementById(`m-${sec}-${prodId}`)) document.getElementById(`m-${sec}-${prodId}`).style.width = (total > 0 ? (checked / total) * 100 : 0) + '%';
+                    if(document.getElementById(`txt-${sec}-${prodId}`)) document.getElementById(`txt-${sec}-${prodId}`).innerText = `${checked}/${total}`;
+                }
+            });
+        });
+        if(document.getElementById('trackerVisual')) document.getElementById('trackerVisual').style.width = (totalMaster > 0 ? (checkedMaster / totalMaster) * 100 : 0) + '%';
+        if(document.getElementById('trackerText')) document.getElementById('trackerText').innerText = `${totalMaster > 0 ? Math.round((checkedMaster / totalMaster) * 100) : 0}% Completed`;
+    }
+
+    function switchProductFilter(id) {
+        currentActiveFilterId = id;
+        document.querySelectorAll('#filterTabGroup .tab-btn').forEach(btn => btn.classList.remove('active'));
+        if(event && event.target) event.target.classList.add('active');
+
+        const columns = document.querySelectorAll('.product-column');
+        columns.forEach(col => { if(col.getAttribute('data-id') === id || !id) col.classList.remove('hidden-node'); else col.classList.add('hidden-node'); });
+        calculateDynamicKPIs();
+    }
+
+    function executeSearch() {
+        const query = document.getElementById('dashboardSearch').value.trim().toLowerCase();
+        document.querySelectorAll('.node-item').forEach(item => {
+            if(item.querySelector('.node-text-input').value.toLowerCase().includes(query) || !query) item.style.opacity = "1"; else item.style.opacity = "0.2";
+        });
+    }
+
+    function securedDownloadRouter() {
+        const inputCheck = prompt("Enter Admin Verification Code to download:");
+        if (inputCheck !== ADMIN_EDIT_PASSWORD) { alert("Access Denied."); return; }
+        const format = document.getElementById('exportFormat').value;
+        if (format === 'pdf') { window.print(); } 
+        else if (format === 'excel') { exportToCSVFile(); }
+        else if (format === 'ppt') { generateComprehensivePresentationDeck(); }
+    }
+
+    async function fetchCloudState() {
+        let cachedHeadlines = localStorage.getItem('operations_headlines_storage');
+        if(cachedHeadlines) globalHeadlinesDataset = JSON.parse(cachedHeadlines);
+
+        if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
+        try {
+            let res = await fetch(CLOUD_DATABASE_URL);
+            let json = await res.json();
+            if(json.status === "success" && json.data) {
+                if(json.data.checklist) activeStateDataset = json.data.checklist;
+                if(json.data.incidents && json.data.incidents.length > 0) incidentLogDataset = json.data.incidents;
+                if(json.data.headlines) globalHeadlinesDataset = json.data.headlines;
+            }
+        } catch(e) { console.log("Cloud Read Error:", e); }
+    }
+
+    async function syncCloudChannel(type, payloadData) {
+        if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
+        try {
+            await fetch(CLOUD_DATABASE_URL, {
+                method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ dataType: type, payload: payloadData })
+            });
+        } catch(e) { console.log("Cloud Push Error:", e); }
+    }
+
+    function createNewIncidentRow() {
+        incidentLogDataset.push({ model: "New Product Model", issue: "Describe issue details...", date: "2026-06", ref: "Ref ID", action: "HQ action roadmap...", status: "PENDING" });
+        calculateDynamicKPIs(); 
+        syncCloudChannel("incidents", incidentLogDataset);
+    }
+
+    function updateIncidentStatus(select, globalIdx) {
+        incidentLogDataset[globalIdx].status = select.value;
+        calculateDynamicKPIs(); 
+        syncCloudChannel("incidents", incidentLogDataset);
+    }
+
+    function exportToCSVFile() {
+        let csv = "Category,Product,Requirement/Item,Status\n";
+        incidentLogDataset.forEach(i => { csv += `"Incident Log","${i.model}","${i.issue.replace(/"/g, '""')}","${i.status}"\n`; });
+        triggerNativeDownload(encodeURI("data:text/csv;charset=utf-8," + csv), "Project_Analytics_Log.csv");
+    }
+
+    function generateComprehensivePresentationDeck() {
+        let pptx = new PptxGenJS(); pptx.layout = 'LAYOUT_16x9';
+        let slide1 = pptx.addSlide(); slide1.addShape(pptx.ShapeType.rect, { fill: '5c3e35', x: 0, y: 0, w: '100%', h: '100%' });
+        slide1.addText(`${globalHeadlinesDataset.main.toUpperCase()}`, { x: 0.6, y: 2.2, w: 11, h: 2, fontSize: 26, bold: true, color: 'ffffff' });
+        
+        let slide2 = pptx.addSlide(); slide2.addText("ANALYTICS PERFORMANCE SUMMARY TIMELINE", { x: 0.5, y: 0.4, w: 10, h: 0.5, fontSize: 18, bold: true, color: '5c3e35' });
+        let pptTableRows = [["Product Model", "Captured Technical Quality Issue Description", "Logged", "Reference Ticket", "Resolution Status"]];
+        incidentLogDataset.forEach(inc => { pptTableRows.push([inc.model, inc.issue, inc.date, inc.ref, inc.status]); });
+        slide2.addTable(pptTableRows, { x: 0.5, y: 1.5, w: 12.3, colW: [1.8, 5.3, 1.0, 2.5, 1.7], border: { pt: '1', color: 'e2e2e2' }, fill: 'ffffff', fontSize: 9, autoPage: true });
+
+        Object.keys(activeStateDataset).forEach(id => {
+            const p = activeStateDataset[id];
+            let slide = pptx.addSlide();
+            slide.addText(`${p.title.toUpperCase()} FUNCTIONAL CHECKLIST STATUS`, { x: 0.5, y: 0.4, w: 11, h: 0.5, fontSize: 18, bold: true, color: '5c3e35' });
+            slide.addText("Egypt Proactive Quality Evaluation Framework", { x: 0.5, y: 0.9, w: 8, h: 0.3, fontSize: 11, bold: true, color: 'f57c00' });
+
+            let currentY = 1.4;
+            ['key', 'app', 'prev'].forEach(sec => {
+                let titleLabel = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Issues Bugs Trace";
+                let itemsList = [];
+                if (p[sec]) p[sec].forEach(item => { itemsList.push((item.checked ? "[✓] " : "[ ] ") + item.text); });
+
+                if(itemsList.length > 0) {
+                    slide.addText(titleLabel, { x: 0.5, y: currentY, w: 4, h: 0.3, fontSize: 12, bold: true, color: '222222' });
+                    currentY += 0.35;
+                    slide.addText(itemsList.slice(0, 5).join("\n"), { x: 0.5, y: currentY, w: 12.3, h: 1.1, fontSize: 10, color: '555555', lineSpacing: 3 });
+                    currentY += 1.3;
+                }
+            });
+        });
+
+        pptx.writeFile({ fileName: 'HUAWEI_Operations_Strategic_Checklist_Review' });
+    }
+
+    function triggerNativeDownload(url, filename) { const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); }
+</script>
+</body>
+</html>
