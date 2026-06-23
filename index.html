@@ -148,11 +148,9 @@
         .progress-bar { background: linear-gradient(90deg, #4caf50, #81c784); height: 100%; width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .search-bar { padding: 12px 22px; width: 180px; border: 1px solid var(--border-color); border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         
-        /* UNHIDE BUTTON STYLE */
         .unhide-block { padding: 20px; text-align: center; background: #f9f9f9; border-radius: 12px; border: 1px dashed #ccc; margin-top: 15px; }
         .btn-unhide { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
-        /* MODAL CATEGORY STYLES */
         .cat-header { background: #f0f4f8; font-weight: 800; color: var(--primary-color); text-transform: uppercase; letter-spacing: 1px; font-size: 1rem; }
         .cat-item { padding-left: 30px !important; color: #444; font-weight: 500; }
     </style>
@@ -289,8 +287,34 @@
         log: "🚨 Technical Incident Capture Log"
     };
 
+    // ALIGNED PERFECTLY WITH THE 5 INCIDENT LOG DEVICES
     const DEFAULT_CHECKLIST_DATA = {
-        mate80: {
+        nova15max: {
+            title: "Nova 15 Max", script: "done", category: "Smartphones", isArchived: false,
+            key: [
+                { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
+                { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
+                { text: "Ai Composition Feature in Camera.", checked: false },
+                { text: "X-Button functions and adding apps to easy access", checked: false },
+                { text: "Speaker Stereo Sound Quality.", checked: false },
+                { text: "Battery Draining fast in normal use.", checked: false }
+            ],
+            app: [
+                { text: "WhatsApp (Test all functions)", checked: false },
+                { text: "WhatsApp Business (Test all functions)", checked: false },
+                { text: "YouTube (High resolution Videos)", checked: false },
+                { text: "Facebook", checked: false },
+                { text: "WPS Office", checked: false },
+                { text: "Snapchat", checked: false },
+                { text: "Instagram", checked: false }
+            ],
+            prev: [
+                { text: "Phone system prompts GBox as Power-intensive app (en-us16078529)", checked: false },
+                { text: "Unable to open or download PDF files shared in WhatsApp", checked: false },
+                { text: "side fingerprint sensor", checked: false }
+            ]
+        },
+        mate80pro: {
             title: "Mate 80 Pro", script: "done", category: "Smartphones", isArchived: false,
             key: [
                 { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
@@ -316,82 +340,60 @@
                 { text: "Unable to open or download PDF files shared in WhatsApp", checked: false }
             ]
         },
-        matepad: {
-            title: "Matepad Pro Max", script: "done", category: "Tablets", isArchived: false,
+        freebudspro5: {
+            title: "FreeBuds Pro 5", script: "done", category: "Audio", isArchived: false,
             key: [
-                { text: "Inaccurate GPS/Location on Huawei Tablets. (en-us16078162)", checked: false },
-                { text: "Overheating during heavy Usage (For 1 Hours using go paint and Huawei notes).", checked: false },
-                { text: "Refresh rate during playing any game", checked: false },
-                { text: "Stylus response during drawing in go paint and writing in Huawei notes using Ai handwriting enhance and freescript", checked: false }
+                { text: "Pairing & Reconnection Stability", checked: false },
+                { text: "Huawei Sound FX application", checked: false },
+                { text: "Spatial Audio Head Tracking", checked: false },
+                { text: "EQ Settings Customization", checked: false }
             ],
             app: [
-                { text: "WhatsApp (Link Companion)", checked: false },
-                { text: "WhatsApp Business (Link Companion)", checked: false },
-                { text: "YouTube (High resolution Videos)", checked: false },
-                { text: "Facebook", checked: false },
-                { text: "WPS PC (Arabic and English)", checked: false },
-                { text: "Netflix", checked: false },
-                { text: "Amazon Prime", checked: false }
+                { text: "Spotify Integration", checked: false },
+                { text: "YouTube Latency Sync", checked: false },
+                { text: "Social Media App Playback", checked: false },
+                { text: "Gaming Mode Sync", checked: false }
             ],
-            prev: []
-        },
-        watchx1: {
-            title: "Watch Kids X1 Pro", script: "done", category: "Wearables", isArchived: false,
-            key: [
-                { text: "My HUAWEI Mate X7 series phone cannot wirelessly reverse charge HUAWEI FreeBuds Pro 5", checked: false },
-                { text: "delay when make calls, watch videos, or play games", checked: false },
-                { text: "Spatial Audio head tracking effects are not noticeable or sensitive enough (en-us15914293)", checked: false }
-            ],
-            app: [],
             prev: [
-                { text: "The Lossless icon is not displayed when I connect my HUAWEI FreeBuds Pro 5/FreeBuds Pro 4/FreeBuds Pro 3 earbuds to my phone (en-us15975613)", checked: false },
-                { text: "The UI elements overlap on the pop-up screen after FreeBuds Pro 4 is connected to the phone. (en-us16084677)", checked: false },
-                { text: "HUAWEI FreeBuds 7i/FreeBuds 6/FreeArc/FreeBuds Pro 4 earbuds cannot be fully charged, or stop charging (en-us16026161)", checked: false }
+                { text: "Sound Leakage at high volume", checked: false },
+                { text: "POCO X3 popup pairing bug", checked: false },
+                { text: "EQ Customization saving", checked: false }
             ]
         },
-        watchfit5: {
-            title: "Watch Fit 5 Series", script: "done", category: "Wearables", isArchived: false,
+        matepadmini: {
+            title: "Matepad Mini", script: "done", category: "Tablets", isArchived: false,
             key: [
-                { text: "Issues of launching the voice assistant on my watch (en-us15818740)", checked: false },
-                { text: "Mute incoming call using the watch", checked: false },
-                { text: "Install Spotify app and the app can control music through the watch", checked: false },
-                { text: "use the ECG on Huawei Watches (en-us16055872)", checked: false },
-                { text: "Group's name of WhatsApp notification is not displayed on Watch when connected with iOS device (en-us15985122)", checked: false }
+                { text: "Inaccurate GPS/Location testing", checked: false },
+                { text: "AI Handwriting Notes App", checked: false },
+                { text: "NearLink tracker validation", checked: false },
+                { text: "PaperMatte glare test", checked: false }
             ],
             app: [
-                { text: "Spotify", checked: false },
-                { text: "Petal Maps", checked: false },
-                { text: "YouTube (High resolution Videos)", checked: false },
-                { text: "Facebook", checked: false },
                 { text: "WPS Office PC Level Framework", checked: false },
-                { text: "Netflix", checked: false },
-                { text: "Amazon Prime", checked: false }
-            ],
-            prev: []
-        },
-        nova15: {
-            title: "Nova 15 Max", script: "done", category: "Smartphones", isArchived: false,
-            key: [
-                { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
-                { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
-                { text: "Ai Composition Feature in Camera.", checked: false },
-                { text: "X-Button functions and adding apps to easy access", checked: false },
-                { text: "Speaker Stereo Sound Quality.", checked: false },
-                { text: "Battery Draining fast in normal use.", checked: false }
-            ],
-            app: [
-                { text: "WhatsApp (Test all functions)", checked: false },
-                { text: "WhatsApp Business (Test all functions)", checked: false },
-                { text: "YouTube (High resolution Videos)", checked: false },
-                { text: "Facebook", checked: false },
-                { text: "WPS Office", checked: false },
-                { text: "Snapchat", checked: false },
-                { text: "Instagram", checked: false }
+                { text: "Huawei Books AI Paging", checked: false },
+                { text: "Celia AI Productivity", checked: false },
+                { text: "Netflix Playback", checked: false }
             ],
             prev: [
-                { text: "Phone system prompts GBox as Power-intensive app (en-us16078529)", checked: false },
-                { text: "Unable to open or download PDF files shared in WhatsApp", checked: false },
-                { text: "side fingerprint sensor", checked: false }
+                { text: "Fingerprint smudges on surface", checked: false }
+            ]
+        },
+        gtrunner2: {
+            title: "GT Runner 2", script: "done", category: "Wearables", isArchived: false,
+            key: [
+                { text: "TruSense System Tracking in UAE", checked: false },
+                { text: "XDR Positional Pathing Algorithms", checked: false },
+                { text: "Heart Rate Accuracy during running", checked: false },
+                { text: "Fit & Sensor accuracy", checked: false }
+            ],
+            app: [
+                { text: "Dubai Wallet Transit Networks", checked: false },
+                { text: "Petal Maps Navigation Sync", checked: false },
+                { text: "Spotify Watch Controller", checked: false }
+            ],
+            prev: [
+                { text: "Reconnection drops during workouts", checked: false },
+                { text: "Notification sync delay", checked: false }
             ]
         }
     };
@@ -424,7 +426,7 @@
 
     let activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
     let incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
-    let completedProductsData = {}; // Stores categorized tested products
+    let completedProductsData = {}; 
 
     function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
@@ -502,22 +504,23 @@
         headerHTML += `</tr>`;
         thead.innerHTML = headerHTML;
 
+        // FIXED LOGIC: Replace partial progress counts with Done/Pending Badges
         let bodyHTML = `
             <tr>
                 <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('script')">Sales Product Scripts 🔍</td>
-                ${Object.keys(activeStateDataset).map(id => `<td><span id="m-script-${id}" class="status-badge-inline status-done">✓ DONE</span></td>`).join('')}
+                ${Object.keys(activeStateDataset).map(id => `<td style="text-align:center;"><span id="m-script-${id}" class="status-badge-inline status-done">✓ DONE</span></td>`).join('')}
             </tr>
             <tr>
                 <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('key')">Key Functions 🔍</td>
-                ${Object.keys(activeStateDataset).map(id => `<td><div class="summary-progress-bg"><div class="progress-bar" id="m-key-${id}"></div></div><div class="summary-metric" id="txt-key-${id}">0/0</div></td>`).join('')}
+                ${Object.keys(activeStateDataset).map(id => `<td style="text-align:center;"><span id="badge-key-${id}" class="status-badge-inline status-pending">PENDING</span></td>`).join('')}
             </tr>
             <tr>
                 <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('app')">Common Apps 🔍</td>
-                ${Object.keys(activeStateDataset).map(id => `<td><div class="summary-progress-bg"><div class="progress-bar" id="m-app-${id}"></div></div><div class="summary-metric" id="txt-app-${id}">0/0</div></td>`).join('')}
+                ${Object.keys(activeStateDataset).map(id => `<td style="text-align:center;"><span id="badge-app-${id}" class="status-badge-inline status-pending">PENDING</span></td>`).join('')}
             </tr>
             <tr>
                 <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('prev')">Previous Series Issues 🔍</td>
-                ${Object.keys(activeStateDataset).map(id => `<td><div class="summary-progress-bg"><div class="progress-bar" id="m-prev-${id}"></div></div><div class="summary-metric" id="txt-prev-${id}">0/0</div></td>`).join('')}
+                ${Object.keys(activeStateDataset).map(id => `<td style="text-align:center;"><span id="badge-prev-${id}" class="status-badge-inline status-pending">PENDING</span></td>`).join('')}
             </tr>
         `;
         tbody.innerHTML = bodyHTML;
@@ -647,7 +650,7 @@
     function addNewProductColumnChannel() {
         const rawName = prompt("Enter the name of the new Product Model:");
         if(!rawName) return;
-        const catName = prompt("Enter category (e.g. Smartphones, Tablets, Wearables):", "Other Devices") || "Other Devices";
+        const catName = prompt("Enter category (e.g. Smartphones, Tablets, Wearables, Audio):", "Other Devices") || "Other Devices";
 
         const cleanKey = "prod_" + Date.now();
         activeStateDataset[cleanKey] = { title: rawName, script: "pending", category: catName, isArchived: false, key: [], app: [], prev: [] };
@@ -679,7 +682,7 @@
     function unhideProductColumn(id) {
         activeStateDataset[id].isArchived = false;
         syncCloudChannel("checklist", activeStateDataset);
-        switchProductFilter(''); // Send back to main view
+        switchProductFilter(''); 
     }
 
     function renderMatrixDashboardGrid() {
@@ -689,7 +692,6 @@
         Object.keys(activeStateDataset).forEach(id => {
             const prod = activeStateDataset[id];
             
-            // Smart Auto-Hide Logic: Skip rendering on main dashboard if archived
             if (currentActiveFilterId === "" && prod.isArchived) return;
 
             const col = document.createElement('div');
@@ -702,7 +704,6 @@
                 </div>
             `;
 
-            // Add unhide button if viewing an archived tab specifically
             if (prod.isArchived && currentActiveFilterId === id) {
                 contentHTML += `<div class="unhide-block"><button class="btn-unhide" onclick="unhideProductColumn('${id}')">👁️ Unhide to Main Dashboard</button></div>`;
             }
@@ -764,9 +765,9 @@
                 if(confirm(`Great job! All checks for ${activeStateDataset[prodId].title} are fully complete.\n\nDo you want to auto-hide this product from the main dashboard to save space? (You can still access it anytime via its tab).`)) {
                     activeStateDataset[prodId].isArchived = true;
                     syncCloudChannel("checklist", activeStateDataset);
-                    if(currentActiveFilterId === "") renderMatrixDashboardGrid(); // re-render to hide
+                    if(currentActiveFilterId === "") renderMatrixDashboardGrid(); 
                 }
-            }, 300); // slight delay to show the checkmark first
+            }, 300); 
         }
     }
 
@@ -864,7 +865,7 @@
     function refreshMetrics() {
         let totalMaster = 0; let checkedMaster = 0;
         let completedProductsCount = 0;
-        completedProductsData = {}; // reset categorization map
+        completedProductsData = {}; 
 
         Object.keys(activeStateDataset).forEach(prodId => {
             let pTotal = 0; let pChecked = 0;
@@ -876,12 +877,19 @@
                     pTotal += total; pChecked += checked;
                     totalMaster += total; checkedMaster += checked;
                     
-                    if(document.getElementById(`m-${sec}-${prodId}`)) document.getElementById(`m-${sec}-${prodId}`).style.width = (total > 0 ? (checked / total) * 100 : 0) + '%';
-                    if(document.getElementById(`txt-${sec}-${prodId}`)) document.getElementById(`txt-${sec}-${prodId}`).innerText = `${checked}/${total}`;
+                    let badge = document.getElementById(`badge-${sec}-${prodId}`);
+                    if (badge) {
+                        if (total > 0 && checked === total) {
+                            badge.className = "status-badge-inline status-done";
+                            badge.innerText = "✓ DONE";
+                        } else {
+                            badge.className = "status-badge-inline status-pending";
+                            badge.innerText = "PENDING";
+                        }
+                    }
                 }
             });
 
-            // If product is 100% complete, map it for the new KPI
             if (pTotal > 0 && pTotal === pChecked) {
                 completedProductsCount++;
                 let cat = activeStateDataset[prodId].category || "Other Devices";
@@ -890,11 +898,9 @@
             }
         });
 
-        // Update Tracker Progress Bar
         if(document.getElementById('trackerVisual')) document.getElementById('trackerVisual').style.width = (totalMaster > 0 ? (checkedMaster / totalMaster) * 100 : 0) + '%';
         if(document.getElementById('trackerText')) document.getElementById('trackerText').innerText = `${totalMaster > 0 ? Math.round((checkedMaster / totalMaster) * 100) : 0}% Completed`;
 
-        // Update KPI Box #4
         document.getElementById('kpiTested').innerText = completedProductsCount;
     }
 
@@ -903,7 +909,6 @@
         document.querySelectorAll('#filterTabGroup .tab-btn').forEach(btn => btn.classList.remove('active'));
         if(event && event.target) event.target.classList.add('active');
 
-        // We use full render so unhide buttons display properly
         renderMatrixDashboardGrid(); 
         calculateDynamicKPIs();
     }
@@ -996,7 +1001,7 @@
 
             let currentY = 1.4;
             ['key', 'app', 'prev'].forEach(sec => {
-                let titleLabel = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Issues Bugs Trace";
+                let titleLabel = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Bugs Trace";
                 let itemsList = [];
                 if (p[sec]) p[sec].forEach(item => { itemsList.push((item.checked ? "[✓] " : "[ ] ") + item.text); });
 
