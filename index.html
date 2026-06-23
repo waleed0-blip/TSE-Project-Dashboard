@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Products Checklist & Analytics Dashboard</title>
     
-    <!-- Native Presentation Compiler Dependency Engine -->
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
     
     <style>
@@ -19,9 +18,6 @@
             --success-color: #388e3c;
             --warning-color: #f57c00;
             --danger-color: #d32f2f;
-            --gemini-blue: #4285f4;
-            --gemini-purple: #9b51e0;
-            --gemini-dark: #1a1b26;
         }
 
         body {
@@ -62,57 +58,6 @@
         .kpi-card.interactive-metric { cursor: pointer; border-left: 4px solid var(--primary-color); }
         .kpi-card.interactive-metric:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); background-color: #fffdfb; }
 
-        /* FLOATING GLOBAL GEMINI BUTTON */
-        .global-gemini-fab {
-            position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, var(--gemini-blue), var(--gemini-purple));
-            color: white; border: none; border-radius: 50%; width: 65px; height: 65px; font-size: 2rem;
-            cursor: pointer; box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4); z-index: 999990;
-            transition: transform 0.2s, box-shadow 0.2s; display: none; /* hidden until logged in */
-            justify-content: center; align-items: center;
-        }
-        .global-gemini-fab:hover { transform: scale(1.08); box-shadow: 0 8px 25px rgba(66, 133, 244, 0.6); }
-
-        /* INTERACTIVE GEMINI WORKSPACE SIDEBAR */
-        #geminiWorkspaceSidebar {
-            position: fixed; top: 0; right: -460px; width: 420px; height: 100vh;
-            background-color: #fff; border-left: 4px solid var(--gemini-blue);
-            box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 100000;
-            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex; flex-direction: column; box-sizing: border-box;
-        }
-        #geminiWorkspaceSidebar.open { right: 0; }
-        
-        .gemini-header-panel {
-            background: linear-gradient(135deg, var(--gemini-blue), var(--gemini-purple));
-            color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .gemini-logo-sparkle { font-size: 1.4rem; font-weight: bold; display: flex; align-items: center; gap: 8px; }
-        
-        .gemini-content-stream { flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #f8f9fa; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
-        .chat-bubble { padding: 12px 16px; border-radius: 14px; font-size: 0.95rem; max-width: 85%; line-height: 1.4; word-wrap: break-word; }
-        .chat-bubble.user { background-color: #e0f2fe; color: #111; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .chat-bubble.ai { background-color: #fff; border: 1px solid var(--border-color); color: #222; align-self: flex-start; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border-bottom-left-radius: 2px; }
-        
-        .gemini-code-block {
-            background-color: var(--gemini-dark); color: #f8f8f2; padding: 14px; border-radius: 8px;
-            font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; overflow-x: auto;
-            position: relative; margin-top: 8px; border-left: 3px solid #50fa7b;
-        }
-        
-        .gemini-input-area {
-            display: flex; padding: 15px; background: #fff; border-top: 1px solid var(--border-color); gap: 10px;
-        }
-        .gemini-input-area input {
-            flex-grow: 1; padding: 12px 20px; border: 1px solid var(--border-color); border-radius: 25px;
-            outline: none; font-size: 0.95rem; font-family: inherit;
-        }
-        .gemini-input-area input:focus { border-color: var(--gemini-blue); }
-        .gemini-input-area button {
-            background-color: var(--gemini-blue); color: white; border: none; border-radius: 50%;
-            width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.2s;
-        }
-        .gemini-input-area button:hover { transform: scale(1.05); background-color: #3367d6; }
-
         .analytics-modal-shield { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999998; justify-content: center; align-items: center; }
         .modal-content-box { background-color: white; border-radius: 14px; max-width: 950px; width: 95%; max-height: 80vh; overflow-y: auto; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
         .close-modal-x { position: absolute; right: 20px; top: 20px; font-size: 1.5rem; font-weight: bold; color: #666; cursor: pointer; }
@@ -130,6 +75,10 @@
         .matrix-del-col-btn { display: none; background: var(--danger-color); color: white; border: none; border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
         .admin-unlocked .matrix-del-col-btn { display: inline-block; }
         .clickable-cell-trigger { cursor: pointer; text-decoration: underline; color: var(--primary-color); font-weight: bold; }
+
+        /* Incident Delete Button */
+        .incident-del-btn { display: none; background: var(--danger-color); color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 0.8rem; cursor: pointer; font-weight: bold; }
+        .admin-unlocked .incident-del-btn { display: inline-block; }
 
         .log-btn, .admin-control-btn { background-color: var(--warning-color); color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; cursor: pointer; display: none; }
         .admin-unlocked .log-btn, .admin-unlocked .admin-control-btn { display: inline-block; }
@@ -199,26 +148,6 @@
         <input type="password" id="masterGateKeyInput" class="auth-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') handleMasterAuthCheck()">
         <button class="auth-submit-btn" onclick="handleMasterAuthCheck()">Verify Entry Identity</button>
         <div id="authErrorNode" class="error-message">✕ Invalid entry token. Please try again.</div>
-    </div>
-</div>
-
-<!-- FLOATING GLOBAL GEMINI ACTION BUTTON -->
-<button class="global-gemini-fab" id="geminiGlobalFab" onclick="toggleGeminiWorkspace()" title="Open Gemini AI Assistant">✨</button>
-
-<!-- REAL INTERACTIVE GEMINI WORKSPACE SIDEBAR -->
-<div id="geminiWorkspaceSidebar">
-    <div class="gemini-header-panel">
-        <div class="gemini-logo-sparkle">✨ Gemini AI Assistant</div>
-        <span style="cursor:pointer; font-weight:bold; font-size:1.2rem;" onclick="toggleGeminiWorkspace()">✕</span>
-    </div>
-    <div class="gemini-content-stream" id="geminiStreamBox">
-        <div class="chat-bubble ai">
-            <strong>Hi!</strong> I'm ready to help you troubleshoot, write Python analysis scripts, or format operational emails. What's on your mind?
-        </div>
-    </div>
-    <div class="gemini-input-area">
-        <input type="text" id="geminiChatInput" placeholder="Ask Gemini..." onkeydown="if(event.key === 'Enter') sendGeminiMessage()">
-        <button onclick="sendGeminiMessage()">➤</button>
     </div>
 </div>
 
@@ -329,7 +258,7 @@
     const ADMIN_EDIT_PASSWORD = "1234";       
     
     // Paste your Google Web App Script URL here:
-    const CLOUD_DATABASE_URL = "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE"; 
+    const CLOUD_DATABASE_URL = "https://script.google.com/macros/s/AKfycbyzuQxBW3kW9nOhI5Kb6kG9Hjgua-OFPdhuq2DfmySC3AsKk-qXQNPcYFnTlzoeyA-1ZQ/exec"; 
 
     let editMode = false;
     let currentActiveFilterId = "";
@@ -414,7 +343,7 @@
                 { text: "Petal Maps", checked: false },
                 { text: "YouTube (High resolution Videos)", checked: false },
                 { text: "Facebook", checked: false },
-                { text: "WPS Office PC Level Framework", checked: false },
+                { text: "WPS PC (Arabic and English)", checked: false },
                 { text: "Netflix", checked: false },
                 { text: "Amazon Prime", checked: false }
             ],
@@ -447,6 +376,7 @@
         }
     };
 
+    // 100% COMPLETE INJECTED AUDIT FROM LOG CIRCLES INSIDE REPORTS 1, 2, AND 3
     const DEFAULT_INCIDENTS_DATA = [
         { model: "Nova 15 Max", issue: "AI Remove option is not found in Gallery application framework", date: "2026-06", ref: "TM6202606150161", action: "HQ Still Analyzing the captured software package behavior parameters", status: "PENDING" },
         { model: "Nova 15 Max", issue: "Camera screen layout flashes aggressively during photo snapshot capture execution", date: "2026-05", ref: "TM202605150178", action: "HQ Analyzed and released technical support knowledge brief FAQ en-us16099942", status: "SOLVED" },
@@ -481,9 +411,12 @@
         if (inputVal === SITE_ENTRY_PASSWORD) {
             document.getElementById('masterAuthShield').style.display = 'none';
             document.getElementById('captureArea').style.display = 'block'; 
-            document.getElementById('geminiGlobalFab').style.display = 'flex'; // Reveals floating button
             
-            // RENDERS INSTANTLY
+            // Safety Data Recovery Fallback (Prevents empty layouts)
+            if(Object.keys(activeStateDataset).length === 0) activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+            if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
+
+            // RENDERS INSTANTLY: Bypass potential network hangs
             applyHeadlineStateToDOM();
             rebuildSummaryTableMarkupStructures();
             renderMatrixDashboardGrid();
@@ -501,51 +434,6 @@
             document.getElementById('masterGateKeyInput').value = '';
         }
     }
-
-    // --- GEMINI INTERACTIVE CHAT ENGINE ---
-    function toggleGeminiWorkspace() {
-        const sidebar = document.getElementById('geminiWorkspaceSidebar');
-        sidebar.classList.toggle('open');
-    }
-
-    function sendGeminiMessage() {
-        const inputField = document.getElementById('geminiChatInput');
-        const text = inputField.value.trim();
-        if (!text) return;
-
-        const streamBox = document.getElementById('geminiStreamBox');
-        
-        // Append user bubble
-        const userBubble = document.createElement('div');
-        userBubble.className = 'chat-bubble user';
-        userBubble.innerText = text;
-        streamBox.appendChild(userBubble);
-        
-        inputField.value = '';
-        streamBox.scrollTop = streamBox.scrollHeight;
-
-        // Simulated intelligent AI response tailored to Huawei / Data Analysis
-        setTimeout(() => {
-            const aiBubble = document.createElement('div');
-            aiBubble.className = 'chat-bubble ai';
-            
-            const lowerText = text.toLowerCase();
-            if(lowerText.includes("python") || lowerText.includes("pandas") || lowerText.includes("code") || lowerText.includes("script")) {
-                aiBubble.innerHTML = `Here is a custom Python/Pandas snippet you can use in your Google Colab notebook to analyze the latest FCR and NSS technical incident logs:<br><br>
-                <div class="gemini-code-block">
-                    <span class="copy-code-badge" onclick="navigator.clipboard.writeText(this.nextSibling.textContent.trim()); alert('Code snippet copied!');">Copy Code</span><pre style="margin:0;">import pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load specific field issues\ndf = pd.read_csv('Project_Analytics_Log.csv')\n\n# Group unresolved cases\npending_cases = df[df['Status'] == 'PENDING']\nprint(f"Total action items: {len(pending_cases)}")</pre>
-                </div>`;
-            } else if (lowerText.includes("nova") || lowerText.includes("mate") || lowerText.includes("watch") || lowerText.includes("freebuds")) {
-                 aiBubble.innerHTML = `I can help you build an automated diagnostic layout or format a professional email escalation for that specific Huawei device. Do you want me to draft the email to the Quality team for this issue?`;
-            } else {
-                aiBubble.innerHTML = `I received your query. Because this dashboard is running strictly on local execution without an active backend API token, I am operating in offline-simulation mode. To process live external data, connect me to your Google Apps Script pipeline!`;
-            }
-            
-            streamBox.appendChild(aiBubble);
-            streamBox.scrollTop = streamBox.scrollHeight;
-        }, 800);
-    }
-    // ----------------------------------------
 
     function applyHeadlineStateToDOM() {
         const mainInput = document.getElementById('globalMainHeadlineText');
@@ -682,10 +570,13 @@
                 <td><input type="text" class="table-text-input" value="${inc.ref}" oninput="handleIncidentTableInput(${globalIndex}, 'ref', this.value)" ${editMode?'':'readonly'}></td>
                 <td><input type="text" class="table-text-input" value="${inc.action}" oninput="handleIncidentTableInput(${globalIndex}, 'action', this.value)" ${editMode?'':'readonly'}></td>
                 <td>
-                    <select class="script-select ${inc.status === 'SOLVED' ? 'status-done' : 'status-pending'}" onchange="updateIncidentStatus(this, ${globalIndex})">
-                        <option value="PENDING" ${inc.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
-                        <option value="SOLVED" ${inc.status === 'SOLVED' ? 'selected' : ''}>SOLVED</option>
-                    </select>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <select class="script-select ${inc.status === 'SOLVED' ? 'status-done' : 'status-pending'}" onchange="updateIncidentStatus(this, ${globalIndex})">
+                            <option value="PENDING" ${inc.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
+                            <option value="SOLVED" ${inc.status === 'SOLVED' ? 'selected' : ''}>SOLVED</option>
+                        </select>
+                        <button class="incident-del-btn" onclick="deleteIncidentRow(${globalIndex})" title="Delete this issue log">✕</button>
+                    </div>
                 </td>
             `;
             tbody.appendChild(tr);
@@ -788,10 +679,10 @@
             `;
 
             ['key', 'app', 'prev'].forEach(sec => {
-                let secTitle = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Issues";
+                let titleLabel = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Issues";
                 contentHTML += `
                     <div class="block-section" data-section="${sec}">
-                        <div class="block-header"><span>${secTitle}</span></div>
+                        <div class="block-header"><span>${titleLabel}</span></div>
                         <ul class="node-list">
                 `;
 
@@ -823,6 +714,7 @@
     }
 
     function addNewItemElement(id, sec) {
+        if(editMode) saveDOMChangesToArray();
         activeStateDataset[id][sec].push({ text: "New Parameter...", checked: false });
         renderMatrixDashboardGrid();
         if(editMode) toggleLiveEditDOMSync(true);
@@ -830,6 +722,7 @@
     }
 
     function deleteItemElement(btn, id, sec, idx) {
+        if(editMode) saveDOMChangesToArray();
         activeStateDataset[id][sec].splice(idx, 1);
         renderMatrixDashboardGrid();
         if(editMode) toggleLiveEditDOMSync(true);
@@ -847,6 +740,38 @@
         }
     }
 
+    function saveDOMChangesToArray() {
+        const mainInput = document.getElementById('globalMainHeadlineText');
+        const overviewInput = document.getElementById('headlineOverviewPanelText');
+        const logInput = document.getElementById('headlineIncidentLogText');
+        
+        if(mainInput && mainInput.value.trim() !== "") globalHeadlinesDataset.main = mainInput.value.trim();
+        if(overviewInput && overviewInput.value.trim() !== "") globalHeadlinesDataset.overview = overviewInput.value.trim();
+        if(logInput && logInput.value.trim() !== "") globalHeadlinesDataset.log = logInput.value.trim();
+        
+        localStorage.setItem('operations_headlines_storage', JSON.stringify(globalHeadlinesDataset));
+        syncCloudChannel("headlines", globalHeadlinesDataset);
+
+        document.querySelectorAll('.product-column').forEach(col => {
+            const id = col.getAttribute('data-id');
+            if (!activeStateDataset[id]) return;
+            
+            const titleNode = col.querySelector('.product-title-input');
+            if(titleNode) activeStateDataset[id].title = titleNode.value.trim();
+            
+            ['key', 'app', 'prev'].forEach(sec => {
+                const rows = col.querySelectorAll(`.block-section[data-section="${sec}"] .node-item`);
+                rows.forEach((li, idx) => {
+                    const textNode = li.querySelector('.node-text-input');
+                    if(textNode && activeStateDataset[id][sec][idx]) {
+                        activeStateDataset[id][sec][idx].text = textNode.value.trim();
+                    }
+                });
+            });
+        });
+        syncCloudChannel("checklist", activeStateDataset);
+    }
+
     function toggleLiveEdit() {
         if (!editMode) {
             const inputPass = prompt("Enter Admin Password:");
@@ -856,6 +781,7 @@
         } else {
             editMode = false;
             document.getElementById('editModeBtn').textContent = "🔒 Unlock Admin Edit";
+            saveDOMChangesToArray(); 
         }
         rebuildSummaryTableMarkupStructures(); 
         renderMatrixDashboardGrid();
@@ -956,6 +882,13 @@
         syncCloudChannel("incidents", incidentLogDataset);
     }
 
+    function deleteIncidentRow(globalIdx) {
+        if(!confirm("Are you sure you want to permanently delete this issue log?")) return;
+        incidentLogDataset.splice(globalIdx, 1);
+        calculateDynamicKPIs();
+        syncCloudChannel("incidents", incidentLogDataset);
+    }
+
     function exportToCSVFile() {
         let csv = "Category,Product,Requirement/Item,Status\n";
         incidentLogDataset.forEach(i => { csv += `"Incident Log","${i.model}","${i.issue.replace(/"/g, '""')}","${i.status}"\n`; });
@@ -980,7 +913,7 @@
 
             let currentY = 1.4;
             ['key', 'app', 'prev'].forEach(sec => {
-                let titleLabel = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Issues Bugs Trace";
+                let titleLabel = sec === 'key' ? "Key Functions" : sec === 'app' ? "Common Apps" : "Previous Series Bugs Trace";
                 let itemsList = [];
                 if (p[sec]) p[sec].forEach(item => { itemsList.push((item.checked ? "[✓] " : "[ ] ") + item.text); });
 
