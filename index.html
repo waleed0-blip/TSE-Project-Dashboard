@@ -211,6 +211,7 @@
         .btn-unhide { background: white; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.95rem; box-shadow: var(--shadow-sm); transition: all 0.3s; font-family: inherit; }
         .btn-unhide:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
         
+        /* CATEGORY TABLE REFINEMENTS */
         .cat-header { background: #f8fafc; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; border-right: 1px solid var(--border-color); }
         .subcat-header { background: #ffffff; font-weight: 700; color: var(--primary-color); font-size: 0.9rem; border-right: 1px solid var(--border-color); }
         .cat-item { padding-left: 20px !important; color: var(--text-main); font-weight: 600; font-size: 0.95rem; }
@@ -287,10 +288,12 @@
             <input type="text" id="headlineOverviewPanelText" class="panel-heading-input" oninput="handleHeadlineInput('overview', this.value)" readonly>
             <button class="admin-control-btn" onclick="addNewProductColumnChannel()">➕ Add Product Line</button>
         </div>
-        <table class="matrix-table" id="matrixTableSummary">
-            <thead id="summaryTableHeaderTarget"></thead>
-            <tbody id="summaryTableBodyTarget"></tbody>
-        </table>
+        <div style="overflow-x:auto;">
+            <table class="matrix-table" id="matrixTableSummary">
+                <thead id="summaryTableHeaderTarget"></thead>
+                <tbody id="summaryTableBodyTarget"></tbody>
+            </table>
+        </div>
     </div>
 
     <div class="analytics-section" id="incidentsTableContainer">
@@ -298,19 +301,21 @@
             <input type="text" id="headlineIncidentLogText" class="panel-heading-input" oninput="handleHeadlineInput('log', this.value)" readonly>
             <button class="log-btn" onclick="createNewIncidentRow()">➕ Log New Issue</button>
         </div>
-        <table class="matrix-table" id="incidentLogTable">
-            <thead>
-                <tr>
-                    <th>Product Model</th>
-                    <th>Captured Technical Issue</th>
-                    <th>Date Logged</th>
-                    <th>Ticket / Reference</th>
-                    <th>HQ Developer Feedback & Actions</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="incidentTableBody"></tbody>
-        </table>
+        <div style="overflow-x:auto;">
+            <table class="matrix-table" id="incidentLogTable">
+                <thead>
+                    <tr>
+                        <th>Product Model</th>
+                        <th>Captured Technical Issue</th>
+                        <th>Date Logged</th>
+                        <th>Ticket / Reference</th>
+                        <th>HQ Developer Feedback & Actions</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="incidentTableBody"></tbody>
+            </table>
+        </div>
     </div>
 
     <div class="dashboard-controls">
@@ -348,7 +353,6 @@
         log: "Technical Escalation Capture Log"
     };
 
-    // RESTORED SUBCATEGORIES FOR PERFECT HIERARCHICAL REPORTING
     const DEFAULT_CHECKLIST_DATA = {
         nova15max: {
             title: "Nova 15 Max", script: "pending", category: "Smartphones", subCategory: "Nova Series", isArchived: false,
@@ -514,8 +518,29 @@
             let localIncidents = localStorage.getItem('tse_incidents_data');
             let localHeadlines = localStorage.getItem('tse_headlines_data');
             
-            if(localChecklist) activeStateDataset = JSON.parse(localChecklist);
-            else if(Object.keys(activeStateDataset).length === 0) activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+            if(localChecklist) {
+                activeStateDataset = JSON.parse(localChecklist);
+                
+                // --- MIGRATION SCRIPT TO FIX CACHED 'GENERAL' SUBCATEGORIES ---
+                const correctSubCats = {
+                    "Nova 15 Max": "Nova Series",
+                    "Mate 80 Pro": "Mate Series",
+                    "FreeBuds Pro 5": "TWS Earbuds",
+                    "Matepad Mini": "MatePad Series",
+                    "GT Runner 2": "Smartwatches"
+                };
+                Object.keys(activeStateDataset).forEach(key => {
+                    let t = activeStateDataset[key].title;
+                    if (correctSubCats[t] && (!activeStateDataset[key].subCategory || activeStateDataset[key].subCategory === "General")) {
+                        activeStateDataset[key].subCategory = correctSubCats[t];
+                    }
+                });
+                commitData('checklist');
+                // --------------------------------------------------------------
+
+            } else {
+                activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+            }
 
             if(localIncidents) incidentLogDataset = JSON.parse(localIncidents);
             else if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
@@ -726,14 +751,23 @@
             Object.keys(completedProductsData).forEach(cat => {
                 let subCats = completedProductsData[cat];
                 subCatCount += Object.keys(subCats).length;
+                
+                let totalDevicesInCat = 0;
+                Object.values(subCats).forEach(arr => totalDevicesInCat += arr.length);
+
+                let isFirstInCat = true;
+
                 Object.keys(subCats).forEach(subCat => {
                     let devices = subCats[subCat];
                     devCount += devices.length;
 
                     devices.forEach((baseName, idx) => {
                         html += `<tr>`;
+                        if(isFirstInCat) {
+                            html += `<td class="cat-header" rowspan="${totalDevicesInCat}">${cat}</td>`;
+                            isFirstInCat = false;
+                        }
                         if(idx === 0) {
-                            html += `<td class="cat-header" rowspan="${devices.length}">${cat}</td>`;
                             html += `<td class="subcat-header" rowspan="${devices.length}">${subCat}</td>`;
                         }
                         html += `<td class="cat-item">✔️ ${baseName}</td></tr>`;
@@ -992,7 +1026,7 @@
 
     function refreshMetrics() {
         completedProductsData = {}; 
-        let completedCount = 0;
+        let uniqueTestedBaseNames = new Set();
 
         Object.keys(activeStateDataset).forEach(prodId => {
             let pTotal = 0; let pChecked = 0;
@@ -1017,20 +1051,24 @@
             });
 
             if (pTotal > 0 && pTotal === pChecked) {
-                completedCount++;
+                let titleStr = activeStateDataset[prodId].title;
+                let baseName = titleStr; // Reverted Phase logic removal, so baseName is just title
+                
                 let cat = activeStateDataset[prodId].category || "Other Devices";
                 let subCat = activeStateDataset[prodId].subCategory || "General";
                 
                 if(!completedProductsData[cat]) completedProductsData[cat] = {};
                 if(!completedProductsData[cat][subCat]) completedProductsData[cat][subCat] = [];
                 
-                if(!completedProductsData[cat][subCat].includes(activeStateDataset[prodId].title)) {
-                    completedProductsData[cat][subCat].push(activeStateDataset[prodId].title);
+                if(!completedProductsData[cat][subCat].includes(baseName)) {
+                    completedProductsData[cat][subCat].push(baseName);
                 }
+                
+                uniqueTestedBaseNames.add(baseName);
             }
         });
 
-        document.getElementById('kpiTested').innerText = completedCount;
+        document.getElementById('kpiTested').innerText = uniqueTestedBaseNames.size;
     }
 
     function switchProductFilter(id) {
