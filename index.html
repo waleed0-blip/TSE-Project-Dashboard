@@ -3,170 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Products Checklist & Analytics Dashboard</title>
+    <title>H1 Operations & New Products Dashboard</title>
+    
+    <!-- Ultra-Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
     
     <style>
         :root {
-            --primary-color: #4a332a;
-            --accent-color: #eaf4fc;
-            --bg-color: #f4f7f6;
+            --primary-color: #0f172a; /* Deep Slate Tech */
+            --accent-brand: #e11d48; /* Crimson Tech Accent */
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #2b2b2b;
-            --border-color: #e0e0e0;
-            --success-color: #2e7d32;
-            --warning-color: #ef6c00;
-            --danger-color: #c62828;
-            --shadow-light: 0 8px 24px rgba(0,0,0,0.04);
-            --shadow-hover: 0 12px 32px rgba(0,0,0,0.08);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --shadow-lg: 0 10px 25px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+            --shadow-hover: 0 20px 30px -5px rgba(0,0,0,0.1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-main);
             margin: 0; padding: 30px 20px;
             line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
+        /* -------------------------------------------
+           PREMIUM SECURITY PORTAL GATE
+        ------------------------------------------- */
         #masterAuthShield {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: var(--primary-color); display: flex; justify-content: center; align-items: center; z-index: 999999;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: flex; justify-content: center; align-items: center; z-index: 999999;
         }
         .auth-card {
-            background-color: white; color: var(--text-color); padding: 40px; border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4); text-align: center; max-width: 420px; width: 90%; margin: auto;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white; padding: 45px 40px; border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            text-align: center; max-width: 400px; width: 90%; margin: auto;
         }
-        .auth-card h2 { margin-top: 0; color: var(--primary-color); font-size: 1.6rem; text-transform: uppercase; letter-spacing: 1px; }
-        .auth-input { width: 100%; padding: 14px 20px; margin-bottom: 15px; border: 2px solid var(--border-color); border-radius: 25px; font-size: 1.05rem; text-align: center; outline: none; box-sizing: border-box; transition: border-color 0.2s; }
-        .auth-input:focus { border-color: var(--primary-color); }
-        .auth-submit-btn { background-color: var(--primary-color); color: white; border: none; padding: 14px 30px; border-radius: 25px; font-weight: bold; font-size: 1.05rem; width: 100%; cursor: pointer; transition: background 0.2s; }
-        .auth-submit-btn:hover { background-color: #31211b; }
-        .error-message { color: var(--danger-color); font-size: 0.85rem; font-weight: bold; margin-top: 10px; display: none; }
+        .auth-card h2 { margin-top: 0; color: #ffffff; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 8px; }
+        .auth-card p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 25px; }
+        .auth-input { width: 100%; padding: 14px 20px; margin-bottom: 20px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.15); color: white; border-radius: 12px; font-size: 1rem; text-align: center; outline: none; box-sizing: border-box; transition: all 0.3s ease; font-family: inherit; }
+        .auth-input:focus { border-color: var(--accent-brand); background: rgba(0,0,0,0.4); box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.1); }
+        .auth-input::placeholder { color: #64748b; }
+        .auth-submit-btn { background: var(--accent-brand); color: white; border: none; padding: 14px 30px; border-radius: 12px; font-weight: 700; font-size: 1rem; width: 100%; cursor: pointer; transition: all 0.2s; font-family: inherit; letter-spacing: 0.5px; }
+        .auth-submit-btn:hover { background-color: #be123c; transform: translateY(-2px); box-shadow: 0 10px 20px -10px rgba(225, 29, 72, 0.5); }
+        .error-message { color: #fca5a5; font-size: 0.85rem; font-weight: 600; margin-top: 15px; display: none; }
 
-        .container { max-width: 1450px; margin: 0 auto; display: none; }
-        header { text-align: center; padding-bottom: 20px; margin-bottom: 30px; border-bottom: 4px solid var(--primary-color); }
+        /* -------------------------------------------
+           MAIN DASHBOARD LAYOUT & ANIMATIONS
+        ------------------------------------------- */
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .container { max-width: 1450px; margin: 0 auto; display: none; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         
-        .headline-input-element { display: block; border: 1px dashed transparent; background: transparent; font-size: 2.6rem; text-transform: uppercase; margin: 0; font-weight: 800; text-align: center; color: var(--primary-color); width: 100%; outline: none; transition: all 0.2s; font-family: inherit; letter-spacing: -0.5px; }
+        header { text-align: center; padding-bottom: 20px; margin-bottom: 35px; border-bottom: 1px solid var(--border-color); }
+        .headline-input-element { display: block; border: 1px dashed transparent; background: transparent; font-size: 2.2rem; text-transform: uppercase; margin: 0; font-weight: 800; text-align: center; color: var(--primary-color); width: 100%; outline: none; transition: all 0.2s; font-family: inherit; letter-spacing: -0.5px; }
         .admin-unlocked .headline-input-element { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 10px; }
 
-        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 35px; }
-        .kpi-card { background: var(--card-bg); border-radius: 16px; padding: 25px 20px; text-align: center; box-shadow: var(--shadow-light); transition: transform 0.2s, box-shadow 0.2s; border: 1px solid rgba(0,0,0,0.03); }
-        .kpi-card h3 { margin: 0 0 12px 0; font-size: 0.95rem; text-transform: uppercase; color: #777; letter-spacing: 0.5px; }
-        .kpi-card .num { font-size: 2.6rem; font-weight: 800; color: var(--primary-color); line-height: 1; }
-        .kpi-card.interactive-metric { cursor: pointer; border-bottom: 4px solid transparent; }
-        .kpi-card.interactive-metric:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-bottom: 4px solid var(--primary-color); }
-
-        .analytics-modal-shield { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 999998; justify-content: center; align-items: center; }
-        .modal-content-box { background-color: white; border-radius: 20px; max-width: 900px; width: 95%; max-height: 85vh; overflow-y: auto; padding: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; }
-        .close-modal-x { position: absolute; right: 25px; top: 25px; font-size: 1.5rem; font-weight: bold; color: #999; cursor: pointer; transition: color 0.2s; }
-        .close-modal-x:hover { color: #333; }
-
-        .overall-view-panel, .analytics-section { background: var(--card-bg); border-radius: 16px; padding: 25px; margin-bottom: 35px; box-shadow: var(--shadow-light); overflow-x: auto; border: 1px solid rgba(0,0,0,0.03); }
+        /* KPI EXECUTIVE CARDS */
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 40px; }
+        .kpi-card { background: var(--card-bg); border-radius: 20px; padding: 25px 20px; text-align: center; box-shadow: var(--shadow-md); transition: all 0.3s ease; border: 1px solid rgba(226, 232, 240, 0.8); position: relative; overflow: hidden; }
+        .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #e2e8f0; transition: background 0.3s; }
         
-        .panel-heading-input { border: 1px dashed transparent; background: transparent; font-size: 1.25rem; font-weight: 800; color: var(--primary-color); text-transform: uppercase; width: 60%; outline: none; transition: all 0.2s; font-family: inherit; }
-        .admin-unlocked .panel-heading-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; }
+        /* KPI Color Specifics */
+        .kpi-card:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+        .kpi-card:nth-child(2)::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .kpi-card:nth-child(3)::before { background: linear-gradient(90deg, #10b981, #059669); }
+        .kpi-card:nth-child(4)::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
 
-        .matrix-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 0.95rem; margin-top: 15px; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
-        .matrix-table th, .matrix-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); }
-        .matrix-table th:last-child, .matrix-table td:last-child { border-right: none; }
+        .kpi-card h3 { margin: 0 0 10px 0; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; }
+        .kpi-card .num { font-size: 3rem; font-weight: 800; color: var(--primary-color); line-height: 1; letter-spacing: -1px; }
+        .kpi-card.interactive-metric { cursor: pointer; }
+        .kpi-card.interactive-metric:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+
+        /* MODAL (Glassmorphism popup) */
+        .analytics-modal-shield { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999998; justify-content: center; align-items: center; }
+        .modal-content-box { background-color: white; border-radius: 24px; max-width: 900px; width: 95%; max-height: 85vh; overflow-y: auto; padding: 40px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; animation: fadeUp 0.4s ease forwards; }
+        .close-modal-x { position: absolute; right: 25px; top: 25px; background: #f1f5f9; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1.2rem; font-weight: bold; color: #64748b; cursor: pointer; transition: all 0.2s; }
+        .close-modal-x:hover { background: #e2e8f0; color: #0f172a; }
+
+        /* DATA PANELS */
+        .overall-view-panel, .analytics-section { background: var(--card-bg); border-radius: 20px; padding: 30px; margin-bottom: 40px; box-shadow: var(--shadow-lg); overflow-x: auto; border: 1px solid rgba(226, 232, 240, 0.8); }
+        .section-title { font-size: 1.1rem; font-weight: 800; color: var(--primary-color); margin-bottom: 20px; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+        .panel-heading-input { border: 1px dashed transparent; background: transparent; font-size: 1.1rem; font-weight: 800; color: var(--primary-color); text-transform: uppercase; width: 60%; outline: none; transition: all 0.2s; font-family: inherit; letter-spacing: inherit; }
+        .admin-unlocked .panel-heading-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; padding: 4px 8px; }
+
+        /* SAAS DATA TABLES */
+        .matrix-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 0.9rem; margin-top: 10px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); }
+        .matrix-table th, .matrix-table td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); }
+        .matrix-table th { background-color: #f8fafc; font-weight: 700; color: var(--text-muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
         .matrix-table tr:last-child td { border-bottom: none; }
-        .matrix-table th { background-color: #f8f9fa; font-weight: 700; color: #444; }
+        .matrix-table tbody tr:hover { background-color: #f8fafc; } /* Zebra Hover */
         .matrix-header-container { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 
-        .matrix-del-col-btn { display: none; background: var(--danger-color); color: white; border: none; border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
+        .matrix-del-col-btn { display: none; background: #fee2e2; color: var(--danger-color); border: none; border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
         .admin-unlocked .matrix-del-col-btn { display: inline-block; }
-        .matrix-del-col-btn:hover { opacity: 0.8; }
-        .clickable-cell-trigger { cursor: pointer; font-weight: 600; color: var(--primary-color); transition: color 0.2s; }
-        .clickable-cell-trigger:hover { color: var(--warning-color); }
+        .matrix-del-col-btn:hover { background: var(--danger-color); color: white; }
+        .clickable-cell-trigger { cursor: pointer; font-weight: 600; color: #3b82f6; transition: color 0.2s; }
+        .clickable-cell-trigger:hover { color: #2563eb; }
 
-        .incident-del-btn { display: none; background: #ffebee; color: var(--danger-color); border: 1px solid #ffcdd2; border-radius: 6px; padding: 4px 10px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        .incident-del-btn { display: none; background: #fee2e2; color: var(--danger-color); border: 1px solid transparent; border-radius: 6px; padding: 6px 12px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
         .admin-unlocked .incident-del-btn { display: inline-block; }
         .incident-del-btn:hover { background: var(--danger-color); color: white; }
 
-        .log-btn, .admin-control-btn { background-color: var(--warning-color); color: white; border: none; padding: 8px 18px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; cursor: pointer; display: none; box-shadow: 0 4px 10px rgba(239, 108, 0, 0.2); }
+        /* BUTTONS & CONTROLS */
+        .log-btn, .admin-control-btn { background-color: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: none; box-shadow: var(--shadow-sm); transition: all 0.2s; font-family: inherit; }
         .admin-unlocked .log-btn, .admin-unlocked .admin-control-btn { display: inline-block; }
-        .admin-control-btn { background-color: #333; margin-left: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .log-btn:hover, .admin-control-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); background-color: #1e293b; }
 
-        .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; }
+        .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; background: white; padding: 15px 25px; border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
         .tabs { display: flex; gap: 10px; flex-wrap: wrap; }
-        .tab-btn { background-color: #fff; border: 1px solid var(--border-color); padding: 10px 22px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.95rem; box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: all 0.2s; color: #555; }
-        .tab-btn.active, .tab-btn:hover { background-color: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+        .tab-btn { background-color: transparent; border: 1px solid transparent; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; color: var(--text-muted); font-family: inherit; }
+        .tab-btn:hover { background-color: #f1f5f9; color: var(--text-main); }
+        .tab-btn.active { background-color: var(--primary-color); color: #fff; box-shadow: var(--shadow-sm); }
 
         .right-controls { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .edit-toggle-btn { background-color: #2c3e50; color: #fff; border: none; padding: 12px 24px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: background 0.2s; }
-        .edit-toggle-btn.editing-active { background-color: var(--warning-color); }
+        .edit-toggle-btn { background-color: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; box-shadow: var(--shadow-sm); transition: all 0.2s; font-family: inherit; }
+        .edit-toggle-btn:hover { background-color: #e2e8f0; }
+        .edit-toggle-btn.editing-active { background-color: var(--warning-color); color: white; border-color: var(--warning-color); }
         
-        .export-box { display: flex; align-items: center; gap: 8px; background-color: #fff; border: 2px solid var(--primary-color); border-radius: 30px; padding: 4px 6px 4px 18px; }
-        .export-select { padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border-color); font-weight: 600; font-size: 0.9rem; outline: none; cursor: pointer; background: #fafafa; }
-        .export-btn { background-color: var(--primary-color); color: white; border: none; padding: 8px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: opacity 0.2s; }
-        .export-btn:hover { opacity: 0.9; }
+        .export-box { display: flex; align-items: center; gap: 8px; background-color: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 4px 6px 4px 14px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        .export-select { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-weight: 500; font-size: 0.85rem; outline: none; cursor: pointer; background: #fff; font-family: inherit; color: var(--text-main); }
+        .export-btn { background-color: white; color: var(--primary-color); border: 1px solid var(--border-color); padding: 6px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; box-shadow: var(--shadow-sm); }
+        .export-btn:hover { background-color: #f1f5f9; }
 
-        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 30px; margin-top: 30px; }
-        .product-column { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow-light); border: 1px solid rgba(0,0,0,0.04); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; }
-        .product-column:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
-        .product-column-header-wrap { position: relative; background: #fafafa; border-bottom: 1px solid var(--border-color); }
-        .product-title-input { border: 1px dashed transparent; background: transparent; padding: 22px; font-size: 1.4rem; font-weight: 800; text-align: center; outline: none; width: 100%; box-sizing: border-box; font-family: inherit; color: var(--primary-color); }
+        /* PRODUCT GRIDS (The Checklists) */
+        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 30px; margin-top: 20px; }
+        .product-column { background: var(--card-bg); border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s ease; position: relative; }
+        .product-column:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+        .product-column-header-wrap { position: relative; background: #f8fafc; border-bottom: 1px solid var(--border-color); }
+        .product-title-input { border: 1px dashed transparent; background: transparent; padding: 25px 20px; font-size: 1.3rem; font-weight: 800; text-align: center; outline: none; width: 100%; box-sizing: border-box; font-family: inherit; color: var(--primary-color); letter-spacing: -0.5px; }
         .admin-unlocked .product-title-input { border: 1px dashed var(--warning-color); background-color: #fffde7; }
         
-        .remove-column-btn { display: none; position: absolute; top: 22px; right: 20px; background: var(--danger-color); color: white; border: none; border-radius: 50%; width: 26px; height: 26px; font-weight: bold; cursor: pointer; z-index: 10; }
+        .remove-column-btn { display: none; position: absolute; top: 25px; right: 20px; background: #fee2e2; color: var(--danger-color); border: none; border-radius: 50%; width: 28px; height: 28px; font-weight: bold; cursor: pointer; z-index: 10; transition: all 0.2s; }
+        .remove-column-btn:hover { background: var(--danger-color); color: white; }
         .admin-unlocked .remove-column-btn { display: flex; justify-content: center; align-items: center; }
 
-        .product-content { padding: 25px; display: flex; flex-direction: column; gap: 25px; }
+        .product-content { padding: 30px 25px; display: flex; flex-direction: column; gap: 30px; }
         .block-section { display: flex; flex-direction: column; }
-        .block-header { font-size: 0.95rem; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+        .block-header { font-size: 0.85rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
         
-        .script-select { font-size: 0.85rem; font-weight: bold; padding: 4px 10px; border-radius: 14px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f5f5f5; }
-        .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; cursor: pointer; }
+        .script-select { font-size: 0.8rem; font-weight: 700; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f8fafc; font-family: inherit; }
+        .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; cursor: pointer; box-shadow: var(--shadow-sm); }
 
-        .status-done { background-color: #e8f5e9; color: var(--success-color); border: 1px solid #c8e6c9; }
-        .status-progress { background-color: #fff3e0; color: var(--warning-color); border: 1px solid #ffe0b2; }
-        .status-pending { background-color: #ffebee; color: var(--danger-color); border: 1px solid #ffcdd2; }
-        .status-badge-inline { display: inline-block; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; }
+        .status-done { background-color: #d1fae5; color: #047857; border: 1px solid #a7f3d0; }
+        .status-progress { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .status-pending { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+        .status-badge-inline { display: inline-block; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.5px; }
 
-        .node-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-        .node-item { padding: 10px; display: flex; align-items: flex-start; gap: 14px; font-size: 0.95rem; position: relative; background: #fafbfc; border-radius: 10px; border: 1px solid transparent; transition: background 0.2s; }
-        .node-item:hover { background: #f0f4f8; }
-        .node-item input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--success-color); cursor: pointer; }
+        .node-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+        .node-item { padding: 12px 14px; display: flex; align-items: flex-start; gap: 14px; font-size: 0.95rem; position: relative; background: #ffffff; border-radius: 12px; border: 1px solid #f1f5f9; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .node-item:hover { border-color: var(--border-color); box-shadow: var(--shadow-sm); }
+        .node-item input[type="checkbox"] { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--success-color); cursor: pointer; border-radius: 4px; }
         
-        .node-text-input { flex-grow: 1; border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: #333; outline: none; width: 100%; padding-right: 25px; box-sizing: border-box; font-family: inherit; line-height: 1.4; }
-        .admin-unlocked .node-text-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 6px; padding: 4px; }
+        .node-text-input { flex-grow: 1; border: 1px dashed transparent; background: transparent; font-size: 0.9rem; color: var(--text-main); font-weight: 500; outline: none; width: 100%; padding-right: 25px; box-sizing: border-box; font-family: inherit; line-height: 1.5; }
+        .admin-unlocked .node-text-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 6px; padding: 6px; }
 
-        .delete-node-btn { display: none; background: none; border: none; color: #ccc; cursor: pointer; position: absolute; right: 10px; top: 10px; font-weight: bold; font-size: 1rem; transition: color 0.2s; }
+        .delete-node-btn { display: none; background: none; border: none; color: #cbd5e1; cursor: pointer; position: absolute; right: 10px; top: 12px; font-weight: bold; font-size: 1.1rem; transition: color 0.2s; }
         .delete-node-btn:hover { color: var(--danger-color); }
         .admin-unlocked .delete-node-btn { display: block; }
-        .add-node-btn { display: none; background: #fff8e1; border: 1px dashed var(--warning-color); color: var(--warning-color); padding: 8px; border-radius: 10px; font-size: 0.85rem; cursor: pointer; margin-top: 10px; text-align: center; font-weight: bold; transition: background 0.2s; }
-        .add-node-btn:hover { background: #ffecb3; }
+        .add-node-btn { display: none; background: #f8fafc; border: 1px dashed #cbd5e1; color: var(--text-muted); padding: 10px; border-radius: 12px; font-size: 0.85rem; cursor: pointer; margin-top: 5px; text-align: center; font-weight: 600; transition: all 0.2s; font-family: inherit; }
+        .add-node-btn:hover { background: #f1f5f9; color: var(--text-main); border-color: #94a3b8; }
         .admin-unlocked .add-node-btn { display: block; }
 
-        .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: #333; outline: none; width: 100%; font-family: inherit; padding: 4px; }
+        .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.9rem; color: var(--text-main); font-weight: 500; outline: none; width: 100%; font-family: inherit; padding: 6px; }
         .admin-unlocked .table-text-input { background-color: #fffde7; border: 1px dashed var(--warning-color); border-radius: 6px; }
 
-        .unhide-block { padding: 20px; text-align: center; background: #f9f9f9; border-radius: 12px; border: 1px dashed #ccc; margin-top: 15px; }
-        .btn-unhide { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .search-bar { padding: 10px 20px; width: 220px; border: 1px solid var(--border-color); border-radius: 10px; outline: none; font-size: 0.9rem; font-family: inherit; background: #f8fafc; transition: all 0.2s; }
+        .search-bar:focus { background: white; border-color: #94a3b8; box-shadow: 0 0 0 3px rgba(226, 232, 240, 0.5); }
         
-        .cat-header { background: #f0f4f8; font-weight: 800; color: var(--primary-color); text-transform: uppercase; letter-spacing: 1px; font-size: 1rem; }
-        .cat-item { padding-left: 30px !important; color: #444; font-weight: 500; font-size: 0.95rem; }
-        .phase-badge { background-color: #e3f2fd; color: #0277bd; border: 1px solid #b3e5fc; font-size: 0.8rem; padding: 2px 6px; border-radius: 8px; font-weight: bold; margin-left: 10px; }
+        .unhide-block { padding: 25px; text-align: center; background: #f8fafc; border-bottom: 1px solid var(--border-color); }
+        .btn-unhide { background: white; color: var(--text-main); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.9rem; box-shadow: var(--shadow-sm); transition: all 0.2s; font-family: inherit; }
+        .btn-unhide:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
+        
+        .cat-header { background: #f8fafc; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; }
+        .cat-item { padding-left: 30px !important; color: var(--text-main); font-weight: 600; font-size: 0.95rem; }
+        .phase-badge { background-color: #eff6ff; color: #0284c7; border: 1px solid #bae6fd; font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; font-weight: 700; margin-left: 10px; vertical-align: middle; }
     </style>
 </head>
 <body>
 
 <div id="masterAuthShield">
     <div class="auth-card">
-        <h2>🔒 Secure Portal Gate</h2>
-        <p>This operational checklist is restricted. Enter the site security code to gain entry access.</p>
+        <h2>🔒 Security Portal</h2>
+        <p>Restricted Strategy Review Area. Authenticate to proceed.</p>
         <input type="password" id="masterGateKeyInput" class="auth-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') handleMasterAuthCheck()">
-        <button class="auth-submit-btn" onclick="handleMasterAuthCheck()">Verify Entry Identity</button>
-        <div id="authErrorNode" class="error-message">✕ Invalid entry token. Please try again.</div>
+        <button class="auth-submit-btn" onclick="handleMasterAuthCheck()">Authorize Access</button>
+        <div id="authErrorNode" class="error-message">✕ Invalid credential token.</div>
     </div>
 </div>
 
 <div id="analyticsKpiModal" class="analytics-modal-shield" onclick="closeKpiDetailsModal()">
     <div class="modal-content-box" onclick="event.stopPropagation()">
         <span class="close-modal-x" onclick="closeKpiDetailsModal()">✕</span>
-        <h2 id="modalTargetTitle" style="color:var(--primary-color); margin-top:0; border-bottom:3px solid #f0f0f0; padding-bottom:12px;">Data Breakdown View</h2>
+        <h2 id="modalTargetTitle" style="color:var(--primary-color); margin-top:0; border-bottom:1px solid var(--border-color); padding-bottom:20px; font-weight:800;">Data Breakdown View</h2>
         <div style="overflow-x:auto;">
             <table class="matrix-table">
                 <thead id="modalTableHeader">
@@ -196,11 +246,11 @@
         </div>
         <div class="kpi-card interactive-metric" onclick="triggerKpiFilterModal('PENDING')">
             <h3>Open Issues (Pending)</h3>
-            <div class="num" id="kpiPending" style="color:var(--danger-color)">0</div>
+            <div class="num" id="kpiPending">0</div>
         </div>
         <div class="kpi-card interactive-metric" onclick="triggerKpiFilterModal('SOLVED')">
             <h3>Resolved Cases</h3>
-            <div class="num" id="kpiSolved" style="color:var(--success-color)">0</div>
+            <div class="num" id="kpiSolved">0</div>
         </div>
         <div class="kpi-card interactive-metric" onclick="showTestedProductsModal()">
             <h3>Total Products Tested</h3>
@@ -243,7 +293,7 @@
         <div class="tabs" id="filterTabGroup"></div>
         <div class="right-controls">
             <button class="edit-toggle-btn" id="editModeBtn" onclick="toggleLiveEdit()">🔒 Unlock Admin Edit</button>
-            <input type="text" id="dashboardSearch" class="search-bar" placeholder="Search parameters..." oninput="executeSearch()">
+            <input type="text" id="dashboardSearch" class="search-bar" placeholder="Search checklist..." oninput="executeSearch()">
             
             <div class="export-box">
                 <span>Save As:</span>
@@ -271,9 +321,9 @@
     let currentActiveFilterId = "";
 
     let globalHeadlinesDataset = {
-        main: "New Products Checklist & Analytics",
-        overview: "📊 Overall Matrix Summary View",
-        log: "🚨 Technical Incident Capture Log"
+        main: "H1 2026 Operations Strategy Review",
+        overview: "Operational Evaluation Matrix",
+        log: "Technical Escalation Capture Log"
     };
 
     const DEFAULT_CHECKLIST_DATA = {
@@ -416,7 +466,6 @@
     let incidentLogDataset = [];
     let completedProductsData = {}; 
 
-    // UNIFIED PERSISTENT DATA COMITTER (Saves Locally & Cloud instantly)
     function commitData(type) {
         if(type === 'checklist' || !type) {
             localStorage.setItem('tse_checklist_data', JSON.stringify(activeStateDataset));
@@ -438,7 +487,6 @@
             document.getElementById('masterAuthShield').style.display = 'none';
             document.getElementById('captureArea').style.display = 'block'; 
             
-            // PRIORITIZE LOCAL STORAGE TO PREVENT REFRESH WIPES
             let localChecklist = localStorage.getItem('tse_checklist_data');
             let localIncidents = localStorage.getItem('tse_incidents_data');
             let localHeadlines = localStorage.getItem('tse_headlines_data');
@@ -456,7 +504,6 @@
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
 
-            // Background Async Syncing checks for newer cloud updates
             fetchCloudState().then(() => {
                 applyHeadlineStateToDOM();
                 rebuildSummaryTableMarkupStructures();
@@ -474,9 +521,9 @@
         const overviewInput = document.getElementById('headlineOverviewPanelText');
         const logInput = document.getElementById('headlineIncidentLogText');
         
-        if(mainInput) mainInput.value = globalHeadlinesDataset.main || "New Products Checklist & Analytics";
-        if(overviewInput) overviewInput.value = globalHeadlinesDataset.overview || "📊 Overall Matrix Summary View";
-        if(logInput) logInput.value = globalHeadlinesDataset.log || "🚨 Technical Incident Capture Log";
+        if(mainInput) mainInput.value = globalHeadlinesDataset.main || "H1 Operations Strategy Review";
+        if(overviewInput) overviewInput.value = globalHeadlinesDataset.overview || "Operational Evaluation Matrix";
+        if(logInput) logInput.value = globalHeadlinesDataset.log || "Technical Escalation Capture Log";
     }
 
     function handleHeadlineInput(fieldKey, valueString) {
@@ -539,7 +586,7 @@
         tbody.innerHTML = bodyHTML;
 
         const tabsBox = document.getElementById('filterTabGroup');
-        let tabsHTML = `<button class="tab-btn ${currentActiveFilterId===''?'active':''}" onclick="switchProductFilter('')">Show All</button>`;
+        let tabsHTML = `<button class="tab-btn ${currentActiveFilterId===''?'active':''}" onclick="switchProductFilter('')">Show All View</button>`;
         Object.keys(activeStateDataset).forEach(id => {
             tabsHTML += `<button class="tab-btn ${currentActiveFilterId===id?'active':''}" onclick="switchProductFilter('${id}')">${activeStateDataset[id].title}</button>`;
         });
@@ -618,15 +665,15 @@
         modalBody.innerHTML = '';
 
         if(targetedArray.length === 0) {
-            modalBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">No recorded incidents found matching this filter parameter scope.</td></tr>`;
+            modalBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:30px;">No records found matching this scope.</td></tr>`;
         } else {
             targetedArray.forEach(inc => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><strong>${inc.model}</strong></td>
-                    <td>${inc.issue}</td>
-                    <td><span class="doc-id">${inc.date}</span></td>
-                    <td><span class="doc-id">${inc.ref}</span></td>
+                    <td><strong style="color:var(--primary-color);">${inc.model}</strong></td>
+                    <td style="color:#475569;">${inc.issue}</td>
+                    <td><span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:6px; font-size:0.85rem;">${inc.date}</span></td>
+                    <td><span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:6px; font-size:0.85rem;">${inc.ref}</span></td>
                     <td><span class="status-badge-inline ${inc.status === 'SOLVED' ? 'status-done':'status-pending'}">${inc.status}</span></td>
                 `;
                 modalBody.appendChild(tr);
@@ -636,7 +683,7 @@
     }
 
     function showTestedProductsModal() {
-        document.getElementById('modalTargetTitle').innerText = "Products Fully Tested (100% Checklist Completion)";
+        document.getElementById('modalTargetTitle').innerText = "Products Fully Tested (100% Completion)";
         const thead = document.getElementById('modalTableHeader');
         thead.innerHTML = `<tr><th>Category & Validated Products</th></tr>`;
 
@@ -644,14 +691,14 @@
         modalBody.innerHTML = '';
 
         if(Object.keys(completedProductsData).length === 0) {
-            modalBody.innerHTML = `<tr><td style="text-align:center; color:#888; padding:20px;">No products have reached 100% completion testing yet.</td></tr>`;
+            modalBody.innerHTML = `<tr><td style="text-align:center; color:#94a3b8; padding:30px;">No products have reached 100% completion testing yet.</td></tr>`;
         } else {
             let html = "";
             Object.keys(completedProductsData).forEach(cat => {
                 html += `<tr><td class="cat-header">${cat}</td></tr>`;
                 Object.keys(completedProductsData[cat]).forEach(baseName => {
                     let times = completedProductsData[cat][baseName];
-                    let timeStr = times > 1 ? ` <span style="color:var(--warning-color); font-weight:bold; font-size:0.85rem;">(Tested ${times} times)</span>` : ``;
+                    let timeStr = times > 1 ? `<span class="phase-badge">Tested ${times} times</span>` : ``;
                     html += `<tr><td class="cat-item">✔️ ${baseName}${timeStr}</td></tr>`;
                 });
             });
@@ -662,7 +709,6 @@
 
     function closeKpiDetailsModal() { document.getElementById('analyticsKpiModal').style.display = 'none'; }
 
-    // SMART RETEST LOGIC ADDED HERE
     function addNewProductColumnChannel() {
         const rawName = prompt("Enter the name of the new Product Model (e.g. Mate 80 Pro):");
         if(!rawName) return;
@@ -830,12 +876,12 @@
         
         if (pTotal > 0 && pTotal === pChecked && !activeStateDataset[prodId].isArchived) {
             setTimeout(() => {
-                if(confirm(`Great job! All checks for ${activeStateDataset[prodId].title} are fully complete.\n\nDo you want to auto-hide this product from the main dashboard to save space? (You can retest it anytime via its tab or the Add button).`)) {
+                if(confirm(`Great job! All checks for ${activeStateDataset[prodId].title} are fully complete.\n\nDo you want to auto-hide this product from the main dashboard to keep your view clean? (You can retest it anytime via its tab or the Add button).`)) {
                     activeStateDataset[prodId].isArchived = true;
                     commitData('checklist');
                     if(currentActiveFilterId === "") renderMatrixDashboardGrid(); 
                 }
-            }, 300); 
+            }, 400); 
         }
     }
 
@@ -958,10 +1004,9 @@
                 }
             });
 
-            // Smart Phase Counting
             if (pTotal > 0 && pTotal === pChecked) {
                 let titleStr = activeStateDataset[prodId].title;
-                let baseName = titleStr.replace(/\s-\sPhase\s\d+$/i, ''); // Strip Phase text for grouping
+                let baseName = titleStr.replace(/\s-\sPhase\s\d+$/i, ''); 
                 
                 let cat = activeStateDataset[prodId].category || "Other Devices";
                 if(!completedProductsData[cat]) completedProductsData[cat] = {};
@@ -1060,10 +1105,10 @@
 
     function generateComprehensivePresentationDeck() {
         let pptx = new PptxGenJS(); pptx.layout = 'LAYOUT_16x9';
-        let slide1 = pptx.addSlide(); slide1.addShape(pptx.ShapeType.rect, { fill: '4a332a', x: 0, y: 0, w: '100%', h: '100%' });
+        let slide1 = pptx.addSlide(); slide1.addShape(pptx.ShapeType.rect, { fill: '0f172a', x: 0, y: 0, w: '100%', h: '100%' });
         slide1.addText(`${globalHeadlinesDataset.main.toUpperCase()}`, { x: 0.6, y: 2.2, w: 11, h: 2, fontSize: 26, bold: true, color: 'ffffff' });
         
-        let slide2 = pptx.addSlide(); slide2.addText("ANALYTICS PERFORMANCE SUMMARY TIMELINE", { x: 0.5, y: 0.4, w: 10, h: 0.5, fontSize: 18, bold: true, color: '4a332a' });
+        let slide2 = pptx.addSlide(); slide2.addText("ANALYTICS PERFORMANCE SUMMARY TIMELINE", { x: 0.5, y: 0.4, w: 10, h: 0.5, fontSize: 18, bold: true, color: '0f172a' });
         let pptTableRows = [["Product Model", "Captured Technical Quality Issue Description", "Logged", "Reference Ticket", "Resolution Status"]];
         incidentLogDataset.forEach(inc => { pptTableRows.push([inc.model, inc.issue, inc.date, inc.ref, inc.status]); });
         slide2.addTable(pptTableRows, { x: 0.5, y: 1.5, w: 12.3, colW: [1.8, 5.3, 1.0, 2.5, 1.7], border: { pt: '1', color: 'e2e2e2' }, fill: 'ffffff', fontSize: 9, autoPage: true });
@@ -1071,8 +1116,8 @@
         Object.keys(activeStateDataset).forEach(id => {
             const p = activeStateDataset[id];
             let slide = pptx.addSlide();
-            slide.addText(`${p.title.toUpperCase()} FUNCTIONAL CHECKLIST STATUS`, { x: 0.5, y: 0.4, w: 11, h: 0.5, fontSize: 18, bold: true, color: '4a332a' });
-            slide.addText("Egypt Proactive Quality Evaluation Framework", { x: 0.5, y: 0.9, w: 8, h: 0.3, fontSize: 11, bold: true, color: 'ef6c00' });
+            slide.addText(`${p.title.toUpperCase()} FUNCTIONAL CHECKLIST STATUS`, { x: 0.5, y: 0.4, w: 11, h: 0.5, fontSize: 18, bold: true, color: '0f172a' });
+            slide.addText("Egypt Proactive Quality Evaluation Framework", { x: 0.5, y: 0.9, w: 8, h: 0.3, fontSize: 11, bold: true, color: 'e11d48' });
 
             let currentY = 1.4;
             ['key', 'app', 'prev'].forEach(sec => {
@@ -1081,15 +1126,15 @@
                 if (p[sec]) p[sec].forEach(item => { itemsList.push((item.checked ? "[✓] " : "[ ] ") + item.text); });
 
                 if(itemsList.length > 0) {
-                    slide.addText(titleLabel, { x: 0.5, y: currentY, w: 4, h: 0.3, fontSize: 12, bold: true, color: '222222' });
+                    slide.addText(titleLabel, { x: 0.5, y: currentY, w: 4, h: 0.3, fontSize: 12, bold: true, color: '1e293b' });
                     currentY += 0.35;
-                    slide.addText(itemsList.slice(0, 5).join("\n"), { x: 0.5, y: currentY, w: 12.3, h: 1.1, fontSize: 10, color: '555555', lineSpacing: 3 });
+                    slide.addText(itemsList.slice(0, 5).join("\n"), { x: 0.5, y: currentY, w: 12.3, h: 1.1, fontSize: 10, color: '64748b', lineSpacing: 3 });
                     currentY += 1.3;
                 }
             });
         });
 
-        pptx.writeFile({ fileName: 'HUAWEI_Operations_Strategic_Checklist_Review' });
+        pptx.writeFile({ fileName: 'Operations_Strategic_Checklist_Review' });
     }
 
     function triggerNativeDownload(url, filename) { const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); }
