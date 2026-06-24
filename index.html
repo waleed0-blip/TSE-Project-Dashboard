@@ -143,17 +143,12 @@
         .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: #333; outline: none; width: 100%; font-family: inherit; padding: 4px; }
         .admin-unlocked .table-text-input { background-color: #fffde7; border: 1px dashed var(--warning-color); border-radius: 6px; }
 
-        .progress-container, .summary-progress-bg { background: #eaedf0; border-radius: 10px; height: 12px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
-        .summary-progress-bg { height: 8px; margin-top: 6px; }
-        .progress-bar { background: linear-gradient(90deg, #4caf50, #81c784); height: 100%; width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .search-bar { padding: 12px 22px; width: 180px; border: 1px solid var(--border-color); border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        
         .unhide-block { padding: 20px; text-align: center; background: #f9f9f9; border-radius: 12px; border: 1px dashed #ccc; margin-top: 15px; }
-        .btn-unhide { background: var(--warning-color); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 10px rgba(239, 108, 0, 0.2); transition: transform 0.2s; }
-        .btn-unhide:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(239, 108, 0, 0.4); }
+        .btn-unhide { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
         .cat-header { background: #f0f4f8; font-weight: 800; color: var(--primary-color); text-transform: uppercase; letter-spacing: 1px; font-size: 1rem; }
-        .cat-item { padding-left: 30px !important; color: #444; font-weight: 500; }
+        .cat-item { padding-left: 30px !important; color: #444; font-weight: 500; font-size: 0.95rem; }
+        .phase-badge { background-color: #e3f2fd; color: #0277bd; border: 1px solid #b3e5fc; font-size: 0.8rem; padding: 2px 6px; border-radius: 8px; font-weight: bold; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -283,7 +278,7 @@
 
     const DEFAULT_CHECKLIST_DATA = {
         nova15max: {
-            title: "Nova 15 Max", script: "done", category: "Smartphones", isArchived: false,
+            title: "Nova 15 Max", script: "pending", category: "Smartphones", isArchived: false,
             key: [
                 { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
                 { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
@@ -308,7 +303,7 @@
             ]
         },
         mate80pro: {
-            title: "Mate 80 Pro", script: "done", category: "Smartphones", isArchived: false,
+            title: "Mate 80 Pro", script: "pending", category: "Smartphones", isArchived: false,
             key: [
                 { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
                 { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
@@ -334,7 +329,7 @@
             ]
         },
         freebudspro5: {
-            title: "FreeBuds Pro 5", script: "done", category: "Audio", isArchived: false,
+            title: "FreeBuds Pro 5", script: "pending", category: "Audio", isArchived: false,
             key: [
                 { text: "Pairing & Reconnection Stability", checked: false },
                 { text: "Huawei Sound FX application", checked: false },
@@ -354,7 +349,7 @@
             ]
         },
         matepadmini: {
-            title: "Matepad Mini", script: "done", category: "Tablets", isArchived: false,
+            title: "Matepad Mini", script: "pending", category: "Tablets", isArchived: false,
             key: [
                 { text: "Inaccurate GPS/Location testing", checked: false },
                 { text: "AI Handwriting Notes App", checked: false },
@@ -372,7 +367,7 @@
             ]
         },
         gtrunner2: {
-            title: "GT Runner 2", script: "done", category: "Wearables", isArchived: false,
+            title: "GT Runner 2", script: "pending", category: "Wearables", isArchived: false,
             key: [
                 { text: "TruSense System Tracking in UAE", checked: false },
                 { text: "XDR Positional Pathing Algorithms", checked: false },
@@ -417,9 +412,25 @@
         { model: "GT Runner 2", issue: "XDR positional pathing algorithms require validation mapping logs under complex structural environments", date: "2026-04", ref: "TM202604100158", action: "Verified active; algorithmic tracking guarantees trace continuity even across dense environmental noise loops", status: "SOLVED" }
     ];
 
-    let activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
-    let incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
+    let activeStateDataset = {};
+    let incidentLogDataset = [];
     let completedProductsData = {}; 
+
+    // UNIFIED PERSISTENT DATA COMITTER (Saves Locally & Cloud instantly)
+    function commitData(type) {
+        if(type === 'checklist' || !type) {
+            localStorage.setItem('tse_checklist_data', JSON.stringify(activeStateDataset));
+            syncCloudChannel("checklist", activeStateDataset);
+        }
+        if(type === 'incidents' || !type) {
+            localStorage.setItem('tse_incidents_data', JSON.stringify(incidentLogDataset));
+            syncCloudChannel("incidents", incidentLogDataset);
+        }
+        if(type === 'headlines' || !type) {
+            localStorage.setItem('tse_headlines_data', JSON.stringify(globalHeadlinesDataset));
+            syncCloudChannel("headlines", globalHeadlinesDataset);
+        }
+    }
 
     function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
@@ -427,14 +438,25 @@
             document.getElementById('masterAuthShield').style.display = 'none';
             document.getElementById('captureArea').style.display = 'block'; 
             
-            if(Object.keys(activeStateDataset).length === 0) activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
-            if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
+            // PRIORITIZE LOCAL STORAGE TO PREVENT REFRESH WIPES
+            let localChecklist = localStorage.getItem('tse_checklist_data');
+            let localIncidents = localStorage.getItem('tse_incidents_data');
+            let localHeadlines = localStorage.getItem('tse_headlines_data');
+            
+            if(localChecklist) activeStateDataset = JSON.parse(localChecklist);
+            else if(Object.keys(activeStateDataset).length === 0) activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+
+            if(localIncidents) incidentLogDataset = JSON.parse(localIncidents);
+            else if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
+
+            if(localHeadlines) globalHeadlinesDataset = JSON.parse(localHeadlines);
 
             applyHeadlineStateToDOM();
             rebuildSummaryTableMarkupStructures();
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
 
+            // Background Async Syncing checks for newer cloud updates
             fetchCloudState().then(() => {
                 applyHeadlineStateToDOM();
                 rebuildSummaryTableMarkupStructures();
@@ -459,21 +481,20 @@
 
     function handleHeadlineInput(fieldKey, valueString) {
         globalHeadlinesDataset[fieldKey] = valueString;
-        localStorage.setItem('operations_headlines_storage', JSON.stringify(globalHeadlinesDataset));
-        syncCloudChannel("headlines", globalHeadlinesDataset);
+        commitData('headlines');
     }
 
     function handleProductTitleInput(productId, valueString) {
         if(activeStateDataset[productId]) {
             activeStateDataset[productId].title = valueString;
-            syncCloudChannel("checklist", activeStateDataset);
+            commitData('checklist');
         }
     }
 
     function handleItemTextInput(productId, sectionKey, indexPosition, valueString) {
         if(activeStateDataset[productId] && activeStateDataset[productId][sectionKey][indexPosition]) {
             activeStateDataset[productId][sectionKey][indexPosition].text = valueString;
-            syncCloudChannel("checklist", activeStateDataset);
+            commitData('checklist');
         }
     }
 
@@ -481,7 +502,7 @@
         if(incidentLogDataset[globalIndex]) {
             incidentLogDataset[globalIndex][fieldKey] = valueString;
             calculateDynamicKPIs();
-            syncCloudChannel("incidents", incidentLogDataset);
+            commitData('incidents');
         }
     }
 
@@ -628,8 +649,10 @@
             let html = "";
             Object.keys(completedProductsData).forEach(cat => {
                 html += `<tr><td class="cat-header">${cat}</td></tr>`;
-                completedProductsData[cat].forEach(prodName => {
-                    html += `<tr><td class="cat-item">✔️ ${prodName}</td></tr>`;
+                Object.keys(completedProductsData[cat]).forEach(baseName => {
+                    let times = completedProductsData[cat][baseName];
+                    let timeStr = times > 1 ? ` <span style="color:var(--warning-color); font-weight:bold; font-size:0.85rem;">(Tested ${times} times)</span>` : ``;
+                    html += `<tr><td class="cat-item">✔️ ${baseName}${timeStr}</td></tr>`;
                 });
             });
             modalBody.innerHTML = html;
@@ -641,26 +664,68 @@
 
     // SMART RETEST LOGIC ADDED HERE
     function addNewProductColumnChannel() {
-        const rawName = prompt("Enter the name of the new Product Model:");
+        const rawName = prompt("Enter the name of the new Product Model (e.g. Mate 80 Pro):");
         if(!rawName) return;
+        const baseName = rawName.trim();
 
-        // Check if product already exists to enable smart retesting
-        const existingId = Object.keys(activeStateDataset).find(id => activeStateDataset[id].title.toLowerCase() === rawName.toLowerCase());
-        
-        if (existingId) {
-            if(confirm(`"${activeStateDataset[existingId].title}" is already in your database. Do you want to bring it back to the dashboard for retesting?`)) {
-                retestProduct(existingId);
+        let maxPhase = 0;
+        let existingCat = "Other Devices";
+        let templateData = null;
+
+        Object.keys(activeStateDataset).forEach(key => {
+            let t = activeStateDataset[key].title;
+            if(t.toLowerCase() === baseName.toLowerCase()) {
+                maxPhase = Math.max(maxPhase, 1);
+                existingCat = activeStateDataset[key].category;
+                templateData = activeStateDataset[key];
+            } else {
+                let match = t.match(new RegExp(`^${baseName.toLowerCase()}\\s-\\sPhase\\s(\\d+)$`, 'i'));
+                if(match) {
+                    maxPhase = Math.max(maxPhase, parseInt(match[1], 10));
+                    existingCat = activeStateDataset[key].category;
+                    templateData = activeStateDataset[key];
+                }
             }
-            return;
+        });
+
+        let newTitle = baseName;
+        let finalCat = existingCat;
+
+        if (maxPhase > 0) {
+            if(confirm(`"${baseName}" has already been tested (Up to Phase ${maxPhase}).\n\nDo you want to initiate a fresh retest as Phase ${maxPhase + 1}? (Previous tests are saved automatically).`)) {
+                newTitle = `${baseName} - Phase ${maxPhase + 1}`;
+            } else {
+                return; 
+            }
+        } else {
+             finalCat = prompt("Enter category (e.g. Smartphones, Tablets, Wearables, Audio):", "Other Devices") || "Other Devices";
         }
 
-        const catName = prompt("Enter category (e.g. Smartphones, Tablets, Wearables, Audio):", "Other Devices") || "Other Devices";
         const cleanKey = "prod_" + Date.now();
-        activeStateDataset[cleanKey] = { title: rawName, script: "pending", category: catName, isArchived: false, key: [], app: [], prev: [] };
         
+        let newParams = { key: [], app: [], prev: [] };
+        if(templateData) {
+            ['key', 'app', 'prev'].forEach(sec => {
+                if(templateData[sec]) {
+                    newParams[sec] = templateData[sec].map(item => ({ text: item.text, checked: false }));
+                }
+            });
+        }
+
+        activeStateDataset[cleanKey] = { 
+            title: newTitle, 
+            script: "pending", 
+            category: finalCat, 
+            isArchived: false, 
+            key: newParams.key, 
+            app: newParams.app, 
+            prev: newParams.prev 
+        };
+        
+        commitData('checklist');
         rebuildSummaryTableMarkupStructures();
         renderMatrixDashboardGrid();
-        syncCloudChannel("checklist", activeStateDataset);
+        calculateDynamicKPIs();
     }
 
     function removeProductColumnChannel(id) {
@@ -668,10 +733,10 @@
         delete activeStateDataset[id];
         if(currentActiveFilterId === id) currentActiveFilterId = "";
         
+        commitData('checklist');
         rebuildSummaryTableMarkupStructures();
         renderMatrixDashboardGrid();
         calculateDynamicKPIs();
-        syncCloudChannel("checklist", activeStateDataset);
     }
 
     function scrollToSectionBlock(sectionDataId) {
@@ -682,18 +747,9 @@
         });
     }
 
-    // SMART RETEST UNHIDE FUNCTION
-    function retestProduct(id) {
-        if(confirm(`Do you want to wipe all previous checkmarks clean for a fresh test?\n\nClick "OK" to reset checks.\nClick "Cancel" to just unhide it with its old checks intact.`)) {
-            ['key', 'app', 'prev'].forEach(sec => {
-                if(activeStateDataset[id][sec]) {
-                    activeStateDataset[id][sec].forEach(item => item.checked = false);
-                }
-            });
-            activeStateDataset[id].script = "pending";
-        }
+    function unhideProductColumn(id) {
         activeStateDataset[id].isArchived = false;
-        syncCloudChannel("checklist", activeStateDataset);
+        commitData('checklist');
         switchProductFilter(''); 
     }
 
@@ -717,7 +773,7 @@
             `;
 
             if (prod.isArchived && currentActiveFilterId === id) {
-                contentHTML += `<div class="unhide-block"><button class="btn-unhide" onclick="retestProduct('${id}')">🔄 Retest Product (Restore to Dashboard)</button></div>`;
+                contentHTML += `<div class="unhide-block"><button class="btn-unhide" onclick="unhideProductColumn('${id}')">👁️ Unhide to Main Dashboard</button></div>`;
             }
 
             contentHTML += `
@@ -776,7 +832,7 @@
             setTimeout(() => {
                 if(confirm(`Great job! All checks for ${activeStateDataset[prodId].title} are fully complete.\n\nDo you want to auto-hide this product from the main dashboard to save space? (You can retest it anytime via its tab or the Add button).`)) {
                     activeStateDataset[prodId].isArchived = true;
-                    syncCloudChannel("checklist", activeStateDataset);
+                    commitData('checklist');
                     if(currentActiveFilterId === "") renderMatrixDashboardGrid(); 
                 }
             }, 300); 
@@ -786,7 +842,7 @@
     function handleCheckboxStateToggle(chk, id, sec, idx) {
         activeStateDataset[id][sec][idx].checked = chk.checked;
         refreshMetrics();
-        syncCloudChannel("checklist", activeStateDataset);
+        commitData('checklist');
         if(chk.checked) checkProductAutoCompletion(id);
     }
 
@@ -795,7 +851,7 @@
         activeStateDataset[id][sec].push({ text: "New Parameter Metric...", checked: false });
         renderMatrixDashboardGrid();
         if(editMode) toggleLiveEditDOMSync(true);
-        syncCloudChannel("checklist", activeStateDataset);
+        commitData('checklist');
     }
 
     function deleteItemElement(btn, id, sec, idx) {
@@ -803,7 +859,7 @@
         activeStateDataset[id][sec].splice(idx, 1);
         renderMatrixDashboardGrid();
         if(editMode) toggleLiveEditDOMSync(true);
-        syncCloudChannel("checklist", activeStateDataset);
+        commitData('checklist');
     }
 
     function toggleLiveEditDOMSync(forceStyles = false) {
@@ -826,9 +882,6 @@
         if(overviewInput && overviewInput.value.trim() !== "") globalHeadlinesDataset.overview = overviewInput.value.trim();
         if(logInput && logInput.value.trim() !== "") globalHeadlinesDataset.log = logInput.value.trim();
         
-        localStorage.setItem('operations_headlines_storage', JSON.stringify(globalHeadlinesDataset));
-        syncCloudChannel("headlines", globalHeadlinesDataset);
-
         document.querySelectorAll('.product-column').forEach(col => {
             const id = col.getAttribute('data-id');
             if (!activeStateDataset[id]) return;
@@ -846,7 +899,9 @@
                 });
             });
         });
-        syncCloudChannel("checklist", activeStateDataset);
+        
+        commitData('headlines');
+        commitData('checklist');
     }
 
     function toggleLiveEdit() {
@@ -871,12 +926,15 @@
         selectElement.className = `script-select status-${selectElement.value}`;
         const tableBadge = document.getElementById(`m-script-${prodId}`);
         if(tableBadge) { tableBadge.className = `status-badge-inline status-${selectElement.value}`; tableBadge.textContent = selectElement.value.toUpperCase(); }
-        if(updateStorage) { activeStateDataset[prodId].script = selectElement.value; syncCloudChannel("checklist", activeStateDataset); }
+        if(updateStorage) { 
+            activeStateDataset[prodId].script = selectElement.value; 
+            commitData('checklist'); 
+        }
     }
 
     function refreshMetrics() {
-        let completedProductsCount = 0;
         completedProductsData = {}; 
+        let uniqueTestedBaseNames = new Set();
 
         Object.keys(activeStateDataset).forEach(prodId => {
             let pTotal = 0; let pChecked = 0;
@@ -900,15 +958,22 @@
                 }
             });
 
+            // Smart Phase Counting
             if (pTotal > 0 && pTotal === pChecked) {
-                completedProductsCount++;
+                let titleStr = activeStateDataset[prodId].title;
+                let baseName = titleStr.replace(/\s-\sPhase\s\d+$/i, ''); // Strip Phase text for grouping
+                
                 let cat = activeStateDataset[prodId].category || "Other Devices";
-                if(!completedProductsData[cat]) completedProductsData[cat] = [];
-                completedProductsData[cat].push(activeStateDataset[prodId].title);
+                if(!completedProductsData[cat]) completedProductsData[cat] = {};
+                
+                if(!completedProductsData[cat][baseName]) completedProductsData[cat][baseName] = 0;
+                completedProductsData[cat][baseName]++;
+                
+                uniqueTestedBaseNames.add(baseName);
             }
         });
 
-        document.getElementById('kpiTested').innerText = completedProductsCount;
+        document.getElementById('kpiTested').innerText = uniqueTestedBaseNames.size;
     }
 
     function switchProductFilter(id) {
@@ -937,20 +1002,23 @@
     }
 
     async function fetchCloudState() {
-        let cachedHeadlines = localStorage.getItem('operations_headlines_storage');
-        if(cachedHeadlines) {
-            let parsed = JSON.parse(cachedHeadlines);
-            if(parsed && parsed.main) globalHeadlinesDataset = parsed;
-        }
-
         if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
         try {
             let res = await fetch(CLOUD_DATABASE_URL);
             let json = await res.json();
             if(json.status === "success" && json.data) {
-                if(json.data.checklist && Object.keys(json.data.checklist).length > 0) activeStateDataset = json.data.checklist;
-                if(json.data.incidents && json.data.incidents.length > 0) incidentLogDataset = json.data.incidents;
-                if(json.data.headlines && json.data.headlines.main) globalHeadlinesDataset = json.data.headlines;
+                if(json.data.checklist && Object.keys(json.data.checklist).length > 0) {
+                    activeStateDataset = json.data.checklist;
+                    localStorage.setItem('tse_checklist_data', JSON.stringify(activeStateDataset));
+                }
+                if(json.data.incidents && json.data.incidents.length > 0) {
+                    incidentLogDataset = json.data.incidents;
+                    localStorage.setItem('tse_incidents_data', JSON.stringify(incidentLogDataset));
+                }
+                if(json.data.headlines && json.data.headlines.main) {
+                    globalHeadlinesDataset = json.data.headlines;
+                    localStorage.setItem('tse_headlines_data', JSON.stringify(globalHeadlinesDataset));
+                }
             }
         } catch(e) { console.log("Cloud Read Error:", e); }
     }
@@ -968,20 +1036,20 @@
     function createNewIncidentRow() {
         incidentLogDataset.push({ model: "New Product Model", issue: "Describe issue details...", date: "2026-06", ref: "Ref ID", action: "HQ action roadmap...", status: "PENDING" });
         calculateDynamicKPIs(); 
-        syncCloudChannel("incidents", incidentLogDataset);
+        commitData('incidents');
     }
 
     function updateIncidentStatus(select, globalIdx) {
         incidentLogDataset[globalIdx].status = select.value;
         calculateDynamicKPIs(); 
-        syncCloudChannel("incidents", incidentLogDataset);
+        commitData('incidents');
     }
 
     function deleteIncidentRow(globalIdx) {
         if(!confirm("Are you sure you want to permanently delete this issue log?")) return;
         incidentLogDataset.splice(globalIdx, 1);
         calculateDynamicKPIs();
-        syncCloudChannel("incidents", incidentLogDataset);
+        commitData('incidents');
     }
 
     function exportToCSVFile() {
