@@ -3,830 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H1 Operations & New Products Dashboard</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
-    
+    <title>Huawei Egypt TSE Operations Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #0f172a;
-            --accent-brand: #e11d48;
-            --bg-color: #f1f5f9;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --success-color: #059669;
-            --warning-color: #d97706;
-            --danger-color: #dc2626;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.02);
-            --shadow-md: 0 8px 16px rgba(0,0,0,0.04);
-            --shadow-lg: 0 15px 35px rgba(0,0,0,0.08);
-            --shadow-hover: 0 20px 40px rgba(0,0,0,0.12);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: radial-gradient(circle at top center, #ffffff, var(--bg-color));
-            color: var(--text-main);
-            margin: 0; padding: 40px 20px;
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-        }
-
-        #masterAuthShield {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            display: flex; justify-content: center; align-items: center; z-index: 999999;
-        }
-        .auth-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white; padding: 50px 45px; border-radius: 28px;
-            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.6);
-            text-align: center; max-width: 420px; width: 90%; margin: auto;
-        }
-        .auth-card h2 { margin-top: 0; color: #ffffff; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 8px; }
-        .auth-card p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 30px; }
-        .auth-input { width: 100%; padding: 15px 20px; margin-bottom: 20px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 14px; font-size: 1.1rem; text-align: center; outline: none; box-sizing: border-box; transition: all 0.3s ease; font-family: inherit; letter-spacing: 2px; }
-        .auth-input:focus { border-color: var(--accent-brand); background: rgba(0,0,0,0.5); box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.15); }
-        .auth-submit-btn { background: var(--accent-brand); color: white; border: none; padding: 15px 30px; border-radius: 14px; font-weight: 700; font-size: 1.05rem; width: 100%; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; }
-        .auth-submit-btn:hover { background-color: #be123c; transform: translateY(-3px); box-shadow: 0 12px 24px -10px rgba(225, 29, 72, 0.6); }
-        .error-message { color: #fca5a5; font-size: 0.9rem; font-weight: 600; margin-top: 15px; display: none; }
-
-        @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .container { max-width: 1480px; margin: 0 auto; display: none; animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        
-        header { text-align: center; padding-bottom: 25px; margin-bottom: 40px; border-bottom: 1px solid var(--border-color); }
-        .headline-input-element { display: block; border: 1px dashed transparent; background: transparent; font-size: 2.5rem; text-transform: uppercase; margin: 0; font-weight: 800; text-align: center; color: var(--primary-color); width: 100%; outline: none; transition: all 0.2s; font-family: inherit; letter-spacing: -0.5px; }
-        .admin-unlocked .headline-input-element { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 12px; }
-
-        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 45px; }
-        .kpi-card { background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 24px; padding: 28px 24px; text-align: center; box-shadow: var(--shadow-md); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid rgba(226, 232, 240, 0.8); position: relative; overflow: hidden; }
-        .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #e2e8f0; transition: background 0.4s; }
-        
-        .kpi-card:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-        .kpi-card:nth-child(2)::before { background: linear-gradient(90deg, #ef4444, #f87171); }
-        .kpi-card:nth-child(3)::before { background: linear-gradient(90deg, #10b981, #34d399); }
-        .kpi-card:nth-child(4)::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
-        .kpi-card:nth-child(5)::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-
-        .kpi-card h3 { margin: 0 0 12px 0; font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.8px; }
-        .kpi-card .num { font-size: 3.2rem; font-weight: 800; color: var(--primary-color); line-height: 1; letter-spacing: -1.5px; }
-        .kpi-card.interactive-metric { cursor: pointer; }
-        .kpi-card.interactive-metric:hover { transform: translateY(-6px) scale(1.02); box-shadow: var(--shadow-hover); border-color: transparent; }
-
-        .analytics-modal-shield { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 999998; justify-content: center; align-items: center; }
-        .modal-content-box { background-color: white; border-radius: 28px; max-width: 950px; width: 95%; max-height: 85vh; overflow-y: auto; padding: 45px; box-shadow: 0 30px 60px -15px rgba(0,0,0,0.6); position: relative; animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .close-modal-x { position: absolute; right: 25px; top: 25px; background: #f1f5f9; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1.3rem; font-weight: bold; color: #64748b; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
-        .close-modal-x:hover { background: #e2e8f0; color: #0f172a; transform: rotate(90deg); border-color: #cbd5e1; }
-
-        .overall-view-panel, .analytics-section { background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 24px; padding: 35px; margin-bottom: 45px; box-shadow: var(--shadow-lg); overflow-x: auto; border: 1px solid rgba(226, 232, 240, 0.8); }
-        .section-title { font-size: 1.2rem; font-weight: 800; color: var(--primary-color); margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; padding-bottom: 18px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
-        .panel-heading-input { border: 1px dashed transparent; background: transparent; font-size: 1.2rem; font-weight: 800; color: var(--primary-color); text-transform: uppercase; width: 60%; outline: none; transition: all 0.2s; font-family: inherit; letter-spacing: inherit; }
-        .admin-unlocked .panel-heading-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; padding: 4px 8px; }
-
-        .matrix-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 0.95rem; margin-top: 10px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
-        .matrix-table th, .matrix-table td { padding: 18px 22px; border-bottom: 1px solid var(--border-color); }
-        .matrix-table th { background-color: #f8fafc; font-weight: 700; color: var(--text-muted); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
-        .matrix-table tr:last-child td { border-bottom: none; }
-        .matrix-table tbody tr { transition: background-color 0.2s; }
-        .matrix-table tbody tr:hover { background-color: #f1f5f9; }
-
-        .matrix-del-col-btn { background: #fee2e2; color: var(--danger-color); border: none; border-radius: 8px; padding: 6px 12px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; display: none; }
-        .admin-unlocked .matrix-del-col-btn { display: inline-block; }
-        .matrix-del-col-btn:hover { background: var(--danger-color); color: white; }
-
-        .log-btn, .admin-control-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; display: inline-flex; align-items: center; gap: 8px; }
-        .log-btn:hover, .admin-control-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); background-color: #1e293b; }
-
-        .status-badge-inline { 
-            display: inline-flex; align-items: center; justify-content: center; 
-            font-size: 0.75rem; font-weight: 800; padding: 0 14px; border-radius: 8px; 
-            letter-spacing: 0.8px; height: 32px; min-width: 95px; text-transform: uppercase; 
-        }
-        .status-done { background-color: #d1fae5; color: #047857; border: 1px solid #a7f3d0; }
-        .status-pending { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-
-        .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; gap: 20px; flex-wrap: wrap; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); padding: 18px 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid rgba(226, 232, 240, 0.8); }
-        
-        .tabs { display: flex; gap: 8px; flex-wrap: wrap; background: #f1f5f9; padding: 6px; border-radius: 14px; }
-        .tab-btn { background-color: transparent; border: none; padding: 10px 22px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; color: var(--text-muted); font-family: inherit; }
-        .tab-btn.active { background-color: #ffffff; color: var(--primary-color); box-shadow: var(--shadow-sm); }
-
-        .right-controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-        .edit-toggle-btn { background-color: #f8fafc; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm); transition: all 0.3s; font-family: inherit; }
-        .edit-toggle-btn:hover { background-color: #e2e8f0; }
-        .edit-toggle-btn.editing-active { background-color: var(--warning-color); color: white; border-color: var(--warning-color); }
-        
-        .export-box { display: flex; align-items: center; gap: 10px; background-color: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 6px 8px 6px 18px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); box-shadow: var(--shadow-sm); }
-        .export-select { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 500; font-size: 0.9rem; background: #f8fafc; font-family: inherit; color: var(--text-main); }
-        .export-btn { background-color: var(--primary-color); color: white; border: none; padding: 8px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; font-family: inherit; }
-        .search-bar { padding: 12px 24px; width: 240px; border: 1px solid var(--border-color); border-radius: 12px; outline: none; font-size: 0.95rem; font-family: inherit; background: #ffffff; box-shadow: var(--shadow-sm); }
-
-        /* Checklist structural configuration - Hidden by default, unlocked with Admin authorization */
-        .matrix-grid { 
-            display: none !important; 
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
-            gap: 35px; 
-            margin-top: 25px; 
-        }
-        .admin-unlocked .matrix-grid { 
-            display: grid !important; 
-        }
-
-        .product-column { background: var(--card-bg); border-radius: 24px; box-shadow: var(--shadow-md); border: 1px solid rgba(226,232,240,0.8); overflow: hidden; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
-        .product-title-input { border: 1px dashed transparent; background: transparent; padding: 28px 20px 10px; font-size: 1.45rem; font-weight: 800; text-align: center; outline: none; width: 100%; box-sizing: border-box; font-family: inherit; color: var(--primary-color); }
-        .admin-unlocked .product-title-input { border: 1px dashed var(--warning-color); background-color: #fffde7; }
-        
-        .cat-meta-inputs { display: none; justify-content: center; gap: 10px; padding: 0 20px 20px; }
-        .admin-unlocked .cat-meta-inputs { display: flex; }
-        .meta-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 6px; padding: 6px 10px; font-size: 0.8rem; text-align: center; width: 45%; outline: none; font-family: inherit; color: var(--primary-color); font-weight: 600; }
-
-        .remove-column-btn { display: none; position: absolute; top: 28px; right: 25px; background: #fee2e2; color: var(--danger-color); border: none; border-radius: 50%; width: 32px; height: 32px; font-weight: bold; cursor: pointer; z-index: 10; font-size: 1.1rem; }
-        .admin-unlocked .remove-column-btn { display: flex; justify-content: center; align-items: center; }
-
-        .product-content { padding: 35px 30px; display: flex; flex-direction: column; gap: 35px; }
-        .block-section { display: flex; flex-direction: column; }
-        .block-header { font-size: 0.9rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .script-select { font-size: 0.85rem; font-weight: 700; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f8fafc; font-family: inherit; }
-        .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; cursor: pointer; }
-
-        .node-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
-        .node-item { padding: 14px 16px; display: flex; align-items: flex-start; gap: 16px; font-size: 1rem; position: relative; background: #ffffff; border-radius: 14px; border: 1px solid #f1f5f9; }
-        .node-item input[type="checkbox"] { margin-top: 5px; width: 20px; height: 20px; accent-color: var(--success-color); cursor: pointer; border-radius: 6px; }
-        
-        .node-text-input { flex-grow: 1; border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: var(--text-main); font-weight: 500; outline: none; width: 100%; padding-right: 30px; box-sizing: border-box; font-family: inherit; }
-        .admin-unlocked .node-text-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; padding: 8px; }
-
-        .delete-node-btn { display: none; background: none; border: none; color: #cbd5e1; cursor: pointer; position: absolute; right: 12px; top: 15px; font-weight: bold; font-size: 1.2rem; }
-        .admin-unlocked .delete-node-btn { display: block; }
-        .add-node-btn { display: none; background: #f8fafc; border: 1px dashed #cbd5e1; color: var(--text-muted); padding: 12px; border-radius: 14px; font-size: 0.9rem; cursor: pointer; margin-top: 8px; text-align: center; font-weight: 600; font-family: inherit; }
-        .admin-unlocked .add-node-btn { display: block; }
-
-        .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: var(--text-main); font-weight: 500; outline: none; width: 100%; font-family: inherit; padding: 6px; pointer-events: none; }
-        .admin-unlocked .table-text-input { background-color: #fffde7; border: 1px dashed var(--warning-color); border-radius: 8px; pointer-events: auto; }
-
-        .table-select-input { border: 1px solid transparent; background: transparent; font-size: 0.9rem; font-weight: 700; outline: none; font-family: inherit; padding: 6px; pointer-events: none; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
-        .admin-unlocked .table-select-input { background: #ffffff; border: 1px solid var(--border-color); border-radius: 6px; pointer-events: auto; padding-right: 20px; }
-
-        .cat-font { font-weight: 800; color: var(--text-muted); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
-        .subcat-font { font-weight: 700; color: var(--primary-color); font-size: 0.9rem; }
+        body { background-color: #0A192F; color: #E2E8F0; font-family: system-ui, -apple-system, sans-serif; }
+        .loading-overlay { background: rgba(10, 25, 47, 0.85); }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-8">
 
-<div id="masterAuthShield">
-    <div class="auth-card">
-        <h2>🔒 Security Portal</h2>
-        <p>Restricted Strategy Review Area. Authenticate to proceed.</p>
-        <input type="password" id="masterGateKeyInput" class="auth-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') handleMasterAuthCheck()">
-        <button class="auth-submit-btn" onclick="handleMasterAuthCheck()">Authorize Access</button>
-        <div id="authErrorNode" class="error-message">✕ Invalid credential token.</div>
+    <div id="loading-screen" class="loading-overlay fixed inset-0 z-50 flex flex-col justify-center items-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-amber-500 mb-4"></div>
+        <p class="text-amber-400 font-mono text-sm tracking-widest">SYNCING LIVE DATABASE...</p>
     </div>
-</div>
 
-<div id="analyticsKpiModal" class="analytics-modal-shield" onclick="closeKpiDetailsModal()">
-    <div class="modal-content-box" onclick="event.stopPropagation()">
-        <span class="close-modal-x" onclick="closeKpiDetailsModal()">✕</span>
-        <h2 id="modalTargetTitle" style="color:var(--primary-color); margin-top:0; border-bottom:1px solid var(--border-color); padding-bottom:20px; font-weight:800;">Data Breakdown View</h2>
-        
-        <div id="modalKpiContainer" style="display:none; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px;">
-            <div class="kpi-card" style="padding:15px; box-shadow:none; border:1px solid var(--border-color);">
-                <h3 style="font-size:0.75rem; margin-bottom:5px;">Categories</h3>
-                <div class="num" id="modalKpiCat" style="font-size:2rem;">0</div>
+    <div id="portal-lock" class="fixed inset-0 bg-[#0A192F] z-40 flex flex-col justify-center items-center p-4">
+        <div class="bg-[#112240] p-8 rounded-xl shadow-2xl border border-[#233554] max-w-md w-full text-center">
+            <i class="fa-solid fa-shield-halved text-5xl text-amber-500 mb-4"></i>
+            <h2 class="text-2xl font-bold text-white mb-2">Security Access Required</h2>
+            <p class="text-gray-400 mb-6 text-sm">Please enter the portal gateway passkey to view the technical validation desk.</p>
+            <input type="password" id="portal-passkey" placeholder="Enter Portal Password" class="w-full bg-[#0A192F] border border-[#233554] rounded p-3 text-white text-center mb-4 focus:outline-none focus:border-amber-500">
+            <button onclick="unlockPortal()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold p-3 rounded transition-colors cursor-pointer">Unlock Dashboard</button>
+            <p id="portal-error" class="text-red-500 text-sm mt-3 hidden">Invalid portal password credential.</p>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-8 bg-[#112240] p-6 rounded-xl border border-[#233554] relative">
+            <div class="absolute top-4 right-4">
+                <button id="admin-login-btn" onclick="openAdminModal()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold px-3 py-1.5 rounded cursor-pointer transition-colors">
+                    <i class="fa-solid fa-lock-open mr-1"></i> Admin Access
+                </button>
+                <button id="admin-logout-btn" onclick="logoutAdmin()" class="bg-red-900 hover:bg-red-800 text-white text-xs font-bold px-3 py-1.5 rounded cursor-pointer transition-colors hidden">
+                    <i class="fa-solid fa-lock mr-1"></i> Lock Admin Panel
+                </button>
             </div>
-            <div class="kpi-card" style="padding:15px; box-shadow:none; border:1px solid var(--border-color);">
-                <h3 style="font-size:0.75rem; margin-bottom:5px;">Sub-Categories</h3>
-                <div class="num" id="modalKpiSubCat" style="font-size:2rem;">0</div>
+            <h1 id="site-headline" class="text-xl md:text-2xl font-black text-white tracking-wide uppercase mb-1">HUAWEI EGYPT SITE — NEW PRODUCTS EXPERIENCE & VALIDATION OPERATIONS HUB</h1>
+            <p id="site-subheadline" class="text-xs md:text-sm text-gray-400 font-medium tracking-normal">Proactive On-Site Engineering Evaluation and HQ Escalation Diagnostics Tracking</p>
+        </header>
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-[#112240] p-5 rounded-xl border border-[#233554]">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Fleet Products</p>
+                <h3 id="stat-total-fleet" class="text-3xl font-extrabold text-white">0</h3>
             </div>
-            <div class="kpi-card" style="padding:15px; box-shadow:none; border:1px solid var(--border-color);">
-                <h3 style="font-size:0.75rem; margin-bottom:5px;">Total Devices</h3>
-                <div class="num" id="modalKpiDev" style="font-size:2rem;">0</div>
+            <div class="bg-[#112240] p-5 rounded-xl border border-[#233554]">
+                <p class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">Total Products Tested</p>
+                <h3 id="stat-total-tested" class="text-3xl font-extrabold text-emerald-400">0</h3>
+                <span class="text-[10px] text-gray-500 block mt-0.5">Excludes "To Be Tested" lines</span>
             </div>
-        </div>
-
-        <div style="overflow-x:auto;">
-            <table class="matrix-table" style="margin-top:0;">
-                <thead id="modalTableHeader"></thead>
-                <tbody id="modalTableBodyTarget"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="container" id="captureArea">
-    <header>
-        <input type="text" id="globalMainHeadlineText" class="headline-input-element" oninput="handleHeadlineInput('main', this.value)" readonly>
-    </header>
-
-    <div class="kpi-row">
-        <div class="kpi-card interactive-metric" onclick="viewOverallClosureGraph()">
-            <h3 id="kpiScopeLabel">Project Scope Issues</h3>
-            <div class="num" id="kpiTotal">0</div>
-        </div>
-        <div class="kpi-card interactive-metric" onclick="showOpenIssuesModal()">
-            <h3>Open Issues (Pending)</h3>
-            <div class="num" id="kpiPending">0</div>
-        </div>
-        <div class="kpi-card interactive-metric" onclick="showResolvedIssuesModal()">
-            <h3>Resolved Cases</h3>
-            <div class="num" id="kpiSolved">0</div>
-        </div>
-        <div class="kpi-card interactive-metric" onclick="showTestedProductsModal()">
-            <h3>Total Products Tested</h3>
-            <div class="num" id="kpiTested">0</div>
-        </div>
-        <div class="kpi-card interactive-metric" onclick="viewOverallClosureGraph()">
-            <h3>Issue Closure Rate</h3>
-            <div class="num" id="kpiClosureRate">0%</div>
-        </div>
-    </div>
-
-    <!-- OPERATIONAL EVALUATION MATRIX -->
-    <div class="overall-view-panel">
-        <div class="section-title">
-            <input type="text" id="headlineOverviewPanelText" class="panel-heading-input" oninput="handleHeadlineInput('overview', this.value)" readonly>
-            <button class="admin-control-btn" onclick="addNewProductColumnChannel()">➕ Add Product Line</button>
-        </div>
-        <div style="overflow-x:auto;">
-            <table class="matrix-table" id="matrixTableSummary">
-                <thead>
-                    <tr>
-                        <th>Product Model</th>
-                        <th>Category</th>
-                        <th>Sub-Category</th>
-                        <th>Script Tracking</th>
-                        <th style="text-align: center; width: 120px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="summaryTableBodyTarget"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- TECHNICAL ESCALATION CAPTURE LOG -->
-    <div class="analytics-section" id="incidentsTableContainer">
-        <div class="section-title">
-            <input type="text" id="headlineIncidentLogText" class="panel-heading-input" oninput="handleHeadlineInput('log', this.value)" readonly>
-            <button class="log-btn" onclick="createNewIncidentRow()">➕ Log New Issue</button>
-        </div>
-        <div style="overflow-x:auto;">
-            <table class="matrix-table" id="incidentLogTable">
-                <thead>
-                    <tr>
-                        <th style="width: 15%;">Product Model</th>
-                        <th style="width: 25%;">Captured Technical Issue</th>
-                        <th style="width: 12%;">Date Logged</th>
-                        <th style="width: 13%;">Ticket / Reference</th>
-                        <th style="width: 20%;">HQ Developer Feedback & Actions</th>
-                        <th style="width: 10%;">Status</th>
-                        <th style="text-align: center; width: 5%;">Delete</th>
-                    </tr>
-                </thead>
-                <tbody id="incidentTableBody"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="dashboard-controls">
-        <div class="tabs" id="filterTabGroup"></div>
-        <div class="right-controls">
-            <input type="text" id="dashboardSearch" class="search-bar" placeholder="Search checklist..." oninput="executeSearch()">
-            <button class="edit-toggle-btn" id="editModeBtn" onclick="toggleLiveEdit()">🔒 Unlock Admin Edit</button>
-            <div class="export-box">
-                <select id="exportFormat" class="export-select">
-                    <option value="ppt">Presentation Deck (.ppt)</option>
-                    <option value="pdf">PDF Document (.pdf)</option>
-                    <option value="excel">Excel Document (.csv)</option>
-                </select>
-                <button class="export-btn" id="exportGoBtn" onclick="securedDownloadRouter()">Download</button>
+            <div class="bg-[#112240] p-5 rounded-xl border border-[#233554]">
+                <p class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Aggregated Lab Issues</p>
+                <h3 id="stat-total-issues" class="text-3xl font-extrabold text-amber-400">0</h3>
             </div>
-        </div>
-    </div>
+            <div class="bg-[#112240] p-5 rounded-xl border border-[#233554]">
+                <p class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">Verified Pass Cases (OK)</p>
+                <h3 id="stat-total-ok" class="text-3xl font-extrabold text-blue-400">0</h3>
+            </div>
+        </section>
 
-    <!-- Standard Checklist Items Grid -->
-    <div class="matrix-grid" id="matrixGrid"></div>
-</div>
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <div class="bg-[#112240] p-6 rounded-xl border border-[#233554] h-fit">
+                <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-magnifying-glass text-amber-500 mr-2"></i>Targeted Device Inspection Desk</h2>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Select Active Product Profile:</label>
+                <select id="product-selector" onchange="renderSelectedProduct()" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2.5 text-white focus:outline-none mb-6"></select>
 
-<script>
-    const SITE_ENTRY_PASSWORD = "1234512345"; 
-    const ADMIN_EDIT_PASSWORD = "1234";       
-    
-    let editMode = false;
-
-    let globalHeadlinesDataset = {
-        main: "H1 2026 Operations Strategy Review",
-        overview: "Operational Evaluation Matrix",
-        log: "Technical Escalation Capture Log"
-    };
-
-    // Modified product checklist mapped precisely onto the structural source definitions
-    let DEFAULT_CHECKLIST_DATA = {
-        freebudspro5: {
-            title: "Freebuds pro 5", script: "completed", category: "Audio", subCategory: "TWS Earbuds", isArchived: false,
-            key: [
-                { text: "Acoustic Performance Sound Leakage Evaluation", checked: true },
-                { text: "Legacy Device Mode Tuning & Huawei Sound Sync Path", checked: false },
-                { text: "Non-Huawei Device Pairing Pop-Up Matrix Validation", checked: false },
-                { text: "AI Life UI Component Overlap Correction Audit", checked: false }
-            ]
-        },
-        gtrunner2: {
-            title: "Gt Runner 2", script: "completed", category: "Wearables", subCategory: "Smart Watches", isArchived: false,
-            key: [
-                { text: "Xuanji Sensing System / TruSense UAE Deployment Audit", checked: true },
-                { text: "Dubai Transportation Transit Card Integration Mapping", checked: true },
-                { text: "High-Precision Lossless XDR Route Tracker Routing", checked: true }
-            ]
-        },
-        matepadmini: {
-            title: "Matepad Mini", script: "completed", category: "Tablets", subCategory: "PaperMatte Series", isArchived: false,
-            key: [
-                { text: "Micro-Nano Etching Display Fingerprint Smudge Test", checked: true },
-                { text: "Notes App 12.4.0.195 Real-Time AI Handwriting Patch", checked: true },
-                { text: "NearLink Precise StarFlash Find Device System Validation", checked: true },
-                { text: "Anti-Glare PaperMatte Screen Fatigue Comfort Cert", checked: true },
-                { text: "Celia AI Imagery Regional Access Configuration Check", checked: true },
-                { text: "WPC Office Integration and WPS PC Suite Validation", checked: true },
-                { text: "AI Eye-Tracking Regional Boundary Verification Books", checked: true }
-            ]
-        },
-        mate80pro: {
-            title: "Huawei Mate 80 Pro", script: "pending", category: "Smartphones", subCategory: "Mate Series", isArchived: false,
-            key: [
-                { text: "4K Media Engine Playback Lag Mitigation Architecture", checked: false }
-            ]
-        },
-        nova15max: {
-            title: "Huawei Nova 15 Max", script: "pending", category: "Smartphones", subCategory: "Nova Series", isArchived: false,
-            key: [
-                { text: "Ana Vodafone Application Installation Compatibility Check", checked: false },
-                { text: "Camera Multi-Mode High Speed Zoom Lens Switching Calibration", checked: false },
-                { text: "Main Camera Sensor Shutter Flash Sync Anomaly Audit", checked: false },
-                { text: "Gallery AI Remove Interactive Component Discovery Evaluation", checked: false }
-            ]
-        }
-    };
-
-    // Refreshed real world technical incidents directly synced from the technical logs
-    let globalIncidentsLog = [
-        { productKey: "freebudspro5", issue: "FreeBuds Pro 5 Acoustic Performance — Sound Leakage Comparison", date: "2026-03-16", ticket: "TM202603160216", feedback: "After checking with HQ we have agreed the following this will happen in a high volume situation or when the earphones are worn loosely and we will refer to en-us15877848 and guide the customer to adjust the volume to a more suitable level and choose a larger pair of ear tips to minimize sound leakage. Alternatively, please refer to en-us15767422 to perform the ear tip fit test.", status: "solved" },
-        { productKey: "freebudspro5", issue: "Huawei Sound is not effect when changing the modes on legacy phones like P30 Pro", date: "2026-04-26", ticket: "TM202604260121", feedback: "Still Analyzing the issue", status: "pending" },
-        { productKey: "gtrunner2", issue: "GT Runner 2 the new Xuanji Sensing System in UAE validation parameters", date: "2026-04-15", ticket: "TM202604150230", feedback: "Confirmed with R&D, GT Runner 2 supports the new TruSense System.", status: "solved" },
-        { productKey: "gtrunner2", issue: "Transportation card on GT Runner 2 Dubai digital wallets integration", date: "2026-04-15", ticket: "TM202604150205", feedback: "GT Runner 2 in Dubai supports transportation cards.", status: "solved" },
-        { productKey: "gtrunner2", issue: "XDR algorithm precision accuracy check on GT runner 2 mapping systems", date: "2026-04-10", ticket: "TM202604100158", feedback: "Watch GT Runner 2 supports XDR algorithm. The XDR algorithm ensures high-precision accuracy even in signal loss conditions, and optimizes the accuracy of route, distance, and pace data.", status: "solved" },
-        { productKey: "matepadmini", issue: "Fingerprints show up easily on the PaperMatte display tracking index", date: "2026-04-01", ticket: "WeLink-Escalation", feedback: "HQ agree that PaperMatte Display screens have this issue and The use of micro-nano etching technology and nanoscale optical coating optimizes light dispersion and display performance.", status: "solved" },
-        { productKey: "matepadmini", issue: "Huawei notes Matepad mini Eye real-time AI handwriting adjustment feature failure", date: "2026-04-14", ticket: "TM202604140241", feedback: "The AI handwriting enhancement feature of Notes is now only available on certain tablets. It is not supported on phones. You need to update the Notes app to version 12.4.0.195 or later", status: "solved" },
-        { productKey: "matepadmini", issue: "Matepad mini Star FlashTM location search function missing in Find device index", date: "2026-04-14", ticket: "TM202604140245", feedback: "The MatePad mini does not support NearLink precise search. No more information is available.", status: "solved" },
-        { productKey: "matepadmini", issue: "Matepad mini Eye Care Certification specification verification", date: "2026-04-10", ticket: "TM202604100175", feedback: "MatePad Mini uses anti-glare PaperMatte display. It is eye-friendly, reducing eye fatigue to improve comfort during long hours of use or in bright outdoor settings.", status: "solved" },
-        { productKey: "matepadmini", issue: "Matepad Mini Celia-generated images functionality restrictions on Huawei notes", date: "2026-04-10", ticket: "TM202604100160", feedback: "The AI-generation function is not supported in countries outside China. Please suggest the customer use other AI apps on the tablet.", status: "solved" },
-        { productKey: "matepadmini", issue: "WPC PC level productivity suite operational profile on Matepad Mini", date: "2026-04-08", ticket: "TM202604080222", feedback: "McLaren supports the use of WPS Office PC", status: "solved" },
-        { productKey: "matepadmini", issue: "Huawei books AI eye-tracking page feature localized system restrictions", date: "2026-04-08", ticket: "TM202604080216", feedback: "Currently, this function is not supported in regions outside China.", status: "solved" },
-        { productKey: "freebudspro5", issue: "Non-Huawei Device Pairing Issue: media formats non-compliance warning message on Poco X3", date: "2026-06-15", ticket: "TM6202606150134", feedback: "Still Analyzing the issue", status: "pending" },
-        { productKey: "freebudspro5", issue: "Other issue appear Issue: UI element overlap on pop-up connection screen layout", date: "2026-06-15", ticket: "TM6202606150132", feedback: "Still Analyzing the issue", status: "pending" },
-        { productKey: "mate80pro", issue: "Video Enhancement Issue: 4k video lagging and processing slowly on baseline models", date: "2026-05-21", ticket: "TM6202605210196", feedback: "Still Analyzing the issue", status: "pending" },
-        { productKey: "nova15max", issue: "App Installation Issue: Ana Vodafone application core functionality structural failure", date: "2026-05-12", ticket: "TM202605120198", feedback: "Still Analyzing the issue", status: "pending" },
-        { productKey: "nova15max", issue: "Lens Switching Issue: Camera mode translation zoom freezing failure", date: "2026-05-19", ticket: "TM6202605190108", feedback: "Still Analyzing the issue", status: "pending" },
-        { productKey: "nova15max", issue: "Main Camera Issue: Spontaneous sensor flash burst during typical indoor captures", date: "2026-05-15", ticket: "TM202605150178", feedback: "Still Analyzing the issue", status: "pending" },
-        { productKey: "nova15max", issue: "AI Remove Issue: Action options selection entry absent inside device gallery app", date: "2026-06-15", ticket: "TM6202606150161", feedback: "Still Analyzing the issue", status: "pending" }
-    ];
-
-    function handleMasterAuthCheck() {
-        const input = document.getElementById("masterGateKeyInput").value;
-        if (input === SITE_ENTRY_PASSWORD) {
-            document.getElementById("masterAuthShield").style.display = "none";
-            document.getElementById("captureArea").style.display = "block";
-            
-            document.getElementById("globalMainHeadlineText").value = globalHeadlinesDataset.main;
-            document.getElementById("headlineOverviewPanelText").value = globalHeadlinesDataset.overview;
-            document.getElementById("headlineIncidentLogText").value = globalHeadlinesDataset.log;
-            
-            recalculateTopKpiMetrics();
-            renderSummaryTable();
-            renderIncidentLogTable();
-            renderMatrixGrid();
-        } else {
-            document.getElementById("authErrorNode").style.display = "block";
-        }
-    }
-
-    function toggleLiveEdit() {
-        if (!editMode) {
-            let tokenInput = prompt("Enter Admin Security Token:");
-            if (tokenInput !== ADMIN_EDIT_PASSWORD) {
-                alert("Unauthorized administrative verification token.");
-                return;
-            }
-            editMode = true;
-            document.body.classList.add("admin-unlocked");
-            document.getElementById("editModeBtn").innerText = "🔓 Admin Edit Unlocked";
-            document.getElementById("editModeBtn").classList.add("editing-active");
-            
-            document.getElementById("globalMainHeadlineText").removeAttribute("readonly");
-            document.getElementById("headlineOverviewPanelText").removeAttribute("readonly");
-            document.getElementById("headlineIncidentLogText").removeAttribute("readonly");
-        } else {
-            editMode = false;
-            document.body.classList.remove("admin-unlocked");
-            document.getElementById("editModeBtn").innerText = "🔒 Unlock Admin Edit";
-            document.getElementById("editModeBtn").classList.remove("editing-active");
-            
-            document.getElementById("globalMainHeadlineText").setAttribute("readonly", "true");
-            document.getElementById("headlineOverviewPanelText").setAttribute("readonly", "true");
-            document.getElementById("headlineIncidentLogText").setAttribute("readonly", "true");
-        }
-        renderSummaryTable();
-        renderIncidentLogTable();
-        renderMatrixGrid();
-    }
-
-    function recalculateTopKpiMetrics() {
-        const total = globalIncidentsLog.length;
-        const solved = globalIncidentsLog.filter(item => item.status === "solved").length;
-        const pending = total - solved;
-        const closureRate = total > 0 ? Math.round((solved / total) * 100) : 0;
-        
-        document.getElementById("kpiTotal").innerText = total;
-        document.getElementById("kpiPending").innerText = pending;
-        document.getElementById("kpiSolved").innerText = solved;
-        document.getElementById("kpiTested").innerText = Object.keys(DEFAULT_CHECKLIST_DATA).filter(k => !DEFAULT_CHECKLIST_DATA[k].isArchived).length;
-        document.getElementById("kpiClosureRate").innerText = closureRate + "%";
-    }
-
-    function renderSummaryTable() {
-        const body = document.getElementById("summaryTableBodyTarget");
-        body.innerHTML = "";
-
-        for (const [key, product] of Object.entries(DEFAULT_CHECKLIST_DATA)) {
-            if (product.isArchived) continue;
-
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td><input type="text" class="table-text-input subcat-font" value="${product.title}" oninput="updateProductField('${key}', 'title', this.value)"></td>
-                <td><input type="text" class="table-text-input cat-font" value="${product.category}" oninput="updateProductField('${key}', 'category', this.value)"></td>
-                <td><input type="text" class="table-text-input" value="${product.subCategory}" oninput="updateProductField('${key}', 'subCategory', this.value)"></td>
-                <td>
-                    <select class="table-select-input" onchange="updateProductField('${key}', 'script', this.value)">
-                        <option value="pending" ${product.script === 'pending' ? 'selected' : ''}>Pending Review</option>
-                        <option value="completed" ${product.script === 'completed' ? 'selected' : ''}>Completed & Signed</option>
-                    </select>
-                </td>
-                <td style="text-align: center;">
-                    <button class="matrix-del-col-btn" onclick="removeProductColumnChannel('${key}')">Delete</button>
-                </td>
-            `;
-            body.appendChild(row);
-        }
-    }
-
-    function renderIncidentLogTable() {
-        const body = document.getElementById("incidentTableBody");
-        body.innerHTML = "";
-
-        globalIncidentsLog.forEach((item, index) => {
-            const row = document.createElement("tr");
-            
-            let productOptions = "";
-            for (const [key, prod] of Object.entries(DEFAULT_CHECKLIST_DATA)) {
-                if (!prod.isArchived) {
-                    productOptions += `<option value="${key}" ${item.productKey === key ? 'selected' : ''}>${prod.title}</option>`;
-                }
-            }
-
-            row.innerHTML = `
-                <td>
-                    <select class="table-select-input" style="font-weight:700;" onchange="updateIncidentField(${index}, 'productKey', this.value)">
-                        ${productOptions}
-                    </select>
-                </td>
-                <td><input type="text" class="table-text-input" value="${item.issue}" oninput="updateIncidentField(${index}, 'issue', this.value)"></td>
-                <td><input type="text" class="table-text-input" value="${item.date}" oninput="updateIncidentField(${index}, 'date', this.value)"></td>
-                <td><input type="text" class="table-text-input" style="font-family:monospace;" value="${item.ticket}" oninput="updateIncidentField(${index}, 'ticket', this.value)"></td>
-                <td><input type="text" class="table-text-input" value="${item.feedback}" oninput="updateIncidentField(${index}, 'feedback', this.value)"></td>
-                <td>
-                    <select class="table-select-input ${item.status === 'solved' ? 'status-done' : 'status-pending'}" onchange="updateIncidentField(${index}, 'status', this.value)">
-                        <option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Pending</option>
-                        <option value="solved" ${item.status === 'solved' ? 'selected' : ''}>Solved</option>
-                    </select>
-                </td>
-                <td style="text-align: center;">
-                    <button class="matrix-del-col-btn" onclick="deleteIncidentRow(${index})">✕</button>
-                </td>
-            `;
-            body.appendChild(row);
-        });
-    }
-
-    function updateProductField(key, field, value) {
-        DEFAULT_CHECKLIST_DATA[key][field] = value;
-        recalculateTopKpiMetrics();
-    }
-
-    function updateIncidentField(index, field, value) {
-        globalIncidentsLog[index][field] = value;
-        recalculateTopKpiMetrics();
-        renderIncidentLogTable(); 
-    }
-
-    function addNewProductColumnChannel() {
-        const uniqueKey = "prod_" + Date.now();
-        DEFAULT_CHECKLIST_DATA[uniqueKey] = {
-            title: "New Product Line", script: "pending", category: "Unassigned", subCategory: "General", isArchived: false,
-            key: [], app: [], prev: []
-        };
-        renderSummaryTable();
-        renderIncidentLogTable();
-        renderMatrixGrid();
-        recalculateTopKpiMetrics();
-    }
-
-    function removeProductColumnChannel(key) {
-        if(confirm("Confirm removal of this evaluation product pathway line?")) {
-            DEFAULT_CHECKLIST_DATA[key].isArchived = true;
-            renderSummaryTable();
-            renderIncidentLogTable();
-            renderMatrixGrid();
-            recalculateTopKpiMetrics();
-        }
-    }
-
-    function createNewIncidentRow() {
-        const firstProductKey = Object.keys(DEFAULT_CHECKLIST_DATA).find(k => !DEFAULT_CHECKLIST_DATA[k].isArchived) || "";
-        const today = new Date().toISOString().split('T')[0];
-        globalIncidentsLog.unshift({
-            productKey: firstProductKey,
-            issue: "Description of structural product anomaly issue",
-            date: today,
-            ticket: "HW-2026-NEW",
-            feedback: "Pending developer investigation",
-            status: "pending"
-        });
-        renderIncidentLogTable();
-        recalculateTopKpiMetrics();
-    }
-
-    function deleteIncidentRow(index) {
-        if(confirm("Permanently wipe this tracking line entry parameters?")) {
-            globalIncidentsLog.splice(index, 1);
-            renderIncidentLogTable();
-            recalculateTopKpiMetrics();
-        }
-    }
-
-    function renderMatrixGrid() {
-        const grid = document.getElementById("matrixGrid");
-        grid.innerHTML = "";
-
-        for (const [key, product] of Object.entries(DEFAULT_CHECKLIST_DATA)) {
-            if (product.isArchived) continue;
-
-            const col = document.createElement("div");
-            col.className = "product-column";
-            col.innerHTML = `
-                <div class="product-column-header-wrap">
-                    <input type="text" class="product-title-input" value="${product.title}" readonly>
-                </div>
-                <div class="product-content">
-                    <div class="block-section">
-                        <div class="block-header">Evaluation Checklist Items</div>
-                        <ul class="node-list">
-                            ${product.key.map((n, i) => `
-                                <li class="node-item">
-                                    <input type="checkbox" ${n.checked ? 'checked' : ''}>
-                                    <input type="text" class="node-text-input" value="${n.text}" readonly>
-                                </li>
-                            `).join('')}
-                        </ul>
+                <div class="space-y-4">
+                    <div class="bg-[#0A192F] p-3.5 rounded border border-[#233554]">
+                        <span class="text-[11px] font-bold text-gray-400 block uppercase mb-1">Field Evaluation Window</span>
+                        <p id="meta-window" class="text-sm font-semibold text-white">N/A</p>
+                    </div>
+                    <div class="bg-[#0A192F] p-3.5 rounded border border-[#233554]">
+                        <span class="text-[11px] font-bold text-emerald-400 block uppercase mb-1">Baseline Functional Pass Cases (OK)</span>
+                        <p id="meta-ok" class="text-sm font-semibold text-emerald-400">0</p>
+                    </div>
+                    <div class="bg-[#0A192F] p-3.5 rounded border border-[#233554]">
+                        <span class="text-[11px] font-bold text-amber-400 block uppercase mb-1">Script Tracking Status</span>
+                        <p id="meta-script" class="text-sm font-bold mt-1 text-white">Pending</p>
+                    </div>
+                    <div class="bg-[#0A192F] p-3.5 rounded border border-[#233554]">
+                        <span class="text-[11px] font-bold text-blue-400 block uppercase mb-1">Testing Evaluation Status</span>
+                        <p id="meta-testing" class="text-sm font-bold mt-1 text-white">To Be Tested</p>
                     </div>
                 </div>
-            `;
-            grid.appendChild(col);
+            </div>
+
+            <div class="bg-[#112240] p-6 rounded-xl border border-[#233554] lg:col-span-2">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-white"><i class="fa-solid fa-list-check text-amber-500 mr-2"></i>Captured Issues Matrix Log</h2>
+                    <span id="issue-badge-count" class="bg-amber-500/10 text-amber-400 font-bold px-2.5 py-1 text-xs rounded-full border border-amber-500/20">0 Issues</span>
+                </div>
+                <div class="overflow-x-auto w-full mb-6">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-[#0A192F] text-gray-400 uppercase font-bold border-b border-[#233554]">
+                                <th class="p-3">Issue Title Flag</th>
+                                <th class="p-3">Reported Date</th>
+                                <th class="p-3 text-center">Status Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody id="issues-table-body"></tbody>
+                    </table>
+                </div>
+                <h3 class="text-sm font-bold text-white mb-3">🔎 View Granular Root Cause & Action Logs</h3>
+                <div id="granular-logs-container" class="space-y-4 max-h-[380px] overflow-y-auto pr-2"></div>
+            </div>
+        </main>
+
+        <section class="bg-[#112240] p-6 rounded-xl border border-[#233554] mb-8">
+            <h2 class="text-lg font-bold text-white mb-2"><i class="fa-solid fa-table-list text-amber-500 mr-2"></i>Multi-Product Verification Checklist Matrix</h2>
+            <div class="space-y-4" id="checklist-accordion-wrapper"></div>
+        </section>
+
+        <section id="admin-control-suite" class="bg-[#172A45] p-6 rounded-xl border-2 border-amber-500/30 shadow-xl mb-12 hidden">
+            <div class="border-b border-[#233554] pb-3 mb-6 flex justify-between items-center">
+                <h2 class="text-xl font-black text-amber-400 tracking-wide uppercase"><i class="fa-solid fa-screwdriver-wrench mr-2"></i>Engineering Admin Control Suite</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-[#112240] p-4 rounded border border-[#233554]">
+                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3"><i class="fa-solid fa-plus text-emerald-500 mr-2"></i>Deploy New Product Profile</h3>
+                    <div class="space-y-3">
+                        <input type="text" id="new-prod-name" placeholder="Device Name" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        <input type="text" id="new-prod-window" value="4 Weeks" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        <input type="number" id="new-prod-ok" value="50" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        <select id="new-prod-script" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            <option value="Pending">Pending</option>
+                            <option value="Completed & Uploaded">Completed & Uploaded</option>
+                        </select>
+                        <select id="new-prod-testing" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            <option value="To Be Tested">To Be Tested</option>
+                            <option value="Tested">Tested</option>
+                        </select>
+                        <button onclick="addNewProduct()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs p-2 rounded cursor-pointer">Commit Product to Sheet</button>
+                    </div>
+                </div>
+
+                <div class="bg-[#112240] p-4 rounded border border-[#233554]">
+                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3"><i class="fa-solid fa-arrows-spin text-blue-500 mr-2"></i>Modify Parameters / Delete</h3>
+                    <div class="space-y-3">
+                        <select id="edit-prod-selector" onchange="populateEditProductForm()" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white"></select>
+                        <input type="text" id="edit-prod-window" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        <input type="number" id="edit-prod-ok" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        <select id="edit-prod-script" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            <option value="Pending">Pending</option>
+                            <option value="Completed & Uploaded">Completed & Uploaded</option>
+                        </select>
+                        <select id="edit-prod-testing" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            <option value="To Be Tested">To Be Tested</option>
+                            <option value="Tested">Tested</option>
+                        </select>
+                        <div class="flex gap-2">
+                            <button onclick="deleteProductProfile()" class="w-1/2 bg-red-900 hover:bg-red-800 text-white font-bold text-xs p-2 rounded cursor-pointer">Remove Profile</button>
+                            <button onclick="updateExistingProduct()" class="w-1/2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs p-2 rounded cursor-pointer">Update Status</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#112240] p-4 rounded border border-[#233554] md:col-span-2">
+                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3"><i class="fa-solid fa-bug text-amber-500 mr-2"></i>Log Technical Issue Record</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <select id="issue-target-prod" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white"></select>
+                        <input type="text" id="issue-title" placeholder="Defect Title" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white col-span-2">
+                        <textarea id="issue-detail" placeholder="Diagnostic Description" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white col-span-3 h-16"></textarea>
+                        <input type="text" id="issue-tse" placeholder="TSE Escalation Action / WeCare" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        <input type="text" id="issue-hq" placeholder="HQ Action / Feedback Log" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        <select id="issue-status" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            <option value="Pending">Pending</option>
+                            <option value="Solved">Solved</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                        <button onclick="submitNewIssueLog()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs p-2 rounded cursor-pointer col-span-3">Commit Issue Row</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex justify-center items-center p-4">
+        <div class="bg-[#112240] p-6 rounded-xl border border-[#233554] max-w-sm w-full">
+            <h3 class="text-base font-bold text-white mb-2">Admin Security</h3>
+            <input type="password" id="admin-passkey" placeholder="Enter Admin Passkey" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white text-center mb-4 focus:outline-none">
+            <div class="flex gap-2">
+                <button onclick="closeAdminModal()" class="w-1/2 bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs p-2 rounded cursor-pointer">Cancel</button>
+                <button onclick="unlockAdminSuite()" class="w-1/2 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs p-2 rounded cursor-pointer">Verify</button>
+            </div>
+            <p id="admin-error" class="text-red-500 text-xs mt-2 text-center hidden">Access denied.</p>
+        </div>
+    </div>
+
+    <script>
+        // 🔗 LINKED GOOGLE APPS SCRIPT WEB APP API URL
+        const API_URL = "https://script.google.com/macros/s/AKfycbx5Ukzqm9CCY-TYO9Ns2dA5gskNrYYhKfRm96JHwmcjUnEC3EYIX6CnOcgGN-E8G1kmTA/exec";
+        const PORTAL_PASSKEY = "CairoTSE2026";
+        const ADMIN_PASSKEY = "TSEAdmin2026";
+
+        let db = {};
+        const checklist_db = {
+            "Sales Product scripts": {"Mate 80 Pro": "✓ Available", "Matepad Pro Max": "✓ Available", "Watch Kids X1 Pro": "✓ Available", "Watch Fit 5 Series": "✓ Available", "Nova 15 Max": "✓ Available"},
+            "Key Functions": {
+                "Mate 80 Pro": "1. Android Auto Installation Guide (en-us16002773)\n2. Overheating during heavy usage.\n3. Ai Composition Feature.\n4. Ai features (en-us16086415).",
+                "Nova 15 Max": "1. Android Auto Installation Guide.\n2. Overheating during heavy Usage.\n3. Ai Composition Feature.\n4. X-Button functions adding apps."
+            }
+        };
+
+        window.onload = function() {
+            fetchLiveDatabase();
+            renderChecklistMatrix();
+        };
+
+        // 📥 FETCH LIVE CONTEXT DATA PIPELINE FROM GOOGLE SHEET
+        function fetchLiveDatabase() {
+            showLoading(true);
+            fetch(API_URL)
+                .then(res => res.json())
+                .then(data => {
+                    db = data;
+                    renderGlobalMetrics();
+                    populateProductSelectors();
+                    renderSelectedProduct();
+                    showLoading(false);
+                })
+                .catch(err => {
+                    console.error("Database sync failure:", err);
+                    showLoading(false);
+                });
         }
-    }
 
-    function showTestedProductsModal() {
-        const modal = document.getElementById("analyticsKpiModal");
-        const modalTitle = document.getElementById("modalTargetTitle");
-        const modalHeader = document.getElementById("modalTableHeader");
-        const modalBody = document.getElementById("modalTableBodyTarget");
-        const kpiContainer = document.getElementById("modalKpiContainer");
-
-        modalTitle.innerText = "Total Products Tested & Performance Review";
-        kpiContainer.style.display = "grid";
-
-        modalHeader.innerHTML = `
-            <tr>
-                <th>Product Model</th>
-                <th>Category</th>
-                <th>Sub-Category</th>
-                <th style="text-align: center;">Issues Captured</th>
-                <th style="text-align: center;">Closure Rate</th>
-            </tr>
-        `;
-
-        modalBody.innerHTML = "";
-        let totalCats = new Set(), totalSubCats = new Set(), totalDevices = 0;
-
-        for (const [key, product] of Object.entries(DEFAULT_CHECKLIST_DATA)) {
-            if (product.isArchived) continue;
-            totalCats.add(product.category); totalSubCats.add(product.subCategory); totalDevices++;
-
-            const productIssues = globalIncidentsLog.filter(item => item.productKey === key);
-            const issueCount = productIssues.length;
-            const solvedCount = productIssues.filter(item => item.status === "solved").length;
-            const closureRate = issueCount > 0 ? Math.round((solvedCount / issueCount) * 100) : 0;
-
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td class="subcat-font">${product.title}</td>
-                <td class="cat-font">${product.category}</td>
-                <td>${product.subCategory}</td>
-                <td style="text-align: center;">
-                    <span class="clickable-cell-trigger" style="color:var(--accent-brand); font-weight:800; cursor:pointer;" onclick="viewSpecificIssueNotes('${key}', '${product.title}')">${issueCount} Issues</span>
-                </td>
-                <td style="text-align: center;">
-                    <span class="clickable-cell-trigger" style="color:var(--success-color); font-weight:800; background:#e6f4ea; padding:4px 10px; border-radius:6px; cursor:pointer;" onclick="renderClosureGraphEngine('${key}', '${product.title}', ${solvedCount}, ${issueCount - solvedCount})">${closureRate}%</span>
-                </td>
-            `;
-            modalBody.appendChild(row);
-        }
-
-        document.getElementById("modalKpiCat").innerText = totalCats.size;
-        document.getElementById("modalKpiSubCat").innerText = totalSubCats.size;
-        document.getElementById("modalKpiDev").innerText = totalDevices;
-        modal.style.display = "flex";
-    }
-
-    function showOpenIssuesModal() {
-        renderFilteredStatusModal("Open Issues (Pending Status)", "pending");
-    }
-
-    function showResolvedIssuesModal() {
-        renderFilteredStatusModal("Resolved Tracking Index Cases", "solved");
-    }
-
-    function renderFilteredStatusModal(title, statusFilter) {
-        const modal = document.getElementById("analyticsKpiModal");
-        const modalTitle = document.getElementById("modalTargetTitle");
-        const modalHeader = document.getElementById("modalTableHeader");
-        const modalBody = document.getElementById("modalTableBodyTarget");
-        document.getElementById("modalKpiContainer").style.display = "none";
-
-        modalTitle.innerText = title;
-        modalHeader.innerHTML = `
-            <tr>
-                <th>Model</th>
-                <th>Captured Issue</th>
-                <th>Reference Ticket</th>
-                <th>Status</th>
-            </tr>
-        `;
-
-        modalBody.innerHTML = "";
-        const items = globalIncidentsLog.filter(item => item.status === statusFilter);
-
-        if(items.length === 0) {
-            modalBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:var(--text-muted);">No issues match this condition.</td></tr>`;
-        } else {
-            items.forEach(item => {
-                const prod = DEFAULT_CHECKLIST_DATA[item.productKey] ? DEFAULT_CHECKLIST_DATA[item.productKey].title : "Unknown Device";
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td class="subcat-font">${prod}</td>
-                    <td>${item.issue}</td>
-                    <td style="font-family:monospace; font-weight:600;">${item.ticket}</td>
-                    <td><span class="status-badge-inline ${statusFilter === 'solved' ? 'status-done' : 'status-pending'}">${item.status}</span></td>
-                `;
-                modalBody.appendChild(row);
+        // 📤 PUSH MUTATION WRITE LIFECYCLE CONTROLLER TO GOOGLE SHEET
+        function commitDatabaseToSheet() {
+            showLoading(true);
+            fetch(API_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(db)
+            })
+            .then(() => {
+                setTimeout(() => { fetchLiveDatabase(); }, 1500);
+            })
+            .catch(err => {
+                console.error("API Error:", err);
+                showLoading(false);
             });
         }
-        modal.style.display = "flex";
-    }
 
-    function viewSpecificIssueNotes(productKey, productTitle) {
-        const modalTitle = document.getElementById("modalTargetTitle");
-        const modalHeader = document.getElementById("modalTableHeader");
-        const modalBody = document.getElementById("modalTableBodyTarget");
-        document.getElementById("modalKpiContainer").style.display = "none";
+        function showLoading(state) {
+            document.getElementById('loading-screen').style.display = state ? 'flex' : 'none';
+        }
 
-        modalTitle.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <button class="edit-toggle-btn" onclick="showTestedProductsModal()" style="padding: 6px 14px; font-size: 0.85rem;">⬅ Back</button>
-                <span>Captured Issues: ${productTitle}</span>
-            </div>
-        `;
+        function unlockPortal() {
+            if(document.getElementById('portal-passkey').value === PORTAL_PASSKEY) {
+                document.getElementById('portal-lock').style.display = 'none';
+            } else {
+                document.getElementById('portal-error').classList.remove('hidden');
+            }
+        }
 
-        modalHeader.innerHTML = `
-            <tr>
-                <th style="width: 15%;">Ticket</th>
-                <th style="width: 50%;">Captured Technical Issue</th>
-                <th style="width: 15%;">Date Logged</th>
-                <th style="width: 20%;">Status</th>
-            </tr>
-        `;
+        function renderGlobalMetrics() {
+            const keys = Object.keys(db);
+            let totalIssues = 0, totalOk = 0, totalTested = 0;
 
-        const matchingIssues = globalIncidentsLog.filter(item => item.productKey === productKey);
-        modalBody.innerHTML = "";
+            keys.forEach(k => {
+                totalIssues += db[k].issues ? db[k].issues.length : 0;
+                totalOk += parseInt(db[k].test_ok || 0);
+                if(db[k].testing_status === "Tested") totalTested++;
+            });
 
-        matchingIssues.forEach(item => {
-            const statusClass = item.status === 'solved' ? 'status-done' : 'status-pending';
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td style="font-family: monospace; font-weight: 600;">${item.ticket}</td>
-                <td>
-                    <div style="font-weight: 600; color: var(--primary-color);">${item.issue}</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">HQ Actions: ${item.feedback}</div>
-                </td>
-                <td style="font-size: 0.9rem; color: var(--text-muted);">${item.date}</td>
-                <td><span class="status-badge-inline ${statusClass}">${item.status}</span></td>
-            `;
-            modalBody.appendChild(row);
-        });
-    }
+            document.getElementById('stat-total-fleet').innerText = keys.length;
+            document.getElementById('stat-total-tested').innerText = totalTested;
+            document.getElementById('stat-total-issues').innerText = totalIssues;
+            document.getElementById('stat-total-ok').innerText = totalOk;
+        }
 
-    function viewOverallClosureGraph() {
-        const total = globalIncidentsLog.length;
-        const solved = globalIncidentsLog.filter(item => item.status === "solved").length;
-        renderClosureGraphEngine("OVERALL", "All Tested Products Combined", solved, total - solved);
-    }
+        function populateProductSelectors() {
+            const selectors = [document.getElementById('product-selector'), document.getElementById('edit-prod-selector'), document.getElementById('issue-target-prod')];
+            selectors.forEach(s => {
+                if(!s) return;
+                const curr = s.value;
+                s.innerHTML = "";
+                Object.keys(db).forEach(k => s.innerHTML += `<option value="${k}">${k}</option>`);
+                if(curr && db[curr]) s.value = curr;
+            });
+        }
 
-    function renderClosureGraphEngine(productKey, title, solved, pending) {
-        const modal = document.getElementById("analyticsKpiModal");
-        const modalTitle = document.getElementById("modalTargetTitle");
-        const modalHeader = document.getElementById("modalTableHeader");
-        const modalBody = document.getElementById("modalTableBodyTarget");
-        document.getElementById("modalKpiContainer").style.display = "none";
+        function renderSelectedProduct() {
+            const pName = document.getElementById('product-selector').value;
+            if(!pName || !db[pName]) return;
 
-        const backAction = productKey === "OVERALL" ? "closeKpiDetailsModal()" : "showTestedProductsModal()";
-        modalTitle.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <button class="edit-toggle-btn" onclick="${backAction}" style="padding: 6px 14px; font-size: 0.85rem;">⬅ Back</button>
-                <span>Resolution Graph: ${title}</span>
-            </div>
-        `;
-        modalHeader.innerHTML = "";
+            const node = db[pName];
+            document.getElementById('meta-window').innerText = node.test_period || "N/A";
+            document.getElementById('meta-ok').innerText = node.test_ok || 0;
+
+            const scrP = document.getElementById('meta-script');
+            scrP.innerText = node.script_tracking || "Pending";
+            scrP.className = "text-xs font-black inline-block px-3 py-1 rounded mt-1 " + (node.script_tracking === "Completed & Uploaded" ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400");
+
+            const testP = document.getElementById('meta-testing');
+            testP.innerText = node.testing_status || "To Be Tested";
+            testP.className = "text-xs font-black inline-block px-3 py-1 rounded mt-1 " + (node.testing_status === "Tested" ? "bg-blue-500/10 text-blue-400" : "bg-rose-500/10 text-rose-400");
+
+            const issues = node.issues || [];
+            document.getElementById('issue-badge-count').innerText = `${issues.length} Issues Logged`;
+
+            const tbody = document.getElementById('issues-table-body');
+            const logsContainer = document.getElementById('granular-logs-container');
+            tbody.innerHTML = ""; logsContainer.innerHTML = "";
+
+            if(issues.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-500 italic">No field defects logged.</td></tr>`;
+                return;
+            }
+
+            issues.forEach((iss, index) => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-[#233554]">
+                        <td class="p-3 font-semibold text-white">${iss.issue}</td>
+                        <td class="p-3 text-gray-400">${iss.date || ''}</td>
+                        <td class="p-3 text-center"><span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/10 text-amber-400">${iss.status}</span></td>
+                    </tr>`;
+                logsContainer.innerHTML += `
+                    <div class="bg-[#0A192F] p-4 rounded border border-[#233554]">
+                        <h4 class="text-xs font-bold text-white mb-1">${index+1}. ${iss.issue}</h4>
+                        <p class="text-xs text-gray-400">${iss.detail}</p>
+                        <p class="text-xs text-orange-400 mt-1">Action: ${iss.tse_action}</p>
+                        <p class="text-xs text-blue-400">HQ: ${iss.hq_action}</p>
+                    </div>`;
+            });
+        }
+
+        function renderChecklistMatrix() {
+            const container = document.getElementById('checklist-accordion-wrapper');
+            container.innerHTML = "";
+            Object.keys(checklist_db).forEach((cat, idx) => {
+                let grid = "";
+                Object.keys(checklist_db[cat]).forEach(p => {
+                    grid += `<div class="bg-[#0A192F] p-3 rounded border border-[#233554]"><h4 class="text-xs font-bold text-amber-400 border-b border-[#233554] pb-1 mb-1">${p}</h4><p class="text-[11px] whitespace-pre-line">${checklist_db[cat][p]}</p></div>`;
+                });
+                container.innerHTML += `<div class="border border-[#233554] rounded-lg overflow-hidden"><button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full bg-[#172A45] text-left p-3 text-xs font-bold text-white flex justify-between"><span>${cat}</span><i class="fa-solid fa-chevron-down"></i></button><div class="hidden p-4 bg-[#112240] grid grid-cols-1 md:grid-cols-2 gap-3">${grid}</div></div>`;
+            });
+        }
+
+        function openAdminModal() { document.getElementById('admin-modal').classList.remove('hidden'); }
+        function closeAdminModal() { document.getElementById('admin-modal').classList.add('hidden'); }
+        function logoutAdmin() { document.getElementById('admin-control-suite').classList.add('hidden'); document.getElementById('admin-logout-btn').classList.add('hidden'); document.getElementById('admin-login-btn').classList.remove('hidden'); }
         
-        const totalIssues = solved + pending;
-        const solvedPercentage = totalIssues > 0 ? Math.round((solved / totalIssues) * 100) : 0;
-        const pendingPercentage = totalIssues > 0 ? 100 - solvedPercentage : 0;
+        function unlockAdminSuite() {
+            if(document.getElementById('admin-passkey').value === ADMIN_PASSKEY) {
+                document.getElementById('admin-control-suite').classList.remove('hidden');
+                document.getElementById('admin-logout-btn').classList.remove('hidden');
+                document.getElementById('admin-login-btn').classList.add('hidden');
+                closeAdminModal();
+                populateEditProductForm();
+            } else {
+                document.getElementById('admin-error').classList.remove('hidden');
+            }
+        }
 
-        modalBody.innerHTML = `
-            <tr>
-                <td colspan="5" style="padding: 40px 20px; background: #ffffff;">
-                    <div style="max-width: 650px; margin: 0 auto;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 25px; text-align: center;">
-                            <div style="background: #f8fafc; padding:15px; border-radius:12px; flex:1; margin:0 10px; border:1px solid var(--border-color);">
-                                <div style="font-size:0.8rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Total Logged</div>
-                                <div style="font-size:1.8rem; font-weight:800; color:var(--primary-color);">${totalIssues}</div>
-                            </div>
-                            <div style="background: #e6f4ea; padding:15px; border-radius:12px; flex:1; margin:0 10px; border:1px solid #a7f3d0;">
-                                <div style="font-size:0.8rem; text-transform:uppercase; color:#137333; font-weight:700;">Resolved Cases</div>
-                                <div style="font-size:1.8rem; font-weight:800; color:#137333;">${solved}</div>
-                            </div>
-                            <div style="background: #fce8e6; padding:15px; border-radius:12px; flex:1; margin:0 10px; border:1px solid #fad2cf;">
-                                <div style="font-size:0.8rem; text-transform:uppercase; color:#c5221f; font-weight:700;">Pending Open</div>
-                                <div style="font-size:1.8rem; font-weight:800; color:#c5221f;">${pending}</div>
-                            </div>
-                        </div>
-                        <div style="margin-bottom:15px; font-weight:700; font-size:0.95rem; color:var(--primary-color);">Volume Bar Distribution:</div>
-                        <div style="display: flex; height:35px; border-radius:10px; overflow:hidden; box-shadow:inset 0 2px 4px rgba(0,0,0,0.06); margin-bottom:30px;">
-                            <div style="background: var(--success-color); width: ${solvedPercentage}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.85rem;">
-                                ${solvedPercentage >= 10 ? solvedPercentage + '%' : ''}
-                            </div>
-                            <div style="background: var(--danger-color); width: ${pendingPercentage}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.85rem;">
-                                ${pendingPercentage >= 10 ? pendingPercentage + '%' : ''}
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        `;
-        modal.style.display = "flex";
-    }
+        function addNewProduct() {
+            const name = document.getElementById('new-prod-name').value.trim();
+            if(!name) return;
+            db[name] = {
+                "test_period": document.getElementById('new-prod-window').value,
+                "test_ok": parseInt(document.getElementById('new-prod-ok').value) || 0,
+                "script_tracking": document.getElementById('new-prod-script').value,
+                "testing_status": document.getElementById('new-prod-testing').value,
+                "issues": []
+            };
+            commitDatabaseToSheet();
+            document.getElementById('new-prod-name').value = "";
+        }
 
-    function closeKpiDetailsModal() {
-        document.getElementById("analyticsKpiModal").style.display = "none";
-    }
+        function populateEditProductForm() {
+            const p = document.getElementById('edit-prod-selector').value;
+            if(!p || !db[p]) return;
+            document.getElementById('edit-prod-window').value = db[p].test_period || "4 Weeks";
+            document.getElementById('edit-prod-ok').value = db[p].test_ok || 0;
+            document.getElementById('edit-prod-script').value = db[p].script_tracking || "Pending";
+            document.getElementById('edit-prod-testing').value = db[p].testing_status || "To Be Tested";
+        }
 
-    function handleHeadlineInput(type, val) {
-        globalHeadlinesDataset[type] = val;
-    }
+        function updateExistingProduct() {
+            const p = document.getElementById('edit-prod-selector').value;
+            if(!p) return;
+            db[p].test_period = document.getElementById('edit-prod-window').value;
+            db[p].test_ok = parseInt(document.getElementById('edit-prod-ok').value) || 0;
+            db[p].script_tracking = document.getElementById('edit-prod-script').value;
+            db[p].testing_status = document.getElementById('edit-prod-testing').value;
+            commitDatabaseToSheet();
+        }
 
-    function executeSearch() {}
-    function securedDownloadRouter() { alert("Export sequence initialized."); }
-</script>
+        function deleteProductProfile() {
+            const p = document.getElementById('edit-prod-selector').value;
+            if(!p) return;
+            if(confirm(`Delete ${p}?`)) {
+                delete db[p];
+                commitDatabaseToSheet();
+            }
+        }
+
+        function submitNewIssueLog() {
+            const target = document.getElementById('issue-target-prod').value;
+            const title = document.getElementById('issue-title').value.trim();
+            if(!title) return;
+            if(!db[target].issues) db[target].issues = [];
+            
+            db[target].issues.push({
+                "issue": title,
+                "detail": document.getElementById('issue-detail').value,
+                "tse_action": document.getElementById('issue-tse').value,
+                "hq_action": document.getElementById('issue-hq').value,
+                "status": document.getElementById('issue-status').value,
+                "date": new Date().toISOString().split('T')[0]
+            });
+            commitDatabaseToSheet();
+            document.getElementById('issue-title').value = "";
+            document.getElementById('issue-detail').value = "";
+        }
+    </script>
 </body>
 </html>
