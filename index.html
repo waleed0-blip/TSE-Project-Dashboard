@@ -754,15 +754,7 @@
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><input type="text" class="table-text-input" value="${inc.model}" oninput="handleIncidentTableInput(${globalIndex}, 'model', this.value)"></td>
-                <td>
-                    <input type="text" 
-                           class="table-text-input" 
-                           value="${inc.issue}" 
-                           oninput="handleIncidentTableInput(${globalIndex}, 'issue', this.value)" 
-                           style="color: #3b82f6; cursor: pointer; text-decoration: underline; font-weight: 600;" 
-                           onclick="alert('📋 DETAILED ISSUE LOG\\n\\n🔹 Product Model: ${inc.model}\\n🔹 Technical Issue: ${inc.issue}\\n🔹 Ticket/Reference: ${inc.ref}\\n🔹 HQ Feedback & Actions: ${inc.action}\\n🔹 Logged Date: ${inc.date}')"
-                           title="Click to view full issue details">
-                </td>
+                <td><input type="text" class="table-text-input" value="${inc.issue}" oninput="handleIncidentTableInput(${globalIndex}, 'issue', this.value)"></td>
                 <td><input type="text" class="table-text-input" value="${inc.date}" oninput="handleIncidentTableInput(${globalIndex}, 'date', this.value)"></td>
                 <td><input type="text" class="table-text-input" value="${inc.ref}" oninput="handleIncidentTableInput(${globalIndex}, 'ref', this.value)"></td>
                 <td><input type="text" class="table-text-input" value="${inc.action}" oninput="handleIncidentTableInput(${globalIndex}, 'action', this.value)"></td>
@@ -779,6 +771,7 @@
             tbody.appendChild(tr);
         });
     }
+
     function triggerKpiFilterModal(scopeFilterMode) {
         let targetedArray = incidentLogDataset;
         let titleLabel = "Full Project Captured Issues History";
