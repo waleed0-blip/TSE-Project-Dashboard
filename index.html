@@ -57,8 +57,7 @@
         .auth-card p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 30px; }
         .auth-input { width: 100%; padding: 15px 20px; margin-bottom: 20px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 14px; font-size: 1.1rem; text-align: center; outline: none; box-sizing: border-box; transition: all 0.3s ease; font-family: inherit; letter-spacing: 2px; }
         .auth-input:focus { border-color: var(--accent-brand); background: rgba(0,0,0,0.5); box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.15); }
-        .auth-input::placeholder { color: #64748b; letter-spacing: normal; }
-        .auth-submit-btn { background: var(--accent-brand); color: white; border: none; padding: 15px 30px; border-radius: 14px; font-weight: 700; font-size: 1.05rem; width: 100%; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; letter-spacing: 0.5px; }
+        .auth-submit-btn { background: var(--accent-brand); color: white; border: none; padding: 15px 30px; border-radius: 14px; font-weight: 700; font-size: 1.05rem; width: 100%; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; }
         .auth-submit-btn:hover { background-color: #be123c; transform: translateY(-3px); box-shadow: 0 12px 24px -10px rgba(225, 29, 72, 0.6); }
         .error-message { color: #fca5a5; font-size: 0.9rem; font-weight: 600; margin-top: 15px; display: none; }
 
@@ -104,124 +103,85 @@
         .matrix-table tr:last-child td { border-bottom: none; }
         .matrix-table tbody tr { transition: background-color 0.2s; }
         .matrix-table tbody tr:hover { background-color: #f1f5f9; }
-        .matrix-header-container { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 
-        .matrix-del-col-btn { display: none; background: #fee2e2; color: var(--danger-color); border: none; border-radius: 8px; padding: 6px 10px; font-size: 0.85rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        .matrix-del-col-btn { background: #fee2e2; color: var(--danger-color); border: none; border-radius: 8px; padding: 6px 12px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; display: none; }
         .admin-unlocked .matrix-del-col-btn { display: inline-block; }
-        .matrix-del-col-btn:hover { background: var(--danger-color); color: white; transform: scale(1.05); }
-        .clickable-cell-trigger { cursor: pointer; font-weight: 600; color: #3b82f6; transition: color 0.2s; }
-        .clickable-cell-trigger:hover { color: #2563eb; text-decoration: underline; }
+        .matrix-del-col-btn:hover { background: var(--danger-color); color: white; }
 
-        .incident-del-btn { display: none; background: #fee2e2; color: var(--danger-color); border: 1px solid transparent; border-radius: 8px; padding: 8px 14px; font-size: 0.85rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-        .admin-unlocked .incident-del-btn { display: inline-block; }
-        .incident-del-btn:hover { background: var(--danger-color); color: white; transform: scale(1.05); }
-
-        .log-btn, .admin-control-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: none; box-shadow: var(--shadow-sm); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; }
-        .admin-unlocked .log-btn, .admin-unlocked .admin-control-btn { display: inline-flex; align-items: center; gap: 8px; }
+        .log-btn, .admin-control-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; display: inline-flex; align-items: center; gap: 8px; }
         .log-btn:hover, .admin-control-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); background-color: #1e293b; }
 
         .status-badge-inline { 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 0.75rem; 
-            font-weight: 800; 
-            padding: 0 14px; 
-            border-radius: 8px; 
-            letter-spacing: 0.8px; 
-            height: 32px; 
-            min-width: 95px; 
-            white-space: nowrap; 
-            text-transform: uppercase; 
-            box-sizing: border-box; 
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            display: inline-flex; align-items: center; justify-content: center; 
+            font-size: 0.75rem; font-weight: 800; padding: 0 14px; border-radius: 8px; 
+            letter-spacing: 0.8px; height: 32px; min-width: 95px; text-transform: uppercase; 
         }
         .status-done { background-color: #d1fae5; color: #047857; border: 1px solid #a7f3d0; }
-        .status-progress { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
         .status-pending { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
 
         .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; gap: 20px; flex-wrap: wrap; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); padding: 18px 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid rgba(226, 232, 240, 0.8); }
         
         .tabs { display: flex; gap: 8px; flex-wrap: wrap; background: #f1f5f9; padding: 6px; border-radius: 14px; }
         .tab-btn { background-color: transparent; border: none; padding: 10px 22px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; color: var(--text-muted); font-family: inherit; }
-        .tab-btn:hover { color: var(--text-main); }
         .tab-btn.active { background-color: #ffffff; color: var(--primary-color); box-shadow: var(--shadow-sm); }
 
         .right-controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
         .edit-toggle-btn { background-color: #f8fafc; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm); transition: all 0.3s; font-family: inherit; }
-        .edit-toggle-btn:hover { background-color: #e2e8f0; transform: translateY(-1px); }
+        .edit-toggle-btn:hover { background-color: #e2e8f0; }
         .edit-toggle-btn.editing-active { background-color: var(--warning-color); color: white; border-color: var(--warning-color); }
         
         .export-box { display: flex; align-items: center; gap: 10px; background-color: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 6px 8px 6px 18px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); box-shadow: var(--shadow-sm); }
-        .export-select { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 500; font-size: 0.9rem; outline: none; cursor: pointer; background: #f8fafc; font-family: inherit; color: var(--text-main); transition: border 0.2s; }
-        .export-select:focus { border-color: #94a3b8; }
-        .export-btn { background-color: var(--primary-color); color: white; border: none; padding: 8px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: all 0.3s; font-family: inherit; }
-        .export-btn:hover { background-color: #1e293b; transform: translateY(-1px); }
-        .search-bar { padding: 12px 24px; width: 240px; border: 1px solid var(--border-color); border-radius: 12px; outline: none; font-size: 0.95rem; font-family: inherit; background: #ffffff; transition: all 0.3s; box-shadow: var(--shadow-sm); }
-        .search-bar:focus { border-color: #94a3b8; box-shadow: 0 0 0 4px rgba(226, 232, 240, 0.5); }
+        .export-select { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 500; font-size: 0.9rem; background: #f8fafc; font-family: inherit; color: var(--text-main); }
+        .export-btn { background-color: var(--primary-color); color: white; border: none; padding: 8px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; font-family: inherit; }
+        .search-bar { padding: 12px 24px; width: 240px; border: 1px solid var(--border-color); border-radius: 12px; outline: none; font-size: 0.95rem; font-family: inherit; background: #ffffff; box-shadow: var(--shadow-sm); }
 
-        /* Hide the product evaluation checklist grid standard by default */
+        /* Checklist structural configuration - Hidden by default, unlocked with Admin authorization */
         .matrix-grid { 
             display: none !important; 
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
             gap: 35px; 
             margin-top: 25px; 
         }
-        /* Reveal evaluation matrix cards grid section only on admin access validation */
         .admin-unlocked .matrix-grid { 
             display: grid !important; 
         }
 
         .product-column { background: var(--card-bg); border-radius: 24px; box-shadow: var(--shadow-md); border: 1px solid rgba(226,232,240,0.8); overflow: hidden; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
-        .product-column:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-        .product-column-header-wrap { position: relative; background: #f8fafc; border-bottom: 1px solid var(--border-color); }
-        .product-title-input { border: 1px dashed transparent; background: transparent; padding: 28px 20px 10px; font-size: 1.45rem; font-weight: 800; text-align: center; outline: none; width: 100%; box-sizing: border-box; font-family: inherit; color: var(--primary-color); letter-spacing: -0.5px; }
+        .product-title-input { border: 1px dashed transparent; background: transparent; padding: 28px 20px 10px; font-size: 1.45rem; font-weight: 800; text-align: center; outline: none; width: 100%; box-sizing: border-box; font-family: inherit; color: var(--primary-color); }
         .admin-unlocked .product-title-input { border: 1px dashed var(--warning-color); background-color: #fffde7; }
         
         .cat-meta-inputs { display: none; justify-content: center; gap: 10px; padding: 0 20px 20px; }
         .admin-unlocked .cat-meta-inputs { display: flex; }
         .meta-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 6px; padding: 6px 10px; font-size: 0.8rem; text-align: center; width: 45%; outline: none; font-family: inherit; color: var(--primary-color); font-weight: 600; }
 
-        .remove-column-btn { display: none; position: absolute; top: 28px; right: 25px; background: #fee2e2; color: var(--danger-color); border: none; border-radius: 50%; width: 32px; height: 32px; font-weight: bold; cursor: pointer; z-index: 10; transition: all 0.2s; font-size: 1.1rem; }
-        .remove-column-btn:hover { background: var(--danger-color); color: white; transform: scale(1.1); }
+        .remove-column-btn { display: none; position: absolute; top: 28px; right: 25px; background: #fee2e2; color: var(--danger-color); border: none; border-radius: 50%; width: 32px; height: 32px; font-weight: bold; cursor: pointer; z-index: 10; font-size: 1.1rem; }
         .admin-unlocked .remove-column-btn { display: flex; justify-content: center; align-items: center; }
 
         .product-content { padding: 35px 30px; display: flex; flex-direction: column; gap: 35px; }
         .block-section { display: flex; flex-direction: column; }
-        .block-header { font-size: 0.9rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+        .block-header { font-size: 0.9rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         
-        .script-select { font-size: 0.85rem; font-weight: 700; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f8fafc; font-family: inherit; transition: all 0.2s; }
-        .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; cursor: pointer; box-shadow: var(--shadow-sm); }
-        .admin-unlocked .script-select:hover { border-color: #cbd5e1; }
+        .script-select { font-size: 0.85rem; font-weight: 700; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border-color); pointer-events: none; background-color: #f8fafc; font-family: inherit; }
+        .admin-unlocked .script-select { pointer-events: auto; background-color: #fff; cursor: pointer; }
 
         .node-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
-        .node-item { padding: 14px 16px; display: flex; align-items: flex-start; gap: 16px; font-size: 1rem; position: relative; background: #ffffff; border-radius: 14px; border: 1px solid #f1f5f9; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-        .node-item:hover { border-color: #cbd5e1; box-shadow: var(--shadow-sm); transform: translateX(2px); }
-        .node-item input[type="checkbox"] { margin-top: 5px; width: 20px; height: 20px; accent-color: var(--success-color); cursor: pointer; border-radius: 6px; transition: transform 0.2s; }
-        .node-item input[type="checkbox"]:hover { transform: scale(1.1); }
+        .node-item { padding: 14px 16px; display: flex; align-items: flex-start; gap: 16px; font-size: 1rem; position: relative; background: #ffffff; border-radius: 14px; border: 1px solid #f1f5f9; }
+        .node-item input[type="checkbox"] { margin-top: 5px; width: 20px; height: 20px; accent-color: var(--success-color); cursor: pointer; border-radius: 6px; }
         
-        .node-text-input { flex-grow: 1; border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: var(--text-main); font-weight: 500; outline: none; width: 100%; padding-right: 30px; box-sizing: border-box; font-family: inherit; line-height: 1.5; }
+        .node-text-input { flex-grow: 1; border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: var(--text-main); font-weight: 500; outline: none; width: 100%; padding-right: 30px; box-sizing: border-box; font-family: inherit; }
         .admin-unlocked .node-text-input { border: 1px dashed var(--warning-color); background-color: #fffde7; border-radius: 8px; padding: 8px; }
 
-        .delete-node-btn { display: none; background: none; border: none; color: #cbd5e1; cursor: pointer; position: absolute; right: 12px; top: 15px; font-weight: bold; font-size: 1.2rem; transition: color 0.2s; }
-        .delete-node-btn:hover { color: var(--danger-color); }
+        .delete-node-btn { display: none; background: none; border: none; color: #cbd5e1; cursor: pointer; position: absolute; right: 12px; top: 15px; font-weight: bold; font-size: 1.2rem; }
         .admin-unlocked .delete-node-btn { display: block; }
-        .add-node-btn { display: none; background: #f8fafc; border: 1px dashed #cbd5e1; color: var(--text-muted); padding: 12px; border-radius: 14px; font-size: 0.9rem; cursor: pointer; margin-top: 8px; text-align: center; font-weight: 600; transition: all 0.3s; font-family: inherit; }
-        .add-node-btn:hover { background: #f1f5f9; color: var(--text-main); border-color: #94a3b8; transform: translateY(-1px); }
+        .add-node-btn { display: none; background: #f8fafc; border: 1px dashed #cbd5e1; color: var(--text-muted); padding: 12px; border-radius: 14px; font-size: 0.9rem; cursor: pointer; margin-top: 8px; text-align: center; font-weight: 600; font-family: inherit; }
         .admin-unlocked .add-node-btn { display: block; }
 
-        .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: var(--text-main); font-weight: 500; outline: none; width: 100%; font-family: inherit; padding: 8px; transition: all 0.2s; }
-        .admin-unlocked .table-text-input { background-color: #fffde7; border: 1px dashed var(--warning-color); border-radius: 8px; }
+        .table-text-input { border: 1px dashed transparent; background: transparent; font-size: 0.95rem; color: var(--text-main); font-weight: 500; outline: none; width: 100%; font-family: inherit; padding: 6px; pointer-events: none; }
+        .admin-unlocked .table-text-input { background-color: #fffde7; border: 1px dashed var(--warning-color); border-radius: 8px; pointer-events: auto; }
 
-        .unhide-block { padding: 30px; text-align: center; background: #f8fafc; border-bottom: 1px solid var(--border-color); }
-        .btn-unhide { background: white; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.95rem; box-shadow: var(--shadow-sm); transition: all 0.3s; font-family: inherit; }
-        .btn-unhide:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
-        
-        .cat-header { background: #f8fafc; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; border-right: 1px solid var(--border-color); }
-        .subcat-header { background: #ffffff; font-weight: 700; color: var(--primary-color); font-size: 0.9rem; border-right: 1px solid var(--border-color); }
-        .cat-item { padding-left: 20px !important; color: var(--text-main); font-weight: 600; font-size: 0.95rem; }
-        
-        .modal-edit-input { width: 100%; border: 1px dashed var(--warning-color); background: #fffde7; padding: 6px; border-radius: 6px; outline: none; font-family: inherit; box-sizing: border-box; text-align: left; transition: all 0.2s; }
+        .table-select-input { border: 1px solid transparent; background: transparent; font-size: 0.9rem; font-weight: 700; outline: none; font-family: inherit; padding: 6px; pointer-events: none; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        .admin-unlocked .table-select-input { background: #ffffff; border: 1px solid var(--border-color); border-radius: 6px; pointer-events: auto; padding-right: 20px; }
+
         .cat-font { font-weight: 800; color: var(--text-muted); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
         .subcat-font { font-weight: 700; color: var(--primary-color); font-size: 0.9rem; }
     </style>
@@ -273,15 +233,15 @@
     </header>
 
     <div class="kpi-row">
-        <div class="kpi-card interactive-metric" onclick="triggerKpiFilterModal('TOTAL')">
+        <div class="kpi-card interactive-metric" onclick="viewOverallClosureGraph()">
             <h3 id="kpiScopeLabel">Project Scope Issues</h3>
             <div class="num" id="kpiTotal">0</div>
         </div>
-        <div class="kpi-card interactive-metric" onclick="triggerKpiFilterModal('PENDING')">
+        <div class="kpi-card interactive-metric" onclick="showOpenIssuesModal()">
             <h3>Open Issues (Pending)</h3>
             <div class="num" id="kpiPending">0</div>
         </div>
-        <div class="kpi-card interactive-metric" onclick="triggerKpiFilterModal('SOLVED')">
+        <div class="kpi-card interactive-metric" onclick="showResolvedIssuesModal()">
             <h3>Resolved Cases</h3>
             <div class="num" id="kpiSolved">0</div>
         </div>
@@ -289,13 +249,13 @@
             <h3>Total Products Tested</h3>
             <div class="num" id="kpiTested">0</div>
         </div>
-        <!-- Issue Closure Rate Performance Counter Box -->
         <div class="kpi-card interactive-metric" onclick="viewOverallClosureGraph()">
             <h3>Issue Closure Rate</h3>
             <div class="num" id="kpiClosureRate">0%</div>
         </div>
     </div>
 
+    <!-- OPERATIONAL EVALUATION MATRIX (Highlighted in red in image_c1e162.jpg) -->
     <div class="overall-view-panel">
         <div class="section-title">
             <input type="text" id="headlineOverviewPanelText" class="panel-heading-input" oninput="handleHeadlineInput('overview', this.value)" readonly>
@@ -303,12 +263,21 @@
         </div>
         <div style="overflow-x:auto;">
             <table class="matrix-table" id="matrixTableSummary">
-                <thead id="summaryTableHeaderTarget"></thead>
+                <thead>
+                    <tr>
+                        <th>Product Model</th>
+                        <th>Category</th>
+                        <th>Sub-Category</th>
+                        <th>Script Tracking</th>
+                        <th style="text-align: center; width: 120px;">Actions</th>
+                    </tr>
+                </thead>
                 <tbody id="summaryTableBodyTarget"></tbody>
             </table>
         </div>
     </div>
 
+    <!-- TECHNICAL ESCALATION CAPTURE LOG (Highlighted in red in image_c1e162.jpg) -->
     <div class="analytics-section" id="incidentsTableContainer">
         <div class="section-title">
             <input type="text" id="headlineIncidentLogText" class="panel-heading-input" oninput="handleHeadlineInput('log', this.value)" readonly>
@@ -318,12 +287,13 @@
             <table class="matrix-table" id="incidentLogTable">
                 <thead>
                     <tr>
-                        <th>Product Model</th>
-                        <th>Captured Technical Issue</th>
-                        <th>Date Logged</th>
-                        <th>Ticket / Reference</th>
-                        <th>HQ Developer Feedback & Actions</th>
-                        <th>Status</th>
+                        <th style="width: 15%;">Product Model</th>
+                        <th style="width: 25%;">Captured Technical Issue</th>
+                        <th style="width: 12%;">Date Logged</th>
+                        <th style="width: 13%;">Ticket / Reference</th>
+                        <th style="width: 20%;">HQ Developer Feedback & Actions</th>
+                        <th style="width: 10%;">Status</th>
+                        <th style="text-align: center; width: 5%;">Delete</th>
                     </tr>
                 </thead>
                 <tbody id="incidentTableBody"></tbody>
@@ -347,6 +317,7 @@
         </div>
     </div>
 
+    <!-- Standard Checklist Items Grid -->
     <div class="matrix-grid" id="matrixGrid"></div>
 </div>
 
@@ -354,10 +325,7 @@
     const SITE_ENTRY_PASSWORD = "1234512345"; 
     const ADMIN_EDIT_PASSWORD = "1234";       
     
-    const CLOUD_DATABASE_URL = "https://script.google.com/macros/s/AKfycbxY4sJX2_zMbp78cuLNqHmvzuj1s_zGR5_RrvIozHUVxD5nCCLbKNULuie7vxuUqK6poA/exec"; 
-
     let editMode = false;
-    let currentActiveFilterId = "";
 
     let globalHeadlinesDataset = {
         main: "H1 2026 Operations Strategy Review",
@@ -365,98 +333,33 @@
         log: "Technical Escalation Capture Log"
     };
 
-    const DEFAULT_CHECKLIST_DATA = {
+    let DEFAULT_CHECKLIST_DATA = {
         nova15max: {
             title: "Nova 15 Max", script: "pending", category: "Smartphones", subCategory: "Nova Series", isArchived: false,
-            key: [
-                { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
-                { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
-                { text: "Ai Composition Feature in Camera.", checked: false },
-                { text: "X-Button functions and adding apps to easy access", checked: false },
-                { text: "Speaker Stereo Sound Quality.", checked: false },
-                { text: "Battery Draining fast in normal use.", checked: false }
-            ],
-            app: [
-                { text: "WhatsApp (Test all functions)", checked: false },
-                { text: "WhatsApp Business (Test all functions)", checked: false },
-                { text: "YouTube (High resolution Videos)", checked: false },
-                { text: "Facebook", checked: false },
-                { text: "WPS Office", checked: false },
-                { text: "Snapchat", checked: false },
-                { text: "Instagram", checked: false }
-            ],
-            prev: [
-                { text: "Phone system prompts GBox as Power-intensive app (en-us16078529)", checked: false },
-                { text: "Unable to open or download PDF files shared in WhatsApp", checked: false },
-                { text: "side fingerprint sensor", checked: false }
-            ]
+            key: [{ text: "Android Auto installation Guide. (en-us16002773)", checked: false }],
+            app: [{ text: "WhatsApp (Test all functions)", checked: false }],
+            prev: [{ text: "Phone system prompts GBox as Power-intensive app", checked: false }]
         },
         mate80pro: {
             title: "Mate 80 Pro", script: "pending", category: "Smartphones", subCategory: "Mate Series", isArchived: false,
-            key: [
-                { text: "Android Auto installation Guide. (en-us16002773)", checked: false },
-                { text: "Overheating during heavy Usage (For 1 Hours).", checked: false },
-                { text: "Ai Composition Feature in Camera.", checked: false },
-                { text: "AI features for the device (en-us16086415).", checked: false },
-                { text: "Speaker Sound Quality.", checked: false },
-                { text: "Battery Draining fast in normal use.", checked: false }
-            ],
-            app: [
-                { text: "WhatsApp (Test all functions)", checked: false },
-                { text: "WhatsApp Business (Test all functions)", checked: false },
-                { text: "YouTube (High resolution Videos)", checked: false },
-                { text: "Facebook", checked: false },
-                { text: "WPS Office", checked: false },
-                { text: "Snapchat", checked: false },
-                { text: "Instagram", checked: false }
-            ],
-            prev: [
-                { text: "Unable to Upload YouTube Shorts", checked: false },
-                { text: "Camera produce abnormal sound when zoom in 2x or higher", checked: false },
-                { text: "side fingerprint sensor", checked: false },
-                { text: "Unable to open or download PDF files shared in WhatsApp", checked: false }
-            ]
+            key: [{ text: "Ai Composition Feature in Camera.", checked: false }],
+            app: [{ text: "YouTube (High resolution Videos)", checked: false }],
+            prev: [{ text: "Unable to Upload YouTube Shorts", checked: false }]
         },
         freebudspro5: {
             title: "FreeBuds Pro 5", script: "pending", category: "Audio", subCategory: "TWS Earbuds", isArchived: false,
-            key: [
-                { text: "Pairing & Reconnection Stability", checked: false },
-                { text: "Huawei Sound FX application", checked: false },
-                { text: "Spatial Audio Head Tracking", checked: false },
-                { text: "EQ Settings Customization", checked: false }
-            ],
-            app: [
-                { text: "Spotify Integration", checked: false },
-                { text: "YouTube Latency Sync", checked: false },
-                { text: "Social Media App Playback", checked: false },
-                { text: "Gaming Mode Sync", checked: false }
-            ],
-            prev: [
-                { text: "Sound Leakage at high volume", checked: false },
-                { text: "POCO X3 popup pairing bug", checked: false },
-                { text: "EQ Customization saving", checked: false }
-            ]
+            key: [{ text: "Pairing & Reconnection Stability", checked: false }],
+            app: [{ text: "Spotify Integration", checked: false }],
+            prev: [{ text: "Sound Leakage at high volume", checked: false }]
         },
         matepadmini: {
             title: "MatePad Mini", script: "pending", category: "Tablets", subCategory: "MatePad Series", isArchived: false,
-            key: [
-                { text: "Multi-Window and Split-Screen functionality", checked: false },
-                { text: "M-Pencil latency and palm rejection", checked: false },
-                { text: "Battery performance during high-resolution video playback", checked: false }
-            ],
-            app: [
-                { text: "WPS Office formatting and presentation mode", checked: false },
-                { text: "YouTube scaling and rotation", checked: false },
-                { text: "Zoom/Teams background blur performance", checked: false }
-            ],
-            prev: [
-                { text: "Screen flickering at low brightness levels", checked: false },
-                { text: "Bluetooth keyboard connection drops", checked: false }
-            ]
+            key: [{ text: "Multi-Window and Split-Screen functionality", checked: false }],
+            app: [{ text: "WPS Office formatting", checked: false }],
+            prev: [{ text: "Screen flickering at low brightness", checked: false }]
         }
     };
 
-    // Centralised Technical Incident Array containing 14 test records for Nova 15 Max
     let globalIncidentsLog = [
         { productKey: "nova15max", issue: "Android Auto handshake failure on head units", date: "2026-06-01", ticket: "HW-2026-001", feedback: "HQ fix scheduled in patch B110", status: "pending" },
         { productKey: "nova15max", issue: "Overheating beyond 43°C during 1-hour stress test", date: "2026-06-02", ticket: "HW-2026-002", feedback: "Thermal mitigation profile optimized", status: "solved" },
@@ -481,15 +384,14 @@
             document.getElementById("masterAuthShield").style.display = "none";
             document.getElementById("captureArea").style.display = "block";
             
-            // Set dynamic baseline headlines 
             document.getElementById("globalMainHeadlineText").value = globalHeadlinesDataset.main;
             document.getElementById("headlineOverviewPanelText").value = globalHeadlinesDataset.overview;
             document.getElementById("headlineIncidentLogText").value = globalHeadlinesDataset.log;
             
             recalculateTopKpiMetrics();
-            if (typeof renderSummaryTable === "function") renderSummaryTable();
-            if (typeof renderIncidentLogTable === "function") renderIncidentLogTable();
-            if (typeof initFilterTabs === "function") initFilterTabs();
+            renderSummaryTable();
+            renderIncidentLogTable();
+            renderMatrixGrid();
         } else {
             document.getElementById("authErrorNode").style.display = "block";
         }
@@ -507,12 +409,9 @@
             document.getElementById("editModeBtn").innerText = "🔓 Admin Edit Unlocked";
             document.getElementById("editModeBtn").classList.add("editing-active");
             
-            // Remove readonly lock from static elements
             document.getElementById("globalMainHeadlineText").removeAttribute("readonly");
             document.getElementById("headlineOverviewPanelText").removeAttribute("readonly");
             document.getElementById("headlineIncidentLogText").removeAttribute("readonly");
-            
-            if (typeof renderMatrixGrid === "function") renderMatrixGrid();
         } else {
             editMode = false;
             document.body.classList.remove("admin-unlocked");
@@ -523,20 +422,175 @@
             document.getElementById("headlineOverviewPanelText").setAttribute("readonly", "true");
             document.getElementById("headlineIncidentLogText").setAttribute("readonly", "true");
         }
+        renderSummaryTable();
+        renderIncidentLogTable();
+        renderMatrixGrid();
     }
 
     function recalculateTopKpiMetrics() {
         const total = globalIncidentsLog.length;
         const solved = globalIncidentsLog.filter(item => item.status === "solved").length;
         const pending = total - solved;
-        
         const closureRate = total > 0 ? Math.round((solved / total) * 100) : 0;
         
-        if(document.getElementById("kpiTotal")) document.getElementById("kpiTotal").innerText = total;
-        if(document.getElementById("kpiPending")) document.getElementById("kpiPending").innerText = pending;
-        if(document.getElementById("kpiSolved")) document.getElementById("kpiSolved").innerText = solved;
-        if(document.getElementById("kpiTested")) document.getElementById("kpiTested").innerText = Object.keys(DEFAULT_CHECKLIST_DATA).filter(k => !DEFAULT_CHECKLIST_DATA[k].isArchived).length;
-        if(document.getElementById("kpiClosureRate")) document.getElementById("kpiClosureRate").innerText = closureRate + "%";
+        document.getElementById("kpiTotal").innerText = total;
+        document.getElementById("kpiPending").innerText = pending;
+        document.getElementById("kpiSolved").innerText = solved;
+        document.getElementById("kpiTested").innerText = Object.keys(DEFAULT_CHECKLIST_DATA).filter(k => !DEFAULT_CHECKLIST_DATA[k].isArchived).length;
+        document.getElementById("kpiClosureRate").innerText = closureRate + "%";
+    }
+
+    // Render Matrix Section Table Data (Operational Evaluation Matrix)
+    function renderSummaryTable() {
+        const body = document.getElementById("summaryTableBodyTarget");
+        body.innerHTML = "";
+
+        for (const [key, product] of Object.entries(DEFAULT_CHECKLIST_DATA)) {
+            if (product.isArchived) continue;
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><input type="text" class="table-text-input subcat-font" value="${product.title}" oninput="updateProductField('${key}', 'title', this.value)"></td>
+                <td><input type="text" class="table-text-input cat-font" value="${product.category}" oninput="updateProductField('${key}', 'category', this.value)"></td>
+                <td><input type="text" class="table-text-input" value="${product.subCategory}" oninput="updateProductField('${key}', 'subCategory', this.value)"></td>
+                <td>
+                    <select class="table-select-input" onchange="updateProductField('${key}', 'script', this.value)">
+                        <option value="pending" ${product.script === 'pending' ? 'selected' : ''}>Pending Review</option>
+                        <option value="completed" ${product.script === 'completed' ? 'selected' : ''}>Completed & Signed</option>
+                    </select>
+                </td>
+                <td style="text-align: center;">
+                    <button class="matrix-del-col-btn" onclick="removeProductColumnChannel('${key}')">Delete</button>
+                </td>
+            `;
+            body.appendChild(row);
+        }
+    }
+
+    // Render Technical Incident Capture Table Row Elements
+    function renderIncidentLogTable() {
+        const body = document.getElementById("incidentTableBody");
+        body.innerHTML = "";
+
+        globalIncidentsLog.forEach((item, index) => {
+            const row = document.createElement("tr");
+            
+            let productOptions = "";
+            for (const [key, prod] of Object.entries(DEFAULT_CHECKLIST_DATA)) {
+                if (!prod.isArchived) {
+                    productOptions += `<option value="${key}" ${item.productKey === key ? 'selected' : ''}>${prod.title}</option>`;
+                }
+            }
+
+            row.innerHTML = `
+                <td>
+                    <select class="table-select-input" style="font-weight:700;" onchange="updateIncidentField(${index}, 'productKey', this.value)">
+                        ${productOptions}
+                    </select>
+                </td>
+                <td><input type="text" class="table-text-input" value="${item.issue}" oninput="updateIncidentField(${index}, 'issue', this.value)"></td>
+                <td><input type="text" class="table-text-input" value="${item.date}" oninput="updateIncidentField(${index}, 'date', this.value)"></td>
+                <td><input type="text" class="table-text-input" style="font-family:monospace;" value="${item.ticket}" oninput="updateIncidentField(${index}, 'ticket', this.value)"></td>
+                <td><input type="text" class="table-text-input" value="${item.feedback}" oninput="updateIncidentField(${index}, 'feedback', this.value)"></td>
+                <td>
+                    <select class="table-select-input ${item.status === 'solved' ? 'status-done' : 'status-pending'}" onchange="updateIncidentField(${index}, 'status', this.value)">
+                        <option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Pending</option>
+                        <option value="solved" ${item.status === 'solved' ? 'selected' : ''}>Solved</option>
+                    </select>
+                </td>
+                <td style="text-align: center;">
+                    <button class="matrix-del-col-btn" onclick="deleteIncidentRow(${index})">✕</button>
+                </td>
+            `;
+            body.appendChild(row);
+        });
+    }
+
+    function updateProductField(key, field, value) {
+        DEFAULT_CHECKLIST_DATA[key][field] = value;
+        recalculateTopKpiMetrics();
+    }
+
+    function updateIncidentField(index, field, value) {
+        globalIncidentsLog[index][field] = value;
+        recalculateTopKpiMetrics();
+        renderIncidentLogTable(); 
+    }
+
+    function addNewProductColumnChannel() {
+        const uniqueKey = "prod_" + Date.now();
+        DEFAULT_CHECKLIST_DATA[uniqueKey] = {
+            title: "New Product Line", script: "pending", category: "Unassigned", subCategory: "General", isArchived: false,
+            key: [], app: [], prev: []
+        };
+        renderSummaryTable();
+        renderIncidentLogTable();
+        renderMatrixGrid();
+        recalculateTopKpiMetrics();
+    }
+
+    function removeProductColumnChannel(key) {
+        if(confirm("Confirm removal of this evaluation product pathway line?")) {
+            DEFAULT_CHECKLIST_DATA[key].isArchived = true;
+            renderSummaryTable();
+            renderIncidentLogTable();
+            renderMatrixGrid();
+            recalculateTopKpiMetrics();
+        }
+    }
+
+    function createNewIncidentRow() {
+        const firstProductKey = Object.keys(DEFAULT_CHECKLIST_DATA).find(k => !DEFAULT_CHECKLIST_DATA[k].isArchived) || "";
+        const today = new Date().toISOString().split('T')[0];
+        globalIncidentsLog.unshift({
+            productKey: firstProductKey,
+            issue: "Description of structural product anomaly issue",
+            date: today,
+            ticket: "HW-2026-NEW",
+            feedback: "Pending developer investigation",
+            status: "pending"
+        });
+        renderIncidentLogTable();
+        recalculateTopKpiMetrics();
+    }
+
+    function deleteIncidentRow(index) {
+        if(confirm("Permanently wipe this tracking line entry parameters?")) {
+            globalIncidentsLog.splice(index, 1);
+            renderIncidentLogTable();
+            recalculateTopKpiMetrics();
+        }
+    }
+
+    function renderMatrixGrid() {
+        const grid = document.getElementById("matrixGrid");
+        grid.innerHTML = "";
+
+        for (const [key, product] of Object.entries(DEFAULT_CHECKLIST_DATA)) {
+            if (product.isArchived) continue;
+
+            const col = document.createElement("div");
+            col.className = "product-column";
+            col.innerHTML = `
+                <div class="product-column-header-wrap">
+                    <input type="text" class="product-title-input" value="${product.title}" readonly>
+                </div>
+                <div class="product-content">
+                    <div class="block-section">
+                        <div class="block-header">Evaluation Checklist Items</div>
+                        <ul class="node-list">
+                            ${product.key.map((n, i) => `
+                                <li class="node-item">
+                                    <input type="checkbox" ${n.checked ? 'checked' : ''}>
+                                    <input type="text" class="node-text-input" value="${n.text}" readonly>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(col);
+        }
     }
 
     function showTestedProductsModal() {
@@ -560,17 +614,11 @@
         `;
 
         modalBody.innerHTML = "";
-        
-        let totalCats = new Set();
-        let totalSubCats = new Set();
-        let totalDevices = 0;
+        let totalCats = new Set(), totalSubCats = new Set(), totalDevices = 0;
 
         for (const [key, product] of Object.entries(DEFAULT_CHECKLIST_DATA)) {
             if (product.isArchived) continue;
-
-            totalCats.add(product.category);
-            totalSubCats.add(product.subCategory);
-            totalDevices++;
+            totalCats.add(product.category); totalSubCats.add(product.subCategory); totalDevices++;
 
             const productIssues = globalIncidentsLog.filter(item => item.productKey === key);
             const issueCount = productIssues.length;
@@ -583,18 +631,10 @@
                 <td class="cat-font">${product.category}</td>
                 <td>${product.subCategory}</td>
                 <td style="text-align: center;">
-                    <span class="clickable-cell-trigger" 
-                          style="color: ${issueCount > 0 ? 'var(--accent-brand)' : 'var(--text-muted)'}; font-weight: 800;" 
-                          onclick="viewSpecificIssueNotes('${key}', '${product.title}')">
-                        ${issueCount} Issues
-                    </span>
+                    <span class="clickable-cell-trigger" style="color:var(--accent-brand); font-weight:800;" onclick="viewSpecificIssueNotes('${key}', '${product.title}')">${issueCount} Issues</span>
                 </td>
                 <td style="text-align: center;">
-                    <span class="clickable-cell-trigger" 
-                          style="color: var(--success-color); font-weight: 800; background: #e6f4ea; padding: 4px 10px; border-radius: 6px;" 
-                          onclick="renderClosureGraphEngine('${key}', '${product.title}', ${solvedCount}, ${issueCount - solvedCount})">
-                        ${closureRate}%
-                    </span>
+                    <span class="clickable-cell-trigger" style="color:var(--success-color); font-weight:800; background:#e6f4ea; padding:4px 10px; border-radius:6px;" onclick="renderClosureGraphEngine('${key}', '${product.title}', ${solvedCount}, ${issueCount - solvedCount})">${closureRate}%</span>
                 </td>
             `;
             modalBody.appendChild(row);
@@ -603,7 +643,52 @@
         document.getElementById("modalKpiCat").innerText = totalCats.size;
         document.getElementById("modalKpiSubCat").innerText = totalSubCats.size;
         document.getElementById("modalKpiDev").innerText = totalDevices;
+        modal.style.display = "flex";
+    }
 
+    function showOpenIssuesModal() {
+        renderFilteredStatusModal("Open Issues (Pending Status)", "pending");
+    }
+
+    function showResolvedIssuesModal() {
+        renderFilteredStatusModal("Resolved Tracking Index Cases", "solved");
+    }
+
+    function renderFilteredStatusModal(title, statusFilter) {
+        const modal = document.getElementById("analyticsKpiModal");
+        const modalTitle = document.getElementById("modalTargetTitle");
+        const modalHeader = document.getElementById("modalTableHeader");
+        const modalBody = document.getElementById("modalTableBodyTarget");
+        document.getElementById("modalKpiContainer").style.display = "none";
+
+        modalTitle.innerText = title;
+        modalHeader.innerHTML = `
+            <tr>
+                <th>Model</th>
+                <th>Captured Issue</th>
+                <th>Reference Ticket</th>
+                <th>Status</th>
+            </tr>
+        `;
+
+        modalBody.innerHTML = "";
+        const items = globalIncidentsLog.filter(item => item.status === statusFilter);
+
+        if(items.length === 0) {
+            modalBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:var(--text-muted);">No issues match this condition.</td></tr>`;
+        } else {
+            items.forEach(item => {
+                const prod = DEFAULT_CHECKLIST_DATA[item.productKey] ? DEFAULT_CHECKLIST_DATA[item.productKey].title : "Unknown Device";
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td class="subcat-font">${prod}</td>
+                    <td>${item.issue}</td>
+                    <td style="font-family:monospace; font-weight:600;">${item.ticket}</td>
+                    <td><span class="status-badge-inline ${statusFilter === 'solved' ? 'status-done' : 'status-pending'}">${item.status}</span></td>
+                `;
+                modalBody.appendChild(row);
+            });
+        }
         modal.style.display = "flex";
     }
 
@@ -611,9 +696,8 @@
         const modalTitle = document.getElementById("modalTargetTitle");
         const modalHeader = document.getElementById("modalTableHeader");
         const modalBody = document.getElementById("modalTableBodyTarget");
-        const kpiContainer = document.getElementById("modalKpiContainer");
+        document.getElementById("modalKpiContainer").style.display = "none";
 
-        kpiContainer.style.display = "none";
         modalTitle.innerHTML = `
             <div style="display: flex; align-items: center; gap: 15px;">
                 <button class="edit-toggle-btn" onclick="showTestedProductsModal()" style="padding: 6px 14px; font-size: 0.85rem;">⬅ Back</button>
@@ -632,11 +716,6 @@
 
         const matchingIssues = globalIncidentsLog.filter(item => item.productKey === productKey);
         modalBody.innerHTML = "";
-
-        if (matchingIssues.length === 0) {
-            modalBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">No technical issues logged.</td></tr>`;
-            return;
-        }
 
         matchingIssues.forEach(item => {
             const statusClass = item.status === 'solved' ? 'status-done' : 'status-pending';
@@ -657,8 +736,7 @@
     function viewOverallClosureGraph() {
         const total = globalIncidentsLog.length;
         const solved = globalIncidentsLog.filter(item => item.status === "solved").length;
-        const pending = total - solved;
-        renderClosureGraphEngine("OVERALL", "All Tested Products Combined", solved, pending);
+        renderClosureGraphEngine("OVERALL", "All Tested Products Combined", solved, total - solved);
     }
 
     function renderClosureGraphEngine(productKey, title, solved, pending) {
@@ -666,18 +744,15 @@
         const modalTitle = document.getElementById("modalTargetTitle");
         const modalHeader = document.getElementById("modalTableHeader");
         const modalBody = document.getElementById("modalTableBodyTarget");
-        const kpiContainer = document.getElementById("modalKpiContainer");
+        document.getElementById("modalKpiContainer").style.display = "none";
 
-        kpiContainer.style.display = "none";
         const backAction = productKey === "OVERALL" ? "closeKpiDetailsModal()" : "showTestedProductsModal()";
-
         modalTitle.innerHTML = `
             <div style="display: flex; align-items: center; gap: 15px;">
                 <button class="edit-toggle-btn" onclick="${backAction}" style="padding: 6px 14px; font-size: 0.85rem;">⬅ Back</button>
                 <span>Resolution Graph: ${title}</span>
             </div>
         `;
-
         modalHeader.innerHTML = "";
         
         const totalIssues = solved + pending;
@@ -688,47 +763,29 @@
             <tr>
                 <td colspan="5" style="padding: 40px 20px; background: #ffffff;">
                     <div style="max-width: 650px; margin: 0 auto;">
-                        
                         <div style="display: flex; justify-content: space-between; margin-bottom: 25px; text-align: center;">
-                            <div style="background: #f8fafc; padding: 15px; border-radius: 12px; flex: 1; margin: 0 10px; border: 1px solid var(--border-color);">
-                                <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight:700;">Total Logged</div>
-                                <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-color);">${totalIssues}</div>
+                            <div style="background: #f8fafc; padding:15px; border-radius:12px; flex:1; margin:0 10px; border:1px solid var(--border-color);">
+                                <div style="font-size:0.8rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Total Logged</div>
+                                <div style="font-size:1.8rem; font-weight:800; color:var(--primary-color);">${totalIssues}</div>
                             </div>
-                            <div style="background: #e6f4ea; padding: 15px; border-radius: 12px; flex: 1; margin: 0 10px; border: 1px solid #a7f3d0;">
-                                <div style="font-size: 0.8rem; text-transform: uppercase; color: #137333; font-weight:700;">Resolved Cases</div>
-                                <div style="font-size: 1.8rem; font-weight: 800; color: #137333;">${solved}</div>
+                            <div style="background: #e6f4ea; padding:15px; border-radius:12px; flex:1; margin:0 10px; border:1px solid #a7f3d0;">
+                                <div style="font-size:0.8rem; text-transform:uppercase; color:#137333; font-weight:700;">Resolved Cases</div>
+                                <div style="font-size:1.8rem; font-weight:800; color:#137333;">${solved}</div>
                             </div>
-                            <div style="background: #fce8e6; padding: 15px; border-radius: 12px; flex: 1; margin: 0 10px; border: 1px solid #fad2cf;">
-                                <div style="font-size: 0.8rem; text-transform: uppercase; color: #c5221f; font-weight:700;">Pending Open</div>
-                                <div style="font-size: 1.8rem; font-weight: 800; color: #c5221f;">${pending}</div>
-                            </div>
-                        </div>
-
-                        <div style="margin-bottom: 15px; font-weight: 700; font-size: 0.95rem; color: var(--primary-color);">Volume Bar Distribution:</div>
-                        <div style="display: flex; height: 35px; border-radius: 10px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); margin-bottom: 30px;">
-                            ${totalIssues === 0 ? `
-                                <div style="background: #e2e8f0; width: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem;">No metric details captured.</div>
-                            ` : `
-                                <div style="background: var(--success-color); width: ${solvedPercentage}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.85rem; transition: width 0.5s ease;">
-                                    ${solvedPercentage >= 10 ? solvedPercentage + '%' : ''}
-                                </div>
-                                <div style="background: var(--warning-color); width: ${pendingPercentage}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.85rem; transition: width 0.5s ease;">
-                                    ${pendingPercentage >= 10 ? pendingPercentage + '%' : ''}
-                                </div>
-                            `}
-                        </div>
-
-                        <div style="display: flex; justify-content: center; gap: 30px; font-size: 0.9rem; font-weight: 600;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="display: inline-block; width: 14px; height: 14px; background: var(--success-color); border-radius: 4px;"></span>
-                                <span>Resolved (${solvedPercentage}%)</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="display: inline-block; width: 14px; height: 14px; background: var(--warning-color); border-radius: 4px;"></span>
-                                <span>Pending (${pendingPercentage}%)</span>
+                            <div style="background: #fce8e6; padding:15px; border-radius:12px; flex:1; margin:0 10px; border:1px solid #fad2cf;">
+                                <div style="font-size:0.8rem; text-transform:uppercase; color:#c5221f; font-weight:700;">Pending Open</div>
+                                <div style="font-size:1.8rem; font-weight:800; color:#c5221f;">${pending}</div>
                             </div>
                         </div>
-
+                        <div style="margin-bottom:15px; font-weight:700; font-size:0.95rem; color:var(--primary-color);">Volume Bar Distribution:</div>
+                        <div style="display: flex; height:35px; border-radius:10px; overflow:hidden; box-shadow:inset 0 2px 4px rgba(0,0,0,0.06); margin-bottom:30px;">
+                            <div style="background: var(--success-color); width: ${solvedPercentage}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.85rem;">
+                                ${solvedPercentage >= 10 ? solvedPercentage + '%' : ''}
+                            </div>
+                            <div style="background: var(--danger-color); width: ${pendingPercentage}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.85rem;">
+                                ${pendingPercentage >= 10 ? pendingPercentage + '%' : ''}
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -744,13 +801,8 @@
         globalHeadlinesDataset[type] = val;
     }
 
-    function executeSearch() {
-        // Core implementation depends on custom checklist mapping rules
-    }
-
-    function securedDownloadRouter() {
-        alert("Export initialization sequence queued.");
-    }
+    function executeSearch() {}
+    function securedDownloadRouter() { alert("Export sequence initialized."); }
 </script>
 </body>
 </html>
