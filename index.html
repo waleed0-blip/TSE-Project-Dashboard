@@ -358,8 +358,8 @@
 </div>
 
 <script>
-    const SITE_ENTRY_PASSWORD = "1234512345"; 
-    const ADMIN_EDIT_PASSWORD = "1234";       
+    const SITE_ENTRY_PASSWORD = "TseProject1234"; 
+    const ADMIN_EDIT_PASSWORD = "TSE2026";       
     
     const CLOUD_DATABASE_URL = "https://script.google.com/macros/s/AKfycbxY4sJX2_zMbp78cuLNqHmvzuj1s_zGR5_RrvIozHUVxD5nCCLbKNULuie7vxuUqK6poA/exec"; 
 
@@ -754,7 +754,15 @@
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><input type="text" class="table-text-input" value="${inc.model}" oninput="handleIncidentTableInput(${globalIndex}, 'model', this.value)"></td>
-                <td><input type="text" class="table-text-input" value="${inc.issue}" oninput="handleIncidentTableInput(${globalIndex}, 'issue', this.value)"></td>
+                <td>
+                    <input type="text" 
+                           class="table-text-input" 
+                           value="${inc.issue}" 
+                           oninput="handleIncidentTableInput(${globalIndex}, 'issue', this.value)" 
+                           style="color: #3b82f6; cursor: pointer; text-decoration: underline; font-weight: 600;" 
+                           onclick="alert('📋 DETAILED ISSUE LOG\\n\\n🔹 Product Model: ${inc.model}\\n🔹 Technical Issue: ${inc.issue}\\n🔹 Ticket/Reference: ${inc.ref}\\n🔹 HQ Feedback & Actions: ${inc.action}\\n🔹 Logged Date: ${inc.date}')"
+                           title="Click to view full issue details">
+                </td>
                 <td><input type="text" class="table-text-input" value="${inc.date}" oninput="handleIncidentTableInput(${globalIndex}, 'date', this.value)"></td>
                 <td><input type="text" class="table-text-input" value="${inc.ref}" oninput="handleIncidentTableInput(${globalIndex}, 'ref', this.value)"></td>
                 <td><input type="text" class="table-text-input" value="${inc.action}" oninput="handleIncidentTableInput(${globalIndex}, 'action', this.value)"></td>
