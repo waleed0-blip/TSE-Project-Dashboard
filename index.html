@@ -267,7 +267,6 @@
             fetch(API_URL)
                 .then(res => res.json())
                 .then(resObj => {
-                    // 🌟 CRITICAL REFIX VALIDATION FOR EMPTY REPOSITORIES/SHEETS
                     if(resObj && resObj.status === "success" && resObj.data && Object.keys(resObj.data).length > 0) {
                         db = resObj.data;
                     } else {
