@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
     
@@ -255,7 +255,7 @@
         </div>
     </div>
 
-    <!-- OPERATIONAL EVALUATION MATRIX (Highlighted in red in image_c1e162.jpg) -->
+    <!-- OPERATIONAL EVALUATION MATRIX -->
     <div class="overall-view-panel">
         <div class="section-title">
             <input type="text" id="headlineOverviewPanelText" class="panel-heading-input" oninput="handleHeadlineInput('overview', this.value)" readonly>
@@ -277,7 +277,7 @@
         </div>
     </div>
 
-    <!-- TECHNICAL ESCALATION CAPTURE LOG (Highlighted in red in image_c1e162.jpg) -->
+    <!-- TECHNICAL ESCALATION CAPTURE LOG -->
     <div class="analytics-section" id="incidentsTableContainer">
         <div class="section-title">
             <input type="text" id="headlineIncidentLogText" class="panel-heading-input" oninput="handleHeadlineInput('log', this.value)" readonly>
@@ -333,49 +333,75 @@
         log: "Technical Escalation Capture Log"
     };
 
+    // Modified product checklist mapped precisely onto the structural source definitions
     let DEFAULT_CHECKLIST_DATA = {
-        nova15max: {
-            title: "Nova 15 Max", script: "pending", category: "Smartphones", subCategory: "Nova Series", isArchived: false,
-            key: [{ text: "Android Auto installation Guide. (en-us16002773)", checked: false }],
-            app: [{ text: "WhatsApp (Test all functions)", checked: false }],
-            prev: [{ text: "Phone system prompts GBox as Power-intensive app", checked: false }]
-        },
-        mate80pro: {
-            title: "Mate 80 Pro", script: "pending", category: "Smartphones", subCategory: "Mate Series", isArchived: false,
-            key: [{ text: "Ai Composition Feature in Camera.", checked: false }],
-            app: [{ text: "YouTube (High resolution Videos)", checked: false }],
-            prev: [{ text: "Unable to Upload YouTube Shorts", checked: false }]
-        },
         freebudspro5: {
-            title: "FreeBuds Pro 5", script: "pending", category: "Audio", subCategory: "TWS Earbuds", isArchived: false,
-            key: [{ text: "Pairing & Reconnection Stability", checked: false }],
-            app: [{ text: "Spotify Integration", checked: false }],
-            prev: [{ text: "Sound Leakage at high volume", checked: false }]
+            title: "Freebuds pro 5", script: "completed", category: "Audio", subCategory: "TWS Earbuds", isArchived: false,
+            key: [
+                { text: "Acoustic Performance Sound Leakage Evaluation", checked: true },
+                { text: "Legacy Device Mode Tuning & Huawei Sound Sync Path", checked: false },
+                { text: "Non-Huawei Device Pairing Pop-Up Matrix Validation", checked: false },
+                { text: "AI Life UI Component Overlap Correction Audit", checked: false }
+            ]
+        },
+        gtrunner2: {
+            title: "Gt Runner 2", script: "completed", category: "Wearables", subCategory: "Smart Watches", isArchived: false,
+            key: [
+                { text: "Xuanji Sensing System / TruSense UAE Deployment Audit", checked: true },
+                { text: "Dubai Transportation Transit Card Integration Mapping", checked: true },
+                { text: "High-Precision Lossless XDR Route Tracker Routing", checked: true }
+            ]
         },
         matepadmini: {
-            title: "MatePad Mini", script: "pending", category: "Tablets", subCategory: "MatePad Series", isArchived: false,
-            key: [{ text: "Multi-Window and Split-Screen functionality", checked: false }],
-            app: [{ text: "WPS Office formatting", checked: false }],
-            prev: [{ text: "Screen flickering at low brightness", checked: false }]
+            title: "Matepad Mini", script: "completed", category: "Tablets", subCategory: "PaperMatte Series", isArchived: false,
+            key: [
+                { text: "Micro-Nano Etching Display Fingerprint Smudge Test", checked: true },
+                { text: "Notes App 12.4.0.195 Real-Time AI Handwriting Patch", checked: true },
+                { text: "NearLink Precise StarFlash Find Device System Validation", checked: true },
+                { text: "Anti-Glare PaperMatte Screen Fatigue Comfort Cert", checked: true },
+                { text: "Celia AI Imagery Regional Access Configuration Check", checked: true },
+                { text: "WPC Office Integration and WPS PC Suite Validation", checked: true },
+                { text: "AI Eye-Tracking Regional Boundary Verification Books", checked: true }
+            ]
+        },
+        mate80pro: {
+            title: "Huawei Mate 80 Pro", script: "pending", category: "Smartphones", subCategory: "Mate Series", isArchived: false,
+            key: [
+                { text: "4K Media Engine Playback Lag Mitigation Architecture", checked: false }
+            ]
+        },
+        nova15max: {
+            title: "Huawei Nova 15 Max", script: "pending", category: "Smartphones", subCategory: "Nova Series", isArchived: false,
+            key: [
+                { text: "Ana Vodafone Application Installation Compatibility Check", checked: false },
+                { text: "Camera Multi-Mode High Speed Zoom Lens Switching Calibration", checked: false },
+                { text: "Main Camera Sensor Shutter Flash Sync Anomaly Audit", checked: false },
+                { text: "Gallery AI Remove Interactive Component Discovery Evaluation", checked: false }
+            ]
         }
     };
 
+    // Refreshed real world technical incidents directly synced from the technical logs
     let globalIncidentsLog = [
-        { productKey: "nova15max", issue: "Android Auto handshake failure on head units", date: "2026-06-01", ticket: "HW-2026-001", feedback: "HQ fix scheduled in patch B110", status: "pending" },
-        { productKey: "nova15max", issue: "Overheating beyond 43°C during 1-hour stress test", date: "2026-06-02", ticket: "HW-2026-002", feedback: "Thermal mitigation profile optimized", status: "solved" },
-        { productKey: "nova15max", issue: "AI Composition camera preview stutter", date: "2026-06-03", ticket: "HW-2026-003", feedback: "Hal layer buffer optimized", status: "solved" },
-        { productKey: "nova15max", issue: "X-Button touch registration latency", date: "2026-06-04", ticket: "HW-2026-004", feedback: "Driver firmware update pushed", status: "pending" },
-        { productKey: "nova15max", issue: "Stereo balancing off-center at 80% volume", date: "2026-06-05", ticket: "HW-2026-005", feedback: "Audio calibration file updated", status: "pending" },
-        { productKey: "nova15max", issue: "GBox background power-intensive pop-up warning", date: "2026-06-06", ticket: "HW-2026-006", feedback: "Whitelisted in PowerGenie system", status: "solved" },
-        { productKey: "nova15max", issue: "WhatsApp PDF attachment download failure via virtual storage", date: "2026-06-07", ticket: "HW-2026-007", feedback: "Scoped storage permission adjusted", status: "pending" },
-        { productKey: "nova15max", issue: "Side fingerprint sensor slow wakeup from deep sleep", date: "2026-06-08", ticket: "HW-2026-008", feedback: "Fingerprint MCU sleep mode modified", status: "solved" },
-        { productKey: "nova15max", issue: "Battery drain spikes during idle standby 5G switching", date: "2026-06-09", ticket: "HW-2026-009", feedback: "Modem sleep cycles adjusted", status: "pending" },
-        { productKey: "nova15max", issue: "Snapchat camera filter aspect ratio stretching", date: "2026-06-10", ticket: "HW-2026-010", feedback: "AppGallery scaling profile forced", status: "solved" },
-        { productKey: "nova15max", issue: "WPS Office rendering lag with 50MB+ spreadsheets", date: "2026-06-11", ticket: "HW-2026-011", feedback: "Heap size expanded", status: "pending" },
-        { productKey: "nova15max", issue: "Instagram Reels audio-video sync drop over Bluetooth", date: "2026-06-12", ticket: "HW-2026-012", feedback: "A2DP latency delay corrected", status: "solved" },
-        { productKey: "nova15max", issue: "YouTube Shorts upload freeze at 99% validation", date: "2026-06-13", ticket: "HW-2026-013", feedback: "Layer timeout extended", status: "pending" },
-        { productKey: "nova15max", issue: "Camera optical image stabilization micro-rattle on zoom", date: "2026-06-14", ticket: "HW-2026-014", feedback: "OIS damping voltage adjusted", status: "pending" },
-        { productKey: "mate80pro", issue: "AI feature translation timeout on regional dialer", date: "2026-06-15", ticket: "HW-2026-015", feedback: "Cloud API server endpoints optimized", status: "pending" }
+        { productKey: "freebudspro5", issue: "FreeBuds Pro 5 Acoustic Performance — Sound Leakage Comparison", date: "2026-03-16", ticket: "TM202603160216", feedback: "After checking with HQ we have agreed the following this will happen in a high volume situation or when the earphones are worn loosely and we will refer to en-us15877848 and guide the customer to adjust the volume to a more suitable level and choose a larger pair of ear tips to minimize sound leakage. Alternatively, please refer to en-us15767422 to perform the ear tip fit test.", status: "solved" },
+        { productKey: "freebudspro5", issue: "Huawei Sound is not effect when changing the modes on legacy phones like P30 Pro", date: "2026-04-26", ticket: "TM202604260121", feedback: "Still Analyzing the issue", status: "pending" },
+        { productKey: "gtrunner2", issue: "GT Runner 2 the new Xuanji Sensing System in UAE validation parameters", date: "2026-04-15", ticket: "TM202604150230", feedback: "Confirmed with R&D, GT Runner 2 supports the new TruSense System.", status: "solved" },
+        { productKey: "gtrunner2", issue: "Transportation card on GT Runner 2 Dubai digital wallets integration", date: "2026-04-15", ticket: "TM202604150205", feedback: "GT Runner 2 in Dubai supports transportation cards.", status: "solved" },
+        { productKey: "gtrunner2", issue: "XDR algorithm precision accuracy check on GT runner 2 mapping systems", date: "2026-04-10", ticket: "TM202604100158", feedback: "Watch GT Runner 2 supports XDR algorithm. The XDR algorithm ensures high-precision accuracy even in signal loss conditions, and optimizes the accuracy of route, distance, and pace data.", status: "solved" },
+        { productKey: "matepadmini", issue: "Fingerprints show up easily on the PaperMatte display tracking index", date: "2026-04-01", ticket: "WeLink-Escalation", feedback: "HQ agree that PaperMatte Display screens have this issue and The use of micro-nano etching technology and nanoscale optical coating optimizes light dispersion and display performance.", status: "solved" },
+        { productKey: "matepadmini", issue: "Huawei notes Matepad mini Eye real-time AI handwriting adjustment feature failure", date: "2026-04-14", ticket: "TM202604140241", feedback: "The AI handwriting enhancement feature of Notes is now only available on certain tablets. It is not supported on phones. You need to update the Notes app to version 12.4.0.195 or later", status: "solved" },
+        { productKey: "matepadmini", issue: "Matepad mini Star FlashTM location search function missing in Find device index", date: "2026-04-14", ticket: "TM202604140245", feedback: "The MatePad mini does not support NearLink precise search. No more information is available.", status: "solved" },
+        { productKey: "matepadmini", issue: "Matepad mini Eye Care Certification specification verification", date: "2026-04-10", ticket: "TM202604100175", feedback: "MatePad Mini uses anti-glare PaperMatte display. It is eye-friendly, reducing eye fatigue to improve comfort during long hours of use or in bright outdoor settings.", status: "solved" },
+        { productKey: "matepadmini", issue: "Matepad Mini Celia-generated images functionality restrictions on Huawei notes", date: "2026-04-10", ticket: "TM202604100160", feedback: "The AI-generation function is not supported in countries outside China. Please suggest the customer use other AI apps on the tablet.", status: "solved" },
+        { productKey: "matepadmini", issue: "WPC PC level productivity suite operational profile on Matepad Mini", date: "2026-04-08", ticket: "TM202604080222", feedback: "McLaren supports the use of WPS Office PC", status: "solved" },
+        { productKey: "matepadmini", issue: "Huawei books AI eye-tracking page feature localized system restrictions", date: "2026-04-08", ticket: "TM202604080216", feedback: "Currently, this function is not supported in regions outside China.", status: "solved" },
+        { productKey: "freebudspro5", issue: "Non-Huawei Device Pairing Issue: media formats non-compliance warning message on Poco X3", date: "2026-06-15", ticket: "TM6202606150134", feedback: "Still Analyzing the issue", status: "pending" },
+        { productKey: "freebudspro5", issue: "Other issue appear Issue: UI element overlap on pop-up connection screen layout", date: "2026-06-15", ticket: "TM6202606150132", feedback: "Still Analyzing the issue", status: "pending" },
+        { productKey: "mate80pro", issue: "Video Enhancement Issue: 4k video lagging and processing slowly on baseline models", date: "2026-05-21", ticket: "TM6202605210196", feedback: "Still Analyzing the issue", status: "pending" },
+        { productKey: "nova15max", issue: "App Installation Issue: Ana Vodafone application core functionality structural failure", date: "2026-05-12", ticket: "TM202605120198", feedback: "Still Analyzing the issue", status: "pending" },
+        { productKey: "nova15max", issue: "Lens Switching Issue: Camera mode translation zoom freezing failure", date: "2026-05-19", ticket: "TM6202605190108", feedback: "Still Analyzing the issue", status: "pending" },
+        { productKey: "nova15max", issue: "Main Camera Issue: Spontaneous sensor flash burst during typical indoor captures", date: "2026-05-15", ticket: "TM202605150178", feedback: "Still Analyzing the issue", status: "pending" },
+        { productKey: "nova15max", issue: "AI Remove Issue: Action options selection entry absent inside device gallery app", date: "2026-06-15", ticket: "TM6202606150161", feedback: "Still Analyzing the issue", status: "pending" }
     ];
 
     function handleMasterAuthCheck() {
@@ -440,7 +466,6 @@
         document.getElementById("kpiClosureRate").innerText = closureRate + "%";
     }
 
-    // Render Matrix Section Table Data (Operational Evaluation Matrix)
     function renderSummaryTable() {
         const body = document.getElementById("summaryTableBodyTarget");
         body.innerHTML = "";
@@ -467,7 +492,6 @@
         }
     }
 
-    // Render Technical Incident Capture Table Row Elements
     function renderIncidentLogTable() {
         const body = document.getElementById("incidentTableBody");
         body.innerHTML = "";
@@ -631,10 +655,10 @@
                 <td class="cat-font">${product.category}</td>
                 <td>${product.subCategory}</td>
                 <td style="text-align: center;">
-                    <span class="clickable-cell-trigger" style="color:var(--accent-brand); font-weight:800;" onclick="viewSpecificIssueNotes('${key}', '${product.title}')">${issueCount} Issues</span>
+                    <span class="clickable-cell-trigger" style="color:var(--accent-brand); font-weight:800; cursor:pointer;" onclick="viewSpecificIssueNotes('${key}', '${product.title}')">${issueCount} Issues</span>
                 </td>
                 <td style="text-align: center;">
-                    <span class="clickable-cell-trigger" style="color:var(--success-color); font-weight:800; background:#e6f4ea; padding:4px 10px; border-radius:6px;" onclick="renderClosureGraphEngine('${key}', '${product.title}', ${solvedCount}, ${issueCount - solvedCount})">${closureRate}%</span>
+                    <span class="clickable-cell-trigger" style="color:var(--success-color); font-weight:800; background:#e6f4ea; padding:4px 10px; border-radius:6px; cursor:pointer;" onclick="renderClosureGraphEngine('${key}', '${product.title}', ${solvedCount}, ${issueCount - solvedCount})">${closureRate}%</span>
                 </td>
             `;
             modalBody.appendChild(row);
