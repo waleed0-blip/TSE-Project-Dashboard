@@ -142,7 +142,10 @@
 
         .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; gap: 20px; flex-wrap: wrap; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); padding: 18px 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid rgba(226, 232, 240, 0.8); }
         
-        .tabs { display: flex; gap: 8px; flex-wrap: wrap; background: #f1f5f9; padding: 6px; border-radius: 14px; }
+        /* Modified styling block: tabs hide dynamically until unlocked */
+        .tabs { display: none; gap: 8px; flex-wrap: wrap; background: #f1f5f9; padding: 6px; border-radius: 14px; }
+        .admin-unlocked .tabs { display: flex; }
+        
         .tab-btn { background-color: transparent; border: none; padding: 10px 22px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; color: var(--text-muted); font-family: inherit; }
         .tab-btn:hover { color: var(--text-main); }
         .tab-btn.active { background-color: #ffffff; color: var(--primary-color); box-shadow: var(--shadow-sm); }
@@ -160,7 +163,6 @@
         .search-bar { padding: 12px 24px; width: 240px; border: 1px solid var(--border-color); border-radius: 12px; outline: none; font-size: 0.95rem; font-family: inherit; background: #ffffff; transition: all 0.3s; box-shadow: var(--shadow-sm); }
         .search-bar:focus { border-color: #94a3b8; box-shadow: 0 0 0 4px rgba(226, 232, 240, 0.5); }
 
-        /* Modified styling rule to dynamically control manual layout visibility patterns */
         .matrix-grid { display: none; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 35px; margin-top: 25px; }
         .admin-unlocked .matrix-grid { display: grid; }
         
@@ -217,9 +219,10 @@
         .cat-font { font-weight: 800; color: var(--text-muted); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
         .subcat-font { font-weight: 700; color: var(--primary-color); font-size: 0.9rem; }
 
-        /* Pure CSS Circular Gauge Styling */
         .circle-gauge-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 30px 0; }
-        .circle-gauge-container { position: relative; width: 180px; height: 180px; border-radius: 50%; background: conic-gradient(var(--success-color) 0%, #e2e8f0 0%); display: flex; align-items: center; justify-content: center; transition: all 0.4s ease; box-shadow: var(--shadow-md); }
+        
+        /* Chart wrapper enhanced with semantic hover cursors for tooltips */
+        .circle-gauge-container { position: relative; width: 190px; height: 190px; border-radius: 50%; background: conic-gradient(var(--success-color) 0%, #e2e8f0 0%); display: flex; align-items: center; justify-content: center; transition: all 0.4s ease; box-shadow: var(--shadow-md); cursor: help; }
         .circle-gauge-container::before { content: ''; position: absolute; width: 140px; height: 140px; background-color: white; border-radius: 50%; }
         .circle-gauge-value { position: relative; font-size: 2.2rem; font-weight: 800; color: var(--primary-color); letter-spacing: -1px; }
     </style>
@@ -256,12 +259,11 @@
             </div>
         </div>
 
-        <!-- Hidden Chart Area Block Inside Modal Framework -->
         <div id="modalChartGaugeArea" class="circle-gauge-wrap" style="display: none;">
-            <div class="circle-gauge-container" id="radialClosurePieVisual">
+            <div class="circle-gauge-container" id="radialClosurePieVisual" title="Hover over data nodes to examine parameters">
                 <div class="circle-gauge-value" id="radialClosureTextNode">0%</div>
             </div>
-            <p style="font-weight: 700; color: var(--text-muted); margin-top: 20px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">Resolved vs. Total Escalation Performance Tracker</p>
+            <p style="font-weight: 700; color: var(--text-muted); margin-top: 24px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">Resolved vs. Total Escalation Performance Tracker</p>
         </div>
 
         <div style="overflow-x:auto;" id="modalTableWrapElement">
@@ -291,7 +293,6 @@
             <h3>Resolved Cases</h3>
             <div class="num" id="kpiSolved">0</div>
         </div>
-        <!-- Requested Closure Rate metric box addition -->
         <div class="kpi-card interactive-metric" onclick="displayClosureChartOverlayModal()">
             <h3>Issue Closure Rate</h3>
             <div class="num" id="kpiClosureRate">0%</div>
@@ -709,7 +710,6 @@
             if(inc.status === "PENDING") pendingCount++; else solvedCount++;
         });
 
-        // Compute Closure Rate Dynamic Math values
         let rawClosureRatePercent = filteredIncidents.length > 0 ? Math.round((solvedCount / filteredIncidents.length) * 100) : 0;
 
         document.getElementById('kpiScopeLabel').innerText = targetLabel;
@@ -721,9 +721,10 @@
         renderIncidentLogTable(filteredIncidents);
     }
 
-    /* Addition function to render dynamic CSS circle performance tracking metrics */
+    /* Enhanced chart overlay parsing explicit tooltip text node calculations */
     function displayClosureChartOverlayModal() {
         let solved = incidentLogDataset.filter(i => i.status === "SOLVED").length;
+        let pending = incidentLogDataset.filter(i => i.status === "PENDING").length;
         let total = incidentLogDataset.length;
         let rate = total > 0 ? Math.round((solved / total) * 100) : 0;
 
@@ -731,9 +732,12 @@
         document.getElementById('modalKpiContainer').style.display = 'none';
         document.getElementById('modalTableWrapElement').style.display = 'none';
         
-        // Render & Update pure CSS geometric color pie parameters
         const pieGauge = document.getElementById('radialClosurePieVisual');
         pieGauge.style.background = `conic-gradient(var(--success-color) ${rate}%, #e2e8f0 ${rate}%)`;
+        
+        // Formulate clear standard browser tooltips on element node hover parameters
+        pieGauge.title = `💡 Data Overview:\n🟢 SOLVED Issues: ${solved}\n🟡 PENDING Issues: ${pending}\n📊 Grand Total Captured: ${total}`;
+        
         document.getElementById('radialClosureTextNode').innerText = `${rate}%`;
         document.getElementById('modalChartGaugeArea').style.display = 'flex';
 
@@ -810,7 +814,6 @@
         document.getElementById('analyticsKpiModal').style.display = 'flex';
     }
 
-    /* Modified to extract issues matching specific tested product logs seamlessly */
     function showTestedProductsModal() {
         document.getElementById('modalTargetTitle').innerText = "Products Fully Tested (100% Completion)";
         document.getElementById('modalKpiContainer').style.display = 'grid';
@@ -840,7 +843,6 @@
                     devCount += devices.length;
 
                     devices.forEach((baseName, idx) => {
-                        // Dynamically look up and tally metrics for requested enhancement rule
                         let capturedIssuesNum = incidentLogDataset.filter(i => i.model.toLowerCase() === baseName.toLowerCase()).length;
 
                         html += `<tr>`;
@@ -912,7 +914,7 @@
     }
 
     function scrollToSectionBlock(sectionDataId) {
-        if (!editMode) return; // Checklist hidden completely unless admin edit unlocked
+        if (!editMode) return; 
         const grid = document.getElementById('matrixGrid');
         if(!grid) return; grid.scrollIntoView({ behavior: 'smooth' });
         document.querySelectorAll(`.block-section[data-section="${sectionDataId}"]`).forEach(block => {
@@ -1164,6 +1166,7 @@
         calculateDynamicKPIs();
     }
 
+    /* Bypasses search transparency drop layers for smooth interaction rules */
     function executeSearch() {
         const query = document.getElementById('dashboardSearch').value.trim().toLowerCase();
         document.querySelectorAll('.node-item').forEach(item => {
