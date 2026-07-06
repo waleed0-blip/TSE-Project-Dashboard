@@ -3,26 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei Egypt TSE Operations Hub</title>
+    <title>HUAWEI EGYPT — New Product Operations Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background-color: #0A192F; color: #E2E8F0; font-family: system-ui, -apple-system, sans-serif; }
-        .loading-overlay { background: rgba(10, 25, 47, 0.9); }
+        .custom-card { background-color: #112240; border: 1px solid #233554; }
+        .inner-vault { background-color: #0A192F; border: 1px solid #233554; }
+        .loading-screen-overlay { background: rgba(10, 25, 47, 0.95); z-index: 1000; }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
-    <div id="loading-screen" class="loading-overlay fixed inset-0 z-50 flex flex-col justify-center items-center">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-amber-500 mb-4"></div>
-        <p class="text-amber-400 font-mono text-sm tracking-widest">SYNCING WITH GOOGLE SHEET DATABASE...</p>
+    <div id="loading-screen" class="loading-screen-overlay fixed inset-0 flex flex-col justify-center items-center">
+        <div class="animate-spin rounded-full h-14 w-14 border-t-4 border-b-4 border-amber-500 mb-4"></div>
+        <p class="text-amber-400 font-mono text-xs tracking-widest uppercase">Syncing Live Google Sheets Vault Pipeline...</p>
     </div>
 
-    <div id="portal-lock" class="fixed inset-0 bg-[#0A192F] z-40 flex flex-col justify-center items-center p-4">
-        <div class="bg-[#112240] p-8 rounded-xl shadow-2xl border border-[#233554] max-w-md w-full text-center">
+    <div id="portal-lock" class="fixed inset-0 bg-[#0A192F] z-50 flex flex-col justify-center items-center p-4">
+        <div class="custom-card p-8 rounded-xl shadow-2xl max-w-md w-full text-center">
             <i class="fa-solid fa-shield-halved text-5xl text-amber-500 mb-4"></i>
             <h2 class="text-2xl font-bold text-white mb-2">Security Access Required</h2>
-            <p class="text-gray-400 mb-6 text-sm">Please enter the portal gateway password to view the validation desk.</p>
+            <p class="text-gray-400 mb-6 text-sm">Please enter the portal gateway passkey to view the technical validation desk.</p>
             <input type="password" id="portal-passkey" placeholder="Enter Portal Password" class="w-full bg-[#0A192F] border border-[#233554] rounded p-3 text-white text-center mb-4 focus:outline-none focus:border-amber-500">
             <button onclick="unlockPortal()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold p-3 rounded transition-colors cursor-pointer">Unlock Dashboard</button>
             <p id="portal-error" class="text-red-500 text-sm mt-3 hidden">Invalid portal password credential.</p>
@@ -30,177 +32,262 @@
     </div>
 
     <div class="max-w-7xl mx-auto">
-        <header class="mb-8 bg-[#112240] p-6 rounded-xl border border-[#233554] relative">
-            <div class="absolute top-4 right-4">
-                <button id="admin-login-btn" onclick="openAdminModal()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold px-3 py-1.5 rounded cursor-pointer transition-colors">
+        
+        <header class="mb-8 custom-card p-6 rounded-xl relative">
+            <div class="absolute top-6 right-6">
+                <button id="admin-login-btn" onclick="openAdminModal()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold px-4 py-2 rounded cursor-pointer transition-colors">
                     <i class="fa-solid fa-lock-open mr-1"></i> Admin Access
                 </button>
-                <button id="admin-logout-btn" onclick="logoutAdmin()" class="bg-red-900 hover:bg-red-800 text-white text-xs font-bold px-3 py-1.5 rounded cursor-pointer transition-colors hidden">
+                <button id="admin-logout-btn" onclick="logoutAdmin()" class="bg-red-900 hover:bg-red-800 text-white text-xs font-bold px-4 py-2 rounded cursor-pointer transition-colors hidden">
                     <i class="fa-solid fa-lock mr-1"></i> Lock Admin Panel
                 </button>
             </div>
             <h1 id="site-headline" class="text-xl md:text-2xl font-black text-white tracking-wide uppercase mb-1">HUAWEI EGYPT SITE — NEW PRODUCTS EXPERIENCE & VALIDATION OPERATIONS HUB</h1>
-            <p id="site-subheadline" class="text-xs md:text-sm text-gray-400 font-medium">Proactive On-Site Engineering Evaluation and HQ Escalation Diagnostics Tracking</p>
+            <p id="site-subheadline" class="text-xs md:text-sm text-gray-400 font-medium tracking-normal">Proactive On-Site Engineering Evaluation and HQ Escalation Diagnostics Tracking</p>
         </header>
 
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-[#112240] p-5 rounded-xl border border-[#233554]">
-                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Total Fleet Products</p>
+            <div class="custom-card p-5 rounded-xl">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Fleet Products</p>
                 <h3 id="stat-total-fleet" class="text-3xl font-extrabold text-white">0</h3>
             </div>
-            <div class="bg-[#112240] p-5 rounded-xl border border-[#233554]">
-                <p class="text-xs font-bold text-emerald-400 uppercase mb-1">Total Products Tested</p>
+            <div class="custom-card p-5 rounded-xl">
+                <p class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">Total Products Tested</p>
                 <h3 id="stat-total-tested" class="text-3xl font-extrabold text-emerald-400">0</h3>
-                <span class="text-[10px] text-gray-500 block">Excludes "To Be Tested" rows</span>
+                <span class="text-[10px] text-gray-500 block mt-0.5">Excludes "To Be Tested" lines</span>
             </div>
-            <div class="bg-[#112240] p-5 rounded-xl border border-[#233554]">
-                <p class="text-xs font-bold text-amber-400 uppercase mb-1">Aggregated Lab Issues</p>
+            <div class="custom-card p-5 rounded-xl">
+                <p class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Aggregated Lab Issues</p>
                 <h3 id="stat-total-issues" class="text-3xl font-extrabold text-amber-400">0</h3>
             </div>
-            <div class="bg-[#112240] p-5 rounded-xl border border-[#233554]">
-                <p class="text-xs font-bold text-blue-400 uppercase mb-1">Verified Pass Cases (OK)</p>
+            <div class="custom-card p-5 rounded-xl">
+                <p class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">Verified Pass Cases (OK)</p>
                 <h3 id="stat-total-ok" class="text-3xl font-extrabold text-blue-400">0</h3>
             </div>
         </section>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            <div class="bg-[#112240] p-6 rounded-xl border border-[#233554] h-fit">
-                <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-magnifying-glass text-amber-500 mr-2"></i>Targeted Inspection Desk</h2>
-                <select id="product-selector" onchange="renderSelectedProduct()" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2.5 text-white focus:outline-none mb-6"></select>
+            
+            <div class="custom-card p-6 rounded-xl h-fit">
+                <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-magnifying-glass text-amber-500 mr-2"></i>Targeted Device Inspection Desk</h2>
+                
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Select Active Product Profile:</label>
+                <select id="product-selector" onchange="renderSelectedProduct()" class="w-full bg-[#0A192F] border border #233554 rounded p-2.5 text-white font-medium focus:outline-none mb-6">
+                    </select>
 
                 <div class="space-y-4">
-                    <div class="bg-[#0A192F] p-3.5 rounded border border-[#233554]">
-                        <span class="text-[11px] font-bold text-gray-400 block uppercase">Field Evaluation Window</span>
+                    <div class="inner-vault p-3.5 rounded">
+                        <span class="text-[11px] font-bold text-gray-400 block uppercase mb-1">Field Evaluation Window</span>
                         <p id="meta-window" class="text-sm font-semibold text-white">N/A</p>
                     </div>
-                    <div class="bg-[#0A192F] p-3.5 rounded border border-[#233554]">
-                        <span class="text-[11px] font-bold text-emerald-400 block uppercase">Baseline Pass Cases (OK)</span>
+                    <div class="inner-vault p-3.5 rounded">
+                        <span class="text-[11px] font-bold text-emerald-400 block uppercase mb-1">Baseline Functional Pass Cases (OK)</span>
                         <p id="meta-ok" class="text-sm font-semibold text-emerald-400">0</p>
                     </div>
-                    <div class="bg-[#0A192F] p-3.5 rounded border border-[#233554]">
-                        <span class="text-[11px] font-bold text-amber-400 block uppercase">Script Tracking Status</span>
-                        <p id="meta-script" class="text-sm font-bold mt-1 text-white">Pending</p>
+                    <div class="inner-vault p-3.5 rounded">
+                        <span class="text-[11px] font-bold text-amber-400 block uppercase mb-1">Script Tracking Status</span>
+                        <div id="meta-script" class="text-sm font-bold mt-1 text-white">Pending</div>
                     </div>
-                    <div class="bg-[#0A192F] p-3.5 rounded border border-[#233554]">
-                        <span class="text-[11px] font-bold text-blue-400 block uppercase">Testing Evaluation Status</span>
-                        <p id="meta-testing" class="text-sm font-bold mt-1 text-white">To Be Tested</p>
+                    <div class="inner-vault p-3.5 rounded">
+                        <span class="text-[11px] font-bold text-blue-400 block uppercase mb-1">Testing Evaluation Status</span>
+                        <div id="meta-testing" class="text-sm font-bold mt-1 text-white">To Be Tested</div>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-[#112240] p-6 rounded-xl border border-[#233554] lg:col-span-2">
+            <div class="custom-card p-6 rounded-xl lg:col-span-2">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-bold text-white"><i class="fa-solid fa-list-check text-amber-500 mr-2"></i>Captured Issues Matrix Log</h2>
                     <span id="issue-badge-count" class="bg-amber-500/10 text-amber-400 font-bold px-2.5 py-1 text-xs rounded-full border border-amber-500/20">0 Issues</span>
                 </div>
-                <div class="overflow-x-auto w-full mb-6">
-                    <table class="w-full text-left text-xs">
+
+                <div class="overflow-x-auto w-full mb-6 rounded border border-[#233554]">
+                    <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="bg-[#0A192F] text-gray-400 border-b border-[#233554]">
+                            <tr class="bg-[#0A192F] text-gray-400 uppercase font-bold border-b border-[#233554]">
                                 <th class="p-3">Issue Title Flag</th>
                                 <th class="p-3">Reported Date</th>
-                                <th class="p-3 text-center">Status</th>
+                                <th class="p-3 text-center">Status Feedback</th>
                             </tr>
                         </thead>
-                        <tbody id="issues-table-body"></tbody>
+                        <tbody id="issues-table-body">
+                            </tbody>
                     </table>
                 </div>
-                <h3 class="text-sm font-bold text-white mb-3">🔎 View Granular Root Cause Logs</h3>
-                <div id="granular-logs-container" class="space-y-4 max-h-[380px] overflow-y-auto pr-2"></div>
+
+                <h3 class="text-sm font-bold text-white mb-3">🔎 View Granular Root Cause & Action Logs</h3>
+                <div id="granular-logs-container" class="space-y-4 max-h-[380px] overflow-y-auto pr-2">
+                    </div>
             </div>
         </main>
 
-        <section class="bg-[#112240] p-6 rounded-xl border border-[#233554] mb-8">
+        <section class="custom-card p-6 rounded-xl mb-8">
             <h2 class="text-lg font-bold text-white mb-2"><i class="fa-solid fa-table-list text-amber-500 mr-2"></i>Multi-Product Verification Checklist Matrix</h2>
+            <p class="text-xs text-gray-400 mb-6">Click any functional category heading row to instantly expand the tested verification scenarios across each active device line.</p>
             <div class="space-y-4" id="checklist-accordion-wrapper"></div>
         </section>
 
-        <section id="admin-control-suite" class="bg-[#172A45] p-6 rounded-xl border-2 border-amber-500/30 mb-12 hidden">
-            <div class="border-b border-[#233554] pb-3 mb-6">
-                <h2 class="text-xl font-black text-amber-400 uppercase"><i class="fa-solid fa-screwdriver-wrench mr-2"></i>Admin Engineering Controls</h2>
+        <footer class="custom-card p-6 rounded-xl text-center mb-12">
+            <h2 class="text-base font-bold text-white mb-2">📥 Professional Executive Report Generator</h2>
+            <p class="text-xs text-gray-400 mb-4">Print formatted summary layouts directly to standard PDF or hard copies.</p>
+            <button onclick="window.print()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs px-6 py-3 rounded shadow transition-colors cursor-pointer">
+                <i class="fa-solid fa-print mr-2"></i> Print Dashboard Sheet to PDF
+            </button>
+        </footer>
+
+        <section id="admin-control-suite" class="bg-[#172A45] p-6 rounded-xl border-2 border-amber-500/40 shadow-xl mb-12 hidden">
+            <div class="border-b border-[#233554] pb-3 mb-6 flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-black text-amber-400 tracking-wide uppercase"><i class="fa-solid fa-screwdriver-wrench mr-2"></i>Engineering Admin Control Suite</h2>
+                    <p class="text-xs text-gray-400">Add new items, remove old columns, and edit everything live directly inside your Google Spreadsheet.</p>
+                </div>
+                <span class="bg-amber-500 text-slate-900 text-xs font-black px-3 py-1 rounded uppercase">Authorized Master Control Mode</span>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-[#112240] p-4 rounded border border-[#233554]">
-                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3">Deploy New Product Profile</h3>
-                    <div class="space-y-3">
-                        <input type="text" id="new-prod-name" placeholder="Device Name" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                        <input type="text" id="new-prod-window" value="4 Weeks" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                        <input type="number" id="new-prod-ok" value="50" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                        <select id="new-prod-script" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                            <option value="Pending">Pending</option>
-                            <option value="Completed & Uploaded">Completed & Uploaded</option>
-                        </select>
-                        <select id="new-prod-testing" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                            <option value="To Be Tested">To Be Tested</option>
-                            <option value="Tested">Tested</option>
-                        </select>
-                        <button onclick="addNewProduct()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs p-2 rounded cursor-pointer">Commit Product</button>
-                    </div>
-                </div>
 
-                <div class="bg-[#112240] p-4 rounded border border-[#233554]">
-                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3">Modify Parameters / Delete</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <div class="custom-card p-5 rounded-lg">
+                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3"><i class="fa-solid fa-plus text-emerald-500 mr-2"></i>Deploy New Product Line Profile</h3>
                     <div class="space-y-3">
-                        <select id="edit-prod-selector" onchange="populateEditProductForm()" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white"></select>
-                        <input type="text" id="edit-prod-window" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                        <input type="number" id="edit-prod-ok" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                        <select id="edit-prod-script" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                            <option value="Pending">Pending</option>
-                            <option value="Completed & Uploaded">Completed & Uploaded</option>
-                        </select>
-                        <select id="edit-prod-testing" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                            <option value="To Be Tested">To Be Tested</option>
-                            <option value="Tested">Tested</option>
-                        </select>
-                        <div class="flex gap-2">
-                            <button onclick="deleteProductProfile()" class="w-1/2 bg-red-900 hover:bg-red-800 text-white font-bold text-xs p-2 rounded cursor-pointer">Remove Entire Profile</button>
-                            <button onclick="updateExistingProduct()" class="w-1/2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs p-2 rounded cursor-pointer">Update Settings</button>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Device Product Name</label>
+                                <input type="text" id="new-prod-name" placeholder="e.g., Nova 16 Ultra" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Validation Window</label>
+                                <input type="text" id="new-prod-window" value="4 Weeks" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            </div>
                         </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">OK Pass Cases</label>
+                                <input type="number" id="new-prod-ok" value="50" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Script Tracking</label>
+                                <select id="new-prod-script" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Completed & Uploaded">Completed & Uploaded</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Testing Status</label>
+                                <select id="new-prod-testing" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                                    <option value="To Be Tested">To Be Tested</option>
+                                    <option value="Tested">Tested</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="addNewProduct()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs p-2.5 rounded cursor-pointer transition-colors">Deploy Device to Live Fleet</button>
                     </div>
                 </div>
 
-                <div class="bg-[#112240] p-4 rounded border border-[#233554] md:col-span-2">
-                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3">Log Technical Field Anomaly</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <select id="issue-target-prod" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white"></select>
-                        <input type="text" id="issue-title" placeholder="Issue Title Summary" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white col-span-2">
-                        <textarea id="issue-detail" placeholder="Granular Narrative Description" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white col-span-3 h-16"></textarea>
-                        <input type="text" id="issue-tse" placeholder="TSE Escalation Action Log" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                        <input type="text" id="issue-hq" placeholder="HQ Action Feedback Log" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                        <select id="issue-status" class="bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
-                            <option value="Pending">Pending</option>
-                            <option value="Solved">Solved</option>
-                            <option value="Closed">Closed</option>
-                        </select>
-                        <button onclick="submitNewIssueLog()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs p-2 rounded cursor-pointer col-span-3">Commit Issue Row Context</button>
+                <div class="custom-card p-5 rounded-lg">
+                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3"><i class="fa-solid fa-arrows-spin text-blue-500 mr-2"></i>Modify / Remove Existing Product</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Select Target Product Profile</label>
+                            <select id="edit-prod-selector" onchange="populateEditProductForm()" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white"></select>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Validation Window</label>
+                                <input type="text" id="edit-prod-window" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Script Tracking</label>
+                                <select id="edit-prod-script" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Completed & Uploaded">Completed & Uploaded</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Testing Status</label>
+                                <select id="edit-prod-testing" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                                    <option value="To Be Tested">To Be Tested</option>
+                                    <option value="Tested">Tested</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">OK Pass Cases</label>
+                                <input type="number" id="edit-prod-ok" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                            </div>
+                            <div class="flex items-end">
+                                <button onclick="deleteProductProfile()" class="w-full bg-red-900 hover:bg-red-800 text-white font-bold text-xs p-2 rounded cursor-pointer transition-colors"><i class="fa-solid fa-trash mr-1"></i> Remove Profile</button>
+                            </div>
+                        </div>
+                        <button onclick="updateExistingProduct()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs p-2.5 rounded cursor-pointer transition-colors">Commit Tracking Status Updates</button>
                     </div>
                 </div>
+
+                <div class="custom-card p-5 rounded-lg lg:col-span-2">
+                    <h3 class="text-sm font-bold text-white border-b border-[#233554] pb-2 mb-3"><i class="fa-solid fa-bug text-amber-500 mr-2"></i>Log & Append Technical Field Issue Record</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Target Product Line</label>
+                            <select id="issue-target-prod" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white"></select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Defect Title Headline</label>
+                            <input type="text" id="issue-title" placeholder="Summary Headline Flag" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        </div>
+                        <div class="md:col-span-3">
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Detailed Diagnostic Narrative</label>
+                            <textarea id="issue-detail" rows="2" placeholder="Describe background field error metrics narrative details..." class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">TSE Regional Response Action</label>
+                            <input type="text" id="issue-tse" placeholder="WeCare Ticket Node" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">HQ Core Reply Feedback</label>
+                            <input type="text" id="issue-hq" placeholder="R&D Task ID Resolution Log" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Sign-off Status</label>
+                            <select id="issue-status" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white">
+                                <option value="Pending">Pending</option>
+                                <option value="Solved">Solved</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+                        <button onclick="submitNewIssueLog()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs p-2.5 rounded cursor-pointer col-span-3 transition-colors">Commit Field Log Record</button>
+                    </div>
+                </div>
+
             </div>
         </section>
     </div>
 
-    <div id="admin-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex justify-center items-center p-4">
-        <div class="bg-[#112240] p-6 rounded-xl border border-[#233554] max-w-sm w-full">
-            <h3 class="text-base font-bold text-white mb-2">Admin Sign-in</h3>
-            <input type="password" id="admin-passkey" placeholder="Enter Admin Passkey" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2 text-xs text-white text-center mb-4 focus:outline-none">
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex justify-center items-center p-4">
+        <div class="custom-card p-6 rounded-xl max-w-sm w-full">
+            <h3 class="text-base font-bold text-white mb-2"><i class="fa-solid fa-lock text-amber-500 mr-2"></i>Authenticate Admin Privileges</h3>
+            <p class="text-xs text-gray-400 mb-4">Enter administrative secondary authorization key to unlock management layout fields blocks.</p>
+            <input type="password" id="admin-passkey" placeholder="Enter Admin Passkey" class="w-full bg-[#0A192F] border border-[#233554] rounded p-2.5 text-xs text-white text-center mb-4 focus:outline-none focus:border-amber-500">
             <div class="flex gap-2">
-                <button onclick="closeAdminModal()" class="w-1/2 bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs p-2 rounded">Cancel</button>
-                <button onclick="unlockAdminSuite()" class="w-1/2 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs p-2 rounded">Verify</button>
+                <button onclick="closeAdminModal()" class="w-1/2 bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs p-2 rounded cursor-pointer">Cancel</button>
+                <button onclick="unlockAdminSuite()" class="w-1/2 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs p-2 rounded cursor-pointer">Verify</button>
             </div>
-            <p id="admin-error" class="text-red-500 text-xs mt-2 text-center hidden">Access denied.</p>
+            <p id="admin-error" class="text-red-500 text-xs mt-2 text-center hidden">Access denied. Invalid credentials.</p>
         </div>
     </div>
 
     <script>
-        // 🔗 HARDCODED ALIGNED GOOGLE APPS SCRIPT WEB APP API URL
+        // Synchronized Google Web App Executable Gateway URL Mapping Node 
         const API_URL = "https://script.google.com/macros/s/AKfycbx5Ukzqm9CCY-TYO9Ns2dA5gskNrYYhKfRm96JHwmcjUnEC3EYIX6CnOcgGN-E8G1kmTA/exec";
         
         const PORTAL_PASSKEY = "CairoTSE2026";
         const ADMIN_PASSKEY = "TSEAdmin2026";
 
         let db = {};
+        
         const checklist_db = {
-            "Sales Product scripts": {"Mate 80 Pro": "✓ Available", "Matepad Pro Max": "✓ Available", "Watch Kids X1 Pro": "✓ Available", "Watch Fit 5 Series": "✓ Available", "Nova 15 Max": "✓ Available"},
+            "Sales Product scripts": {
+                "Mate 80 Pro": "✓ Available", "Matepad Pro Max": "✓ Available", "Watch Kids X1 Pro": "✓ Available", "Watch Fit 5 Series": "✓ Available", "Nova 15 Max": "✓ Available"
+            },
             "Key Functions": {
                 "Mate 80 Pro": "1. Android Auto Installation Guide (en-us16002773)\n2. Overheating during heavy usage (1 Hours).\n3. Ai Composition Feature in Camera.\n4. Ai features for the device (en-us16086415).\n5. Speaker Sound Quality.\n6. Battery Draining fast in normal use.",
                 "Nova 15 Max": "1. Android Auto installation Guide. (en-us16002773)\n2. Overheating during heavy Usage (For 1 Hours).\n3. Ai Composition Feature in Camera.\n4. X-Button functions and adding apps to easy access\n5. Speaker Stereo Sound Quality.\n6. Battery Draining fast in normal use."
@@ -215,6 +302,7 @@
             }
         };
 
+        // Fallback default structure arrays if Google Cloud gives empty result context matrix row 
         const FALLBACK_DB = {
             "Nova 15 Max": { "test_period": "4 Weeks", "test_ok": 60, "script_tracking": "Completed & Uploaded", "testing_status": "Tested", "issues": [] },
             "Mate 80 Pro": { "test_period": "4 Weeks", "test_ok": 62, "script_tracking": "Completed & Uploaded", "testing_status": "Tested", "issues": [] }
@@ -225,6 +313,7 @@
             renderChecklistMatrix();
         };
 
+        // 📥 READ LIFECYCLE SYNC PIPELINE FROM GOOGLE SHEET
         function fetchLiveDatabase() {
             showLoading(true);
             fetch(API_URL)
@@ -249,6 +338,7 @@
                 });
         }
 
+        // 📤 WRITE LIFECYCLE TRANSACTION PIPELINE POST TO GOOGLE SHEET
         function commitDatabaseToSheet() {
             showLoading(true);
             fetch(API_URL, {
@@ -258,6 +348,7 @@
                 body: JSON.stringify(db)
             })
             .then(() => {
+                // Wait for background execution rows array parsing synchronization inside Google cloud cells
                 setTimeout(() => { fetchLiveDatabase(); }, 1200);
             })
             .catch(() => {
@@ -341,11 +432,16 @@
                         <td class="p-3 text-center"><span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/10 text-amber-400">${iss.status}</span></td>
                     </tr>`;
                 logsContainer.innerHTML += `
-                    <div class="bg-[#0A192F] p-4 rounded border border-[#233554]">
-                        <h4 class="text-xs font-bold text-white mb-1">${index+1}. ${iss.issue}</h4>
-                        <p class="text-xs text-gray-400">${iss.detail}</p>
-                        <p class="text-xs text-orange-400 mt-1">Action: ${iss.tse_action}</p>
-                        <p class="text-xs text-blue-400">HQ: ${iss.hq_action}</p>
+                    <div class="inner-vault p-4 rounded shadow-md border border-[#233554]/60">
+                        <h4 class="text-xs font-bold text-white mb-2 flex justify-between items-center">
+                            <span>${index+1}. ${iss.issue}</span>
+                            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded ${iss.status==='Solved'?'bg-emerald-500/10 text-emerald-400':'bg-amber-500/10 text-amber-400'}">${iss.status}</span>
+                        </h4>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-2"><span class="font-bold text-gray-300">Field Narrative Context:</span> ${iss.detail}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] border-t border-[#233554]/40 pt-2">
+                            <p class="text-orange-400"><span class="font-bold text-gray-400">TSE Action Log:</span> ${iss.tse_action}</p>
+                            <p class="text-blue-400"><span class="font-bold text-gray-400">HQ Technical Feedback:</span> ${iss.hq_action}</p>
+                        </div>
                     </div>`;
             });
         }
@@ -358,7 +454,7 @@
                 Object.keys(checklist_db[cat]).forEach(p => {
                     grid += `<div class="bg-[#0A192F] p-3 rounded border border-[#233554]"><h4 class="text-xs font-bold text-amber-400 border-b border-[#233554] pb-1 mb-1">${p}</h4><p class="text-[11px] whitespace-pre-line">${checklist_db[cat][p]}</p></div>`;
                 });
-                container.innerHTML += `<div class="border border-[#233554] rounded-lg overflow-hidden"><button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full bg-[#172A45] text-left p-3 text-xs font-bold text-white flex justify-between"><span>${cat}</span><i class="fa-solid fa-chevron-down"></i></button><div class="hidden p-4 bg-[#112240] grid grid-cols-1 md:grid-cols-2 gap-3">${grid}</div></div>`;
+                container.innerHTML += `<div class="border border-[#233554] rounded-lg overflow-hidden"><button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full bg-[#172A45] hover:bg-[#233554] text-left p-3.5 text-xs font-bold text-white flex justify-between cursor-pointer transition-colors"><span><i class="fa-solid fa-folder mr-2 text-amber-500"></i>${cat}</span><i class="fa-solid fa-chevron-down"></i></button><div class="hidden p-4 bg-[#112240] grid grid-cols-1 md:grid-cols-2 gap-3">${grid}</div></div>`;
             });
         }
 
@@ -398,7 +494,7 @@
         function deleteProductProfile() {
             const p = document.getElementById('edit-prod-selector').value;
             if(!p) return;
-            if(confirm(`Delete ${p}?`)) {
+            if(confirm(`Delete entire product row context mapping for ${p}?`)) {
                 delete db[p];
                 commitDatabaseToSheet();
             }
@@ -420,6 +516,8 @@
             commitDatabaseToSheet();
             document.getElementById('issue-title').value = "";
             document.getElementById('issue-detail').value = "";
+            document.getElementById('issue-tse').value = "";
+            document.getElementById('issue-hq').value = "";
         }
     </script>
 </body>
