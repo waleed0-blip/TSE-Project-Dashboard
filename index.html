@@ -669,19 +669,19 @@
 
         let bodyHTML = `
             <tr>
-                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('script')">Sales Product Scripts 🔍</td>
+                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('script')">Sales Product Scripts</td>
                 ${Object.keys(activeStateDataset).map(id => `<td style="text-align:center;"><span id="m-script-${id}" class="status-badge-inline status-${activeStateDataset[id].script}">${activeStateDataset[id].script === 'done' ? '✓ DONE' : activeStateDataset[id].script.toUpperCase()}</span></td>`).join('')}
             </tr>
             <tr>
-                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('key')">Key Functions 🔍</td>
+                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('key')">Key Functions</td>
                 ${Object.keys(activeStateDataset).map(id => `<td style="text-align:center;"><span id="badge-key-${id}" class="status-badge-inline status-pending">PENDING</span></td>`).join('')}
             </tr>
             <tr>
-                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('app')">Common Apps 🔍</td>
+                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('app')">Common Apps</td>
                 ${Object.keys(activeStateDataset).map(id => `<td style="text-align:center;"><span id="badge-app-${id}" class="status-badge-inline status-pending">PENDING</span></td>`).join('')}
             </tr>
             <tr>
-                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('prev')">Previous Series Issues 🔍</td>
+                <td class="clickable-cell-trigger" onclick="scrollToSectionBlock('prev')">Previous Series Issues</td>
                 ${Object.keys(activeStateDataset).map(id => `<td style="text-align:center;"><span id="badge-prev-${id}" class="status-badge-inline status-pending">PENDING</span></td>`).join('')}
             </tr>
         `;
