@@ -525,6 +525,7 @@
         }
     }
 
+    // FIXED: Prevented startup login from auto-committing local storage to Google Apps Script
     function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
         if (inputVal === SITE_ENTRY_PASSWORD) {
@@ -556,8 +557,6 @@
                         }
                     }
                 });
-                commitData('checklist'); 
-
             } else {
                 activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
             }
@@ -572,6 +571,7 @@
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
 
+            // Fetch live Cloud truth and immediately render
             fetchCloudState().then(() => {
                 applyHeadlineStateToDOM();
                 rebuildSummaryTableMarkupStructures();
@@ -1178,12 +1178,12 @@
         else if (format === 'ppt') { generateComprehensivePresentationDeck(); }
     }
 
-    // FIXED: Cloud State Fetcher updated to bust mobile browser caching
+    // Direct Cloud Fetch with Cache-Busting
     async function fetchCloudState() {
-        if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
+        if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
         try {
             let cacheBustUrl = CLOUD_DATABASE_URL + (CLOUD_DATABASE_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
-            let res = await fetch(cacheBustUrl, { cache: "no-store" });
+            let res = await fetch(cacheBustUrl, { cache: "no-store", headers: { "Cache-Control": "no-cache" } });
             let json = await res.json();
             if(json.status === "success" && json.data) {
                 if(json.data.checklist && Object.keys(json.data.checklist).length > 0) {
@@ -1203,7 +1203,7 @@
     }
 
     async function syncCloudChannel(type, payloadData) {
-        if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
+        if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
         try {
             await fetch(CLOUD_DATABASE_URL, {
                 method: "POST", headers: { "Content-Type": "text/plain" },
