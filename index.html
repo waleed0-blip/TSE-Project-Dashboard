@@ -232,7 +232,7 @@
         <h2>🔒 Security Portal</h2>
         <p>Restricted Strategy Review Area. Authenticate to proceed.</p>
         <input type="password" id="masterGateKeyInput" class="auth-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') handleMasterAuthCheck()">
-        <button class="auth-submit-btn" onclick="handleMasterAuthCheck()">Authorize Access</button>
+        <button class="auth-submit-btn" id="authSubmitBtn" onclick="handleMasterAuthCheck()">Authorize Access</button>
         <div id="authErrorNode" class="error-message">✕ Invalid credential token.</div>
     </div>
 </div>
@@ -359,7 +359,6 @@
     const SITE_ENTRY_PASSWORD = "TseProject1234"; 
     const ADMIN_EDIT_PASSWORD = "TSE2026";       
     
-    // UPDATED WEB APP URL
     const CLOUD_DATABASE_URL = "https://script.google.com/macros/s/AKfycbzG5DsGlmVSq8LAVFM1Ow5apDthC2YhimnoRFvljw-M6WleCBj-AgVkfvwuQhdvF9Wxkw/exec"; 
 
     let editMode = false;
@@ -493,7 +492,7 @@
         { model: "FreeBuds Pro 5", issue: "Acoustic performance leaks noticeable noise signals when operating at top 3 high volume levels", date: "2026-03", ref: "TM202603160216", action: "Expected fit threshold design. Users guided to choose a larger pair of ear tips and run fit test en-us15767422", status: "SOLVED" },
         { model: "FreeBuds Pro 5", issue: "Huawei Sound parameters fail to activate when connected to legacy P30 Pro system profiles", date: "2026-04", ref: "TM202604260121", action: "HQ development core teams still analyzing raw audio package translation logs", status: "PENDING" },
         { model: "FreeBuds Pro 5", issue: "Personalized prompt creation capabilities completely hidden inside global region accounts", date: "2026-06", ref: "TM6202606150132", action: "Feature restricted inside China mainland servers. Custom standalone global region FAQ has been requested", status: "SOLVED" },
-        { model: "FreeBuds Pro 5", issue: "Broadcast signaling packets trigger random pairing popup box layers on third-party POCO X3", date: "2026-06", ref: "TM6202606150134", action: "Derived from custom host phone background OS power policy rules. Basic earphone operations completely unhindered", status: "SOLVED" },
+        { model: "FreeBuds Pro 5", issue: "Broadcast signaling packets trigger random pairing popup box layers on third-party POCO X3", date: "2026-06", ref: "TM202606150134", action: "Derived from custom host phone background OS power policy rules. Basic earphone operations completely unhindered", status: "SOLVED" },
         { model: "FreeBuds Pro 5", issue: "Equalizer curve frequency tuning shifts show no real audible differences upon minimal adjustments", date: "2026-03", ref: "Internal Brief", action: "Validation profiling tests ongoing to trace systemic filter metrics across target legacy accessories", status: "PENDING" },
         { model: "Matepad Mini", issue: "Surface glass screen panel traps fingerprints and skin oils noticeably more than standard panels", date: "2026-04", ref: "WeLink Core", action: "Expected structural artifact of anti-glare PaperMatte micro-nano glass texturing processes", status: "SOLVED" },
         { model: "Matepad Mini", issue: "Real-time AI handwriting adjustment capabilities require explicit rollout definitions inside Notes App", date: "2026-04", ref: "TM202604140241", action: "Feature limited to specific tablet lines. Notes app upgrade to 12.4.0.195 or higher forced", status: "SOLVED" },
@@ -526,57 +525,38 @@
         }
     }
 
-    function handleMasterAuthCheck() {
+    // MANDATORY CLOUD-FIRST FETCH
+    async function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
         if (inputVal === SITE_ENTRY_PASSWORD) {
-            document.getElementById('masterAuthShield').style.display = 'none';
-            document.getElementById('captureArea').style.display = 'block'; 
-            
-            let localChecklist = localStorage.getItem('tse_checklist_data');
-            let localIncidents = localStorage.getItem('tse_incidents_data');
-            let localHeadlines = localStorage.getItem('tse_headlines_data');
-            
-            if(localChecklist) {
-                activeStateDataset = JSON.parse(localChecklist);
-                
-                const correctSubCats = {
-                    "Nova 15 Max": { cat: "Smartphones", sub: "Nova Series" },
-                    "Mate 80 Pro": { cat: "Smartphones", sub: "Mate Series" },
-                    "FreeBuds Pro 5": { cat: "Audio", sub: "TWS Earbuds" },
-                    "Matepad Mini": { cat: "Tablets", sub: "MatePad Series" },
-                    "GT Runner 2": { cat: "Wearables", sub: "Smartwatches" }
-                };
-                Object.keys(activeStateDataset).forEach(key => {
-                    let t = activeStateDataset[key].title;
-                    if (correctSubCats[t]) {
-                        if (!activeStateDataset[key].category || activeStateDataset[key].category === "Other Devices") {
-                            activeStateDataset[key].category = correctSubCats[t].cat;
-                        }
-                        if (!activeStateDataset[key].subCategory || activeStateDataset[key].subCategory === "General") {
-                            activeStateDataset[key].subCategory = correctSubCats[t].sub;
-                        }
-                    }
-                });
-            } else {
-                activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+            const btn = document.getElementById('authSubmitBtn');
+            btn.innerText = "Syncing Live Data...";
+            btn.disabled = true;
+
+            // Load baseline memory
+            activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+            incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
+
+            // Force fresh Cloud sync first
+            let fetchSuccess = await fetchCloudState();
+
+            // Only fallback to LocalStorage if completely offline/failed
+            if (!fetchSuccess) {
+                let localChecklist = localStorage.getItem('tse_checklist_data');
+                let localIncidents = localStorage.getItem('tse_incidents_data');
+                let localHeadlines = localStorage.getItem('tse_headlines_data');
+                if (localChecklist) activeStateDataset = JSON.parse(localChecklist);
+                if (localIncidents) incidentLogDataset = JSON.parse(localIncidents);
+                if (localHeadlines) globalHeadlinesDataset = JSON.parse(localHeadlines);
             }
 
-            if(localIncidents) incidentLogDataset = JSON.parse(localIncidents);
-            else if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
-
-            if(localHeadlines) globalHeadlinesDataset = JSON.parse(localHeadlines);
+            document.getElementById('masterAuthShield').style.display = 'none';
+            document.getElementById('captureArea').style.display = 'block'; 
 
             applyHeadlineStateToDOM();
             rebuildSummaryTableMarkupStructures();
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
-
-            fetchCloudState().then(() => {
-                applyHeadlineStateToDOM();
-                rebuildSummaryTableMarkupStructures();
-                renderMatrixDashboardGrid();
-                calculateDynamicKPIs();
-            });
         } else {
             document.getElementById('authErrorNode').style.display = 'block';
             document.getElementById('masterGateKeyInput').value = '';
@@ -1177,11 +1157,17 @@
         else if (format === 'ppt') { generateComprehensivePresentationDeck(); }
     }
 
+    // Direct Cloud Fetch with Cache-Busting + CORS Follow
     async function fetchCloudState() {
-        if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
+        if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL.includes("PASTE_YOUR")) return false;
         try {
             let cacheBustUrl = CLOUD_DATABASE_URL + (CLOUD_DATABASE_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
-            let res = await fetch(cacheBustUrl, { cache: "no-store", headers: { "Cache-Control": "no-cache" } });
+            let res = await fetch(cacheBustUrl, { 
+                method: 'GET',
+                mode: 'cors',
+                redirect: 'follow',
+                cache: 'no-store'
+            });
             let json = await res.json();
             if(json.status === "success" && json.data) {
                 if(json.data.checklist && Object.keys(json.data.checklist).length > 0) {
@@ -1196,15 +1182,20 @@
                     globalHeadlinesDataset = json.data.headlines;
                     localStorage.setItem('tse_headlines_data', JSON.stringify(globalHeadlinesDataset));
                 }
+                return true;
             }
         } catch(e) { console.log("Cloud Read Error:", e); }
+        return false;
     }
 
     async function syncCloudChannel(type, payloadData) {
-        if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
+        if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL.includes("PASTE_YOUR")) return;
         try {
             await fetch(CLOUD_DATABASE_URL, {
-                method: "POST", headers: { "Content-Type": "text/plain" },
+                method: "POST",
+                mode: "cors",
+                redirect: "follow",
+                headers: { "Content-Type": "text/plain" },
                 body: JSON.stringify({ dataType: type, payload: payloadData })
             });
         } catch(e) { console.log("Cloud Push Error:", e); }
@@ -1269,7 +1260,7 @@
         pptx.writeFile({ fileName: 'Operations_Strategic_Checklist_Review' });
     }
 
-    function triggerNativeDownload(url, filename) { const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); }
+    function triggerNativeDownload(url, filename) { const a = document.getElementById('exportGoBtn'); const link = document.createElement('a'); link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove(); }
 </script>
 </body>
 </html>
