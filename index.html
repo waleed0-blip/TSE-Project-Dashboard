@@ -142,6 +142,7 @@
 
         .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; gap: 20px; flex-wrap: wrap; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); padding: 18px 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid rgba(226, 232, 240, 0.8); }
         
+        /* Modified styling block: tabs hide dynamically until unlocked */
         .tabs { display: none; gap: 8px; flex-wrap: wrap; background: #f1f5f9; padding: 6px; border-radius: 14px; }
         .admin-unlocked .tabs { display: flex; }
         
@@ -220,6 +221,7 @@
 
         .circle-gauge-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 30px 0; }
         
+        /* Chart wrapper enhanced with semantic hover cursors for tooltips */
         .circle-gauge-container { position: relative; width: 190px; height: 190px; border-radius: 50%; background: conic-gradient(var(--success-color) 0%, #e2e8f0 0%); display: flex; align-items: center; justify-content: center; transition: all 0.4s ease; box-shadow: var(--shadow-md); cursor: help; }
         .circle-gauge-container::before { content: ''; position: absolute; width: 140px; height: 140px; background-color: white; border-radius: 50%; }
         .circle-gauge-value { position: relative; font-size: 2.2rem; font-weight: 800; color: var(--primary-color); letter-spacing: -1px; }
@@ -232,7 +234,7 @@
         <h2>🔒 Security Portal</h2>
         <p>Restricted Strategy Review Area. Authenticate to proceed.</p>
         <input type="password" id="masterGateKeyInput" class="auth-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') handleMasterAuthCheck()">
-        <button class="auth-submit-btn" id="authSubmitBtn" onclick="handleMasterAuthCheck()">Authorize Access</button>
+        <button class="auth-submit-btn" onclick="handleMasterAuthCheck()">Authorize Access</button>
         <div id="authErrorNode" class="error-message">✕ Invalid credential token.</div>
     </div>
 </div>
@@ -525,34 +527,59 @@
         }
     }
 
-    async function handleMasterAuthCheck() {
+    function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
         if (inputVal === SITE_ENTRY_PASSWORD) {
-            const btn = document.getElementById('authSubmitBtn');
-            btn.innerText = "Syncing Live Data...";
-            btn.disabled = true;
-
-            activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
-            incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
-
-            let fetchSuccess = await fetchCloudState();
-
-            if (!fetchSuccess) {
-                let localChecklist = localStorage.getItem('tse_checklist_data');
-                let localIncidents = localStorage.getItem('tse_incidents_data');
-                let localHeadlines = localStorage.getItem('tse_headlines_data');
-                if (localChecklist) activeStateDataset = JSON.parse(localChecklist);
-                if (localIncidents) incidentLogDataset = JSON.parse(localIncidents);
-                if (localHeadlines) globalHeadlinesDataset = JSON.parse(localHeadlines);
-            }
-
             document.getElementById('masterAuthShield').style.display = 'none';
             document.getElementById('captureArea').style.display = 'block'; 
+            
+            let localChecklist = localStorage.getItem('tse_checklist_data');
+            let localIncidents = localStorage.getItem('tse_incidents_data');
+            let localHeadlines = localStorage.getItem('tse_headlines_data');
+            
+            if(localChecklist) {
+                activeStateDataset = JSON.parse(localChecklist);
+                
+                const correctSubCats = {
+                    "Nova 15 Max": { cat: "Smartphones", sub: "Nova Series" },
+                    "Mate 80 Pro": { cat: "Smartphones", sub: "Mate Series" },
+                    "FreeBuds Pro 5": { cat: "Audio", sub: "TWS Earbuds" },
+                    "Matepad Mini": { cat: "Tablets", sub: "MatePad Series" },
+                    "GT Runner 2": { cat: "Wearables", sub: "Smartwatches" }
+                };
+                Object.keys(activeStateDataset).forEach(key => {
+                    let t = activeStateDataset[key].title;
+                    if (correctSubCats[t]) {
+                        if (!activeStateDataset[key].category || activeStateDataset[key].category === "Other Devices") {
+                            activeStateDataset[key].category = correctSubCats[t].cat;
+                        }
+                        if (!activeStateDataset[key].subCategory || activeStateDataset[key].subCategory === "General") {
+                            activeStateDataset[key].subCategory = correctSubCats[t].sub;
+                        }
+                    }
+                });
+                commitData('checklist'); 
+
+            } else {
+                activeStateDataset = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_DATA));
+            }
+
+            if(localIncidents) incidentLogDataset = JSON.parse(localIncidents);
+            else if(incidentLogDataset.length === 0) incidentLogDataset = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS_DATA));
+
+            if(localHeadlines) globalHeadlinesDataset = JSON.parse(localHeadlines);
 
             applyHeadlineStateToDOM();
             rebuildSummaryTableMarkupStructures();
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
+
+            fetchCloudState().then(() => {
+                applyHeadlineStateToDOM();
+                rebuildSummaryTableMarkupStructures();
+                renderMatrixDashboardGrid();
+                calculateDynamicKPIs();
+            });
         } else {
             document.getElementById('authErrorNode').style.display = 'block';
             document.getElementById('masterGateKeyInput').value = '';
@@ -694,6 +721,7 @@
         renderIncidentLogTable(filteredIncidents);
     }
 
+    /* Enhanced chart overlay parsing explicit tooltip text node calculations */
     function displayClosureChartOverlayModal() {
         let solved = incidentLogDataset.filter(i => i.status === "SOLVED").length;
         let pending = incidentLogDataset.filter(i => i.status === "PENDING").length;
@@ -707,6 +735,7 @@
         const pieGauge = document.getElementById('radialClosurePieVisual');
         pieGauge.style.background = `conic-gradient(var(--success-color) ${rate}%, #e2e8f0 ${rate}%)`;
         
+        // Formulate clear standard browser tooltips on element node hover parameters
         pieGauge.title = `💡 Data Overview:\n🟢 SOLVED Issues: ${solved}\n🟡 PENDING Issues: ${pending}\n📊 Grand Total Captured: ${total}`;
         
         document.getElementById('radialClosureTextNode').innerText = `${rate}%`;
@@ -1137,6 +1166,7 @@
         calculateDynamicKPIs();
     }
 
+    /* Bypasses search transparency drop layers for smooth interaction rules */
     function executeSearch() {
         const query = document.getElementById('dashboardSearch').value.trim().toLowerCase();
         document.querySelectorAll('.node-item').forEach(item => {
@@ -1154,10 +1184,9 @@
     }
 
     async function fetchCloudState() {
-        if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL.includes("PASTE_YOUR")) return false;
+        if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
         try {
-            let cacheBustUrl = CLOUD_DATABASE_URL + (CLOUD_DATABASE_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
-            let res = await fetch(cacheBustUrl, { redirect: 'follow' });
+            let res = await fetch(CLOUD_DATABASE_URL);
             let json = await res.json();
             if(json.status === "success" && json.data) {
                 if(json.data.checklist && Object.keys(json.data.checklist).length > 0) {
@@ -1172,20 +1201,15 @@
                     globalHeadlinesDataset = json.data.headlines;
                     localStorage.setItem('tse_headlines_data', JSON.stringify(globalHeadlinesDataset));
                 }
-                return true;
             }
         } catch(e) { console.log("Cloud Read Error:", e); }
-        return false;
     }
 
     async function syncCloudChannel(type, payloadData) {
-        if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL.includes("PASTE_YOUR")) return;
+        if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
         try {
-            // Using text/plain prevents browser CORS preflight blocks with Apps Script
             await fetch(CLOUD_DATABASE_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "text/plain" },
+                method: "POST", headers: { "Content-Type": "text/plain" },
                 body: JSON.stringify({ dataType: type, payload: payloadData })
             });
         } catch(e) { console.log("Cloud Push Error:", e); }
@@ -1250,7 +1274,7 @@
         pptx.writeFile({ fileName: 'Operations_Strategic_Checklist_Review' });
     }
 
-    function triggerNativeDownload(url, filename) { const link = document.createElement('a'); link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove(); }
+    function triggerNativeDownload(url, filename) { const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); }
 </script>
 </body>
 </html>
