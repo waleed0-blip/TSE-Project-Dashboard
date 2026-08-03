@@ -142,7 +142,6 @@
 
         .dashboard-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; gap: 20px; flex-wrap: wrap; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); padding: 18px 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid rgba(226, 232, 240, 0.8); }
         
-        /* Modified styling block: tabs hide dynamically until unlocked */
         .tabs { display: none; gap: 8px; flex-wrap: wrap; background: #f1f5f9; padding: 6px; border-radius: 14px; }
         .admin-unlocked .tabs { display: flex; }
         
@@ -221,7 +220,6 @@
 
         .circle-gauge-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 30px 0; }
         
-        /* Chart wrapper enhanced with semantic hover cursors for tooltips */
         .circle-gauge-container { position: relative; width: 190px; height: 190px; border-radius: 50%; background: conic-gradient(var(--success-color) 0%, #e2e8f0 0%); display: flex; align-items: center; justify-content: center; transition: all 0.4s ease; box-shadow: var(--shadow-md); cursor: help; }
         .circle-gauge-container::before { content: ''; position: absolute; width: 140px; height: 140px; background-color: white; border-radius: 50%; }
         .circle-gauge-value { position: relative; font-size: 2.2rem; font-weight: 800; color: var(--primary-color); letter-spacing: -1px; }
@@ -721,7 +719,6 @@
         renderIncidentLogTable(filteredIncidents);
     }
 
-    /* Enhanced chart overlay parsing explicit tooltip text node calculations */
     function displayClosureChartOverlayModal() {
         let solved = incidentLogDataset.filter(i => i.status === "SOLVED").length;
         let pending = incidentLogDataset.filter(i => i.status === "PENDING").length;
@@ -735,7 +732,6 @@
         const pieGauge = document.getElementById('radialClosurePieVisual');
         pieGauge.style.background = `conic-gradient(var(--success-color) ${rate}%, #e2e8f0 ${rate}%)`;
         
-        // Formulate clear standard browser tooltips on element node hover parameters
         pieGauge.title = `💡 Data Overview:\n🟢 SOLVED Issues: ${solved}\n🟡 PENDING Issues: ${pending}\n📊 Grand Total Captured: ${total}`;
         
         document.getElementById('radialClosureTextNode').innerText = `${rate}%`;
@@ -1166,7 +1162,6 @@
         calculateDynamicKPIs();
     }
 
-    /* Bypasses search transparency drop layers for smooth interaction rules */
     function executeSearch() {
         const query = document.getElementById('dashboardSearch').value.trim().toLowerCase();
         document.querySelectorAll('.node-item').forEach(item => {
@@ -1183,10 +1178,12 @@
         else if (format === 'ppt') { generateComprehensivePresentationDeck(); }
     }
 
+    // FIXED: Cloud State Fetcher updated to bust mobile browser caching
     async function fetchCloudState() {
         if(CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
         try {
-            let res = await fetch(CLOUD_DATABASE_URL);
+            let cacheBustUrl = CLOUD_DATABASE_URL + (CLOUD_DATABASE_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+            let res = await fetch(cacheBustUrl, { cache: "no-store" });
             let json = await res.json();
             if(json.status === "success" && json.data) {
                 if(json.data.checklist && Object.keys(json.data.checklist).length > 0) {
