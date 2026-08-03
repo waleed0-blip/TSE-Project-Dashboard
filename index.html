@@ -359,7 +359,8 @@
     const SITE_ENTRY_PASSWORD = "TseProject1234"; 
     const ADMIN_EDIT_PASSWORD = "TSE2026";       
     
-    const CLOUD_DATABASE_URL = "https://script.google.com/macros/s/AKfycbxY4sJX2_zMbp78cuLNqHmvzuj1s_zGR5_RrvIozHUVxD5nCCLbKNULuie7vxuUqK6poA/exec"; 
+    // UPDATED WEB APP URL
+    const CLOUD_DATABASE_URL = "https://script.google.com/macros/s/AKfycbzG5DsGlmVSq8LAVFM1Ow5apDthC2YhimnoRFvljw-M6WleCBj-AgVkfvwuQhdvF9Wxkw/exec"; 
 
     let editMode = false;
     let currentActiveFilterId = "";
@@ -525,7 +526,6 @@
         }
     }
 
-    // FIXED: Prevented startup login from auto-committing local storage to Google Apps Script
     function handleMasterAuthCheck() {
         const inputVal = document.getElementById('masterGateKeyInput').value.trim();
         if (inputVal === SITE_ENTRY_PASSWORD) {
@@ -571,7 +571,6 @@
             renderMatrixDashboardGrid();
             calculateDynamicKPIs();
 
-            // Fetch live Cloud truth and immediately render
             fetchCloudState().then(() => {
                 applyHeadlineStateToDOM();
                 rebuildSummaryTableMarkupStructures();
@@ -1178,7 +1177,6 @@
         else if (format === 'ppt') { generateComprehensivePresentationDeck(); }
     }
 
-    // Direct Cloud Fetch with Cache-Busting
     async function fetchCloudState() {
         if(!CLOUD_DATABASE_URL || CLOUD_DATABASE_URL === "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") return;
         try {
